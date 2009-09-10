@@ -199,8 +199,7 @@ ZZZ;
 	<div id="loginMenu"><? echo $logDiv; ?></div>
 	<div id="headerTop">&nbsp;</div>
 	<div id="header">
-		<img src="/img/logo1.png"/>
-		<!--<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>-->
+		<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>
 <?
 	print_menu();
 ?>
