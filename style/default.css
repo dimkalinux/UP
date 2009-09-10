@@ -1,0 +1,29 @@
+playing{
+	left:10px;
+	bottom:38px;
+}
+progress{
+	left:81px;
+	bottom:26px;
+	width:-140px;
+}
+volume{
+	right:54px;
+	bottom:34px;
+}
+screen{
+	right:37px;
+	bottom:50px;
+}
+start{
+	left:50%;
+	top:40%;
+}
+time{
+	left:38px;
+	bottom:29px;
+}
+logo{
+	left:50%;
+	bottom:42px;
+}
