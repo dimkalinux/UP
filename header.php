@@ -57,6 +57,7 @@ FMB;
 //
 function print_menu() {
 	global $user;
+
 	$menuArrow = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAMAAADeWG8gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF2trawMDA////FCoqwwAAACdJREFUeNpiYMIADFiEGKivihECUFTBRZDMgokgm8VIC3dhCgEEGAAduAIBgj6YfQAAAABJRU5ErkJggg==';
 	$cpage = $_SERVER['PHP_SELF'];
 	$class = "z";
@@ -180,7 +181,7 @@ ZZZ;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><? echo ($page_title); ?></title>
+	<title><?php echo $page_title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="keywords" content="скачать, upload, загрузить, файлы, выложить, files, файлообменник, обменник">
 	<meta name="robots" content="index, follow">
@@ -191,18 +192,14 @@ ZZZ;
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="http://up.lluga.net/rss/"/>
 	<link rel="search" type="application/opensearchdescription+xml" title="up@lluga.net search" href="http://up.lluga.net/misc/up_search.xml"/>
 </head>
-<?php
-	flush();
-	define('UP_HEADER', 1);
-?>
+<?php flush(); ?>
 <body>
 	<div id="loginMenu"><? echo $logDiv; ?></div>
 	<div id="headerTop">&nbsp;</div>
 	<div id="header">
 		<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>
-<?
-	print_menu();
-?>
+<?php print_menu(); ?>
 	</div>
 	<div id="wrap">
 		<div id="primary">
+<?php define('UP_HEADER', 1); ?>
