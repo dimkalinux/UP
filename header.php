@@ -85,10 +85,10 @@ ZZZ;
 			<a href="/stat/">Статистика</a>
 			<a href="/compability.php">Совместимость</a>
 			<a href="/feedback/" class="item_line">Обратная связь</a>
-			<a href="/on-air/" class="item_line">Прямой эфир</a>
 			<a href="/map/">Карта сайта</a>
 			<a href="/agree/" class="item_line">Пользовательское соглашение</a>
 			<a href="/service/uploaders.php">Дополнительные программы</a>
+			<a href="/ftp_access.php">Доступ по фтп</a>
         </div>
 	</li>
 ZZZ;
@@ -114,6 +114,7 @@ ZZZ;
 			<a href="/top/archive/">Архивы</a>
 			<a href="/top/images/">Картинки</a>
 			<a href="/top/image/">Образы дисков</a>
+			<a href="/on-air/" class="item_line">Прямой эфир</a>
 			<a href="/spam/" class="item_line">Спам</a>
 			$myFilesMenuEntry
       	</div>
