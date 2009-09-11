@@ -18,8 +18,8 @@ require UP_ROOT.'header.php';
 <p>
 В качестве вебсервера используется связка <a href="http://sysoev.ru/nginx/">Nginx</a> + <a href="http://httpd.apache.org/">Apache2</a>.</p>
 
-<h3>Исходный код проекта</h3>
-<p>Код проекта доступен в <a href="http://code.google.com/p/up2-0/">Google Code</a>.</p>
+<!--<h3>Исходный код проекта</h3>
+<p>Код проекта доступен в <a href="http://code.google.com/p/up2-0/">Google Code</a>.</p>-->
 
 
 <h3>Автор</h3>

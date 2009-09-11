@@ -107,8 +107,8 @@ ZZZ;
 		</span>
  		<div class="sub_menu">
 	       	<a href="/top/new/">Cвежие</a>
-           	<a href="/top/popular/">Популярные</a>
 			<a href="/top/size/">Большие</a>
+			<a href="/top/popular/">Популярные</a>
 			<a href="/top/mp3/" class="item_line">Музыка</a>
 			<a href="/top/video/">Видео</a>
 			<a href="/top/archive/">Архивы</a>
@@ -137,7 +137,7 @@ ZZZ;
 			<a href="http://radio.lluga.net:8000/">Интернет радио</a>
 			<a href="http://files.iteam.net.ua/">Файловый сервер</a>
 			<a href="http://bf2.iteam.net.ua/">Игровой сервер</a>
-			<a href="http://forum.lluga.net/labs/" class="item_line">Labs.lluga.net</a>
+			<a href="http://forum.iteam.net.ua/labs/" class="item_line">Labs</a>
 		</div>
 	</li>
 ZZZ;
