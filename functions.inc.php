@@ -1320,5 +1320,19 @@ function getWelcomeMessage() {
 	return $messages[array_rand($messages)];
 }
 
+function printPage($content) {
+	global $base_url, $user;
+
+	if (!defined('UP_HEADER')) {
+		require_once UP_ROOT.'header.php';
+	}
+
+	echo $content;
+
+	if (!defined('UP_FOOTER')) {
+		require_once UP_ROOT.'footer.php';
+	}
+}
+
 
 ?>
