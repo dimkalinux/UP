@@ -19,7 +19,7 @@ if (file_exists(UP_ROOT.'config.inc.php')) {
 }
 
 if (!defined('UP')) {
-	die('The file \'config.inc.php\' doesn\'t exist or is corrupt.');
+	die("Файл конфигурации «config.inc.php» не найден или повреждён.");
 }
 
 // Block prefetch requests
@@ -48,6 +48,7 @@ require_once UP_ROOT.'include/storage.inc.php';
 require_once UP_ROOT.'include/user.inc.php';
 
 
+// get user info
 try {
 	$user = User::getCurrentUser();
 } catch(Exception $e) {
@@ -121,9 +122,6 @@ function a_generate_filename($storagepath, $messagelenght=0, $filesize=0) {
 
 function a_create_mime($extension) {
 	$mimecodes = array (
-		// mimes taken from microsoft ... those that don't need external programs to work
-		// abit unsure on some file extentions, but they aren't used so much anyhow :P
-		//fileext.				mimetype
 		'rtf' 			=>		'text/richtext',
 		'html'			=>		'text/html',
 		'htm'			=>		'text/html',
@@ -269,7 +267,6 @@ function format_minutes($min) {
 	}
 }
 
-
 function format_days($day) {
 	if ($day == 0) {
 		return "сегодня";
@@ -279,8 +276,7 @@ function format_days($day) {
 }
 
 
-function format_raz($num=0)
-{
+function format_raz($num=0) {
 	if ($num == 0) {
 		return '0&nbsp;<span class="filesize">раз</span>';
 	}
@@ -290,15 +286,12 @@ function format_raz($num=0)
 
 
 function show_error_message($message) {
-	global $user, $base_url;
-	require_once UP_ROOT.'header.php';
-	$out = <<<ZZZ
+	$out = <<<FMB
 	<div id="status">&nbsp;</div>
 	<h2>Ошибка</h2>
 	<div class="message">$message</div>
-ZZZ;
-	echo $out;
-	require_once UP_ROOT.'footer.php';
+FMB;
+	printPage($out);
 	exit();
 }
 
