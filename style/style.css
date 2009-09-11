@@ -82,7 +82,6 @@ body { padding: 0px 2em; color: #101010; background: #f8f8f8;
 a, .as_js_link { color: #0063DC; }
 a:link, a:visited, a:active { text-decoration: none; }
 a:hover { text-decoration: underline; }
-
 a:focus { outline-style: none; outline-width: medium; }
 
 
@@ -300,8 +299,8 @@ form[name=feedback] textarea { width: 33em; }
 #footer { clear: both; color: #474747; }
 #footer ul { margin: 0.5em 24px .5em 0pt; list-style-type: none; list-style-image: none; list-style-position: outside; }
 #footer li { display: inline; padding-right: .5em; }
-#footer li a { color: #2b2b2b; text-decoration: none; font-weight: normal;  }
-#footer a:hover { text-decoration: underline !important; }
+#footer li a { color: #101010; text-decoration: none; font-weight: normal;  }
+#footer a:hover { text-decoration: underline !important; color: #0063DC !important; }
 #footer li + li { border-left: 1px solid #e5e5e5; padding-left: .5em; }
 .sitenav { float: left; }
 .separator { border-top: 1px solid #e5e5e5; padding-top: .2em; margin-bottom: 1em; }
