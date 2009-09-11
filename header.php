@@ -199,7 +199,7 @@ ZZZ;
 	<div id="headerTop">&nbsp;</div>
 	<div id="header">
 		<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>
-<?php print_menu(); ?>
+<?php //print_menu(); ?>
 	</div>
 	<div id="wrap">
 		<div id="primary">
