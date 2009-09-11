@@ -342,36 +342,19 @@ function is_mp3($file_name, $mime) {
 
 
 function is_mp3_by_mime($mime) {
-	$is_valid_mime = false;
-
 	$valid_mime = array('application/x-force-download', 'audio/mpeg', 'application/force-download');
 
-	foreach ($valid_mime as $gim) {
-		if ($gim === $mime) {
-			$is_valid_mime = true;
-			break;
-		}
-	}
-
-	return $is_valid_mime;
+	return in_array($mime, $valid_type);
 }
 
-function is_image_by_ext($file_name) {
-	$is_valid_type = false;
 
-	// 1. check file ext
+function is_image_by_ext($file_name) {
 	$valid_type = array('jpg', 'jpeg', 'png', 'gif');
 	$type = get_file_ext($file_name);
 
-	foreach ($valid_type as $git) {
-		if ($git === $type) {
-			$is_valid_type = true;
-			break;
-		}
-	}
-
-	return $is_valid_type;
+	return in_array($type, $valid_type);
 }
+
 
 function is_can_be_adult($file_name) {
 	$valid_type = array('avi', 'wmv', 'mpeg', 'mgp', 'zip', 'rar', 'bat', 'exe');
@@ -387,6 +370,7 @@ function is_archive($file_name) {
 
 	return in_array($type, $valid_type);
 }
+
 
 function is_image_by_mime($full_filename) {
 	$valid_mime = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
@@ -415,13 +399,15 @@ function is_image($file_name, $full_filename) {
 	return ($is_valid_type && $is_valid_mime);
 }
 
-function is_flv ($file_name, $mime) {
+
+function is_flv($file_name, $mime) {
 	return (get_file_ext($file_name) == 'flv' || get_file_ext($file_name) == 'mov');
 }
 
 
 function create_thumbs($file, $thumbs_full_filename, $thumbs_preview_full_filename=null) {
 	require_once UP_ROOT.'include/phpThumb/phpthumb.class.php';
+
 	$phpThumb = new phpThumb();
 	$phpThumb->setSourceFilename($file);
 	$phpThumb->w = $GLOBALS['thumbs_w'];
@@ -455,7 +441,7 @@ function create_thumbs($file, $thumbs_full_filename, $thumbs_preview_full_filena
 }
 
 
-function get_thumbs_filename ($location_name) {
+function get_thumbs_filename($location_name) {
 	return 'thumbs/'.md5($location_name).'.png';
 }
 
@@ -468,17 +454,6 @@ function get_client_ip() {
 	}
 }
 
-/*
-function get_group_id_by_group_secret_code($group_secret_code=0) {
-	if (!$group_secret_code) {
-		return 759;
-	}
-
-	$db = new DB;
-	$row = $db->getRow("SELECT id FROM up WHERE group_secret_key=? ORDER BY uploaded_date LIMIT 1", $group_secret_code);
-	return ($row) ? intval($row['id'], 10) : 0;
-}
-*/
 
 function ip_check($IP, $CIDR) {
     	list ($net, $mask) = split ("/", $CIDR);
@@ -491,6 +466,7 @@ function ip_check($IP, $CIDR) {
 
     	return ($ip_ip_net == $ip_net);
 }
+
 
 function get_geo($user_ip) {
 	$apache_geo = 'world';	// default is 'world'
