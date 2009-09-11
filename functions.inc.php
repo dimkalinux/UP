@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!defined('UP_ROOT')) {
 	exit('The constant UP_ROOT must be defined.');

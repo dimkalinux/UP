@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Make sure no one attempts to run this script "directly"
 if (!defined('UP')) {
@@ -195,7 +195,7 @@ ZZZ;
 </head>
 <?php flush(); ?>
 <body>
-	<div id="loginMenu"><? echo $logDiv; ?></div>
+	<div id="loginMenu"><?php echo $logDiv; ?></div>
 	<div id="headerTop">&nbsp;</div>
 	<div id="header">
 		<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>

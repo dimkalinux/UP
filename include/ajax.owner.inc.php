@@ -1,10 +1,9 @@
-<?
+<?php
 
 // Make sure no one attempts to run this script "directly"
 if (!defined('UP')) {
 	exit;
 }
-
 
 require_once UP_ROOT.'include/ajax.inc.php';
 
