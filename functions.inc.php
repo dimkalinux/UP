@@ -87,17 +87,8 @@ function get_get($str) {
 }
 
 
-function a_get_file_extension($filename) {
-	if (mb_strlen($filename) == 0) {
-		return null;
-	}
-
-	return strtolower(ltrim(strrchr($filename,"."),"."));
-}
-
-
 function a_generate_pathname($storagepath='') {
-	if (strlen($storagepath) > 0) {
+	if (mb_strlen($storagepath) > 0) {
 		//we have to check so that path doesn't exist already...
 		$not_unique = true;
 
@@ -340,6 +331,10 @@ function get_cool_and_short_filename($str, $max_len=55) {
 
 
 function get_file_ext($file_name) {
+	if (mb_strlen($file_name) == 0) {
+		return null;
+	}
+
 	return strtolower(substr(strrchr($file_name, "."), 1));
 }
 

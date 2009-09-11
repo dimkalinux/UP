@@ -16,49 +16,44 @@ define('UPLOAD_ERROR_NO_FILE', 6);
 define('UPLOAD_ERROR_STORAGE', 7);
 define('UPLOAD_ERROR_EMPTY_FILE', 8);
 
-//ini_set("max_execution_time", 0);
 
 $log = null;
-$error = 4;
+$error = UPLOAD_ERROR_SERVER_FAIL;
 $item_id = -1;
 $owner_id = 0;
-$item_pass = null;
-$message = null;
-$add_error_message = null;
+$item_pass = $message = $add_error_message = null;
 $file = $_POST;
-$group_id = null;
 $is_web = isset($_POST['progress_id']);
+
+// errors text message
 $a_err_msg = array("",
-	"файл заражён вирусом",
-	"сбой при сохранении файла",
-	"превышен максимально разрешенный размер загружаемого файла",
-	"сбой при обработке файла",
-	"сработала зашита от флуда",
-	"получен запрос без файла",
-	'ошибка в системе хранения файлов',
-	'получен пустой файл');
+	"файл заражён вирусом",											// 1
+	"сбой при сохранении файла",									// 2
+	"превышен максимально разрешенный размер загружаемого файла",	// 3
+	"сбой при обработке файла",										// 4
+	"сработала зашита от флуда",									// 5
+	"получен запрос без файла",										// 6
+	'ошибка в системе хранения файлов',								// 7
+	'получен пустой файл');											// 8
 
-/*
-$log = new Logger;
-$log->info("upload ".$user['ip'].' '.get_client_ip());
-//$log->info("upload ".print_r($_REQUEST));*/
 
+
+// real start here
 do {
-	if (!isset($file['file_path'])) {
-		$error = UPLOAD_ERROR_NO_FILE;
-		$add_error_message = "!OK: ".implode(" ", $file);
-		break;
+	// check all required file attrs
+	$file_attrs = array('file_path', 'file_name', 'file_ip', 'file_storage_name', 'file_size');
+	foreach ($file_attrs as $fa) {
+		if (!isset($file[$fa])) {
+			$error = UPLOAD_ERROR_SERVER_FAIL;
+			$add_error_message = "'$fa' is empty";
+			break;
+		}
 	}
 
-	if (!isset($file['file_storage_name'])) {
-		$error = UPLOAD_ERROR_NO_FILE;
-		$add_error_message = "no storage_name";
-		break;
-	}
 
+	// antiflood
 	$ip = $file['file_ip'];
 	if ($ip && $is_web) {
-		// antiflood
 		$cache = new Cache;
 		$floodKey = 'uf'.$ip;
 		$floodCounter = $cache->inc($floodKey, 120);
@@ -77,24 +72,19 @@ do {
 	if ($file['file_size'] < 1) {
 		$error = UPLOAD_ERROR_EMPTY_FILE;
 
-		if (isset($file['file_size'])) {
-			$add_error_message .= ' размер: '.$file['file_size'];
-		}
-
-		if (isset($file['file_name'])) {
-			$add_error_message .= ' имя: '.$file['file_name'];
-		}
+		$add_error_message .= ' размер: '.$file['file_size'];
+		$add_error_message .= ' имя: '.$file['file_name'];
 		break;
 	}
 
 	// check max filesize
-	if ($file['file_size'] > ($GLOBALS['max_file_size']*1048576)) {
+	if ($file['file_size'] > ($max_file_size*1048576)) {
 		$error = UPLOAD_ERROR_MAX_SIZE;
 		break;
 	}
 
 	// start process file
-	$uploadfilename = a_generate_filename($GLOBALS['upload_dir'], 10, $file['file_size']);
+	$uploadfilename = a_generate_filename($upload_dir, 10, $file['file_size']);
 
 	try {
 		$storage = new Storage;
@@ -108,12 +98,8 @@ do {
 	}
 
 
-	$uploadfile = $GLOBALS['upload_dir'].$subfolder.'/'.basename($uploadfilename);
+	$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
 	$item_pass = mt_rand();
-	$group_secret_code = trim(get_post('group_secret_code'));
-	$group_id = get_group_id_by_group_secret_code($group_secret_code);
-
-	// modify file name
 	$up_file_name = $file['file_name'];
 	$up_file_size = $file['file_size'];
 	$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
@@ -126,18 +112,17 @@ do {
 		$desc = check_plain(mb_substr($_POST['uploadDesc'], 0, 512));
 	}
 
-
 	// password
 	$password = '';
-	if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword'], 'UTF-8') > 0)) {
+	if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword']) > 0)) {
 		$t_hasher = new PasswordHash(8, FALSE);
 		$password = $t_hasher->HashPassword($_POST['uploadPassword']);
 	}
 
 	// mime
 	$up_file_mime = $file['file_content_type'];
-	if (strlen($up_file_mime) == 0) {
-		$up_file_mime = a_create_mime(a_get_file_extension($file['file_name']));
+	if (mb_strlen($up_file_mime) == 0) {
+		$up_file_mime = a_create_mime(get_file_ext($file['file_name']));
 	}
 
 	// rename file (move)
@@ -147,7 +132,7 @@ do {
 	exec("/bin/mv -f '$filepath' '$uploadfile'", $output, $ret);
 	if ($ret != 0) {
 		$error = UPLOAD_ERROR_SAVE;
-		$_udir = $GLOBALS['upload_dir'].$subfolder;
+		$_udir = $upload_dir.$subfolder;
 		$_udir_size = disk_free_space($_udir);
 
 		$add_error_message = <<<ZZZ
@@ -162,14 +147,6 @@ ZZZ;
 		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?, ?)",
 			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_mime, $up_file_size, $md5, $desc, $is_spam, $is_adult, $hidden, $user['id']);
 
-		$item_id = $db->lastID();
-		if ($group_id == 0) {
-			$group_id = $item_id;
-		}
-
-		// set group_id
-		$db->query("UPDATE up SET group_id=? WHERE id=? LIMIT 1", $group_id, $item_id);
-
 		// dont add BAD files to DNOW
 		if (!$is_adult && !$is_spam && !$hidden) {
 			$db->query("DELETE from dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
@@ -183,14 +160,8 @@ ZZZ;
 	} catch (Exception $e) {
 		$error = UPLOAD_ERROR_SERVER_FAIL;
 		$add_error_message = $e->getMessage();
-
-		if (isset($file['file_size'])) {
-			$add_error_message .= ' размер: '.$file['file_size'];
-		}
-
-		if (isset($file['file_name'])) {
-			$add_error_message .= ' имя: '.$file['file_name'];
-		}
+		$add_error_message .= ' размер: '.$file['file_size'];
+		$add_error_message .= ' имя: '.$file['file_name'];
 
 		if (isset($uploadfile)) {
 			if (is_file($uploadfile)) {
@@ -248,7 +219,7 @@ if ($error != 0) {
 	}
 	$log->error("загрузкa файла. '$message'");
 } else {
-	$message = "OK"; //.implode(" ", array_keys($_REQUEST));
+	$message = "OK";
 }
 
 $result = array('error'=> $error, 'id'=> $item_id, 'group' => $group_id, 'pass' => $item_pass, 'message' => $message);
