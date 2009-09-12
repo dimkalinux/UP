@@ -206,7 +206,7 @@ tr#header-name td { padding-bottom: .8em !important; font-family: Verdana, Tahom
 a.page_links, a.page_links:visited { color: #0055cc !important; }
 
 
-.formRow { padding-bottom: .6em; }
+formRow { padding-bottom: .6em; }
 label { display: block; }
 
 #uploadSubmit { margin-left: .5em; }
