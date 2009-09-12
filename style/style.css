@@ -221,7 +221,7 @@ label { color: #000; font-weight: normal;}
 #uploadForm { margin-top: 0; }
 
 #serviceTable .header { font-weight: bold; margin-bottom: .4em; }
-#serviceTable div + div { margin-bottom: 1em; margin-right: 1em; font-size: .9em;}
+#serviceTable div + div { margin-bottom: 1em; margin-right: 1em; font-size: .95em;}
 
 #mapTable td { padding-right: 2em; }
 #mapTable .header { font-weight: bold; margin-bottom: .6em; }
