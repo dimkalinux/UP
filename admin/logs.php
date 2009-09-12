@@ -1,15 +1,12 @@
-<?
+<?php
+define('ADMIN_PAGE', 1);
+
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '.././');
 }
+
 require UP_ROOT.'functions.inc.php';
 
-
-$admin = is_admin();
-if (!$admin) {
-	show_error_message('Доступ к журналу событий защищён зарослями фиалок и лютиков.');
-	exit();
-}
 
 // admin js function
 $admin_th_row = '<th class="first center"><input id="allCB" type="checkbox"/></th>';

@@ -55,6 +55,13 @@ try {
 	error($e->getMessage());
 }
 
+// is admin rights?
+if (defined('ADMIN_PAGE')) {
+	if (is_admin() != true) {
+		show_error_message('Доступ защищён зарослями фиалок и лютиков.');
+		exit();
+	}
+}
 
 
 
@@ -297,7 +304,7 @@ FMB;
 
 
 function is_admin() {
-	return true;
+	return false;
 	if (get_client_ip() === '192.168.10.50') {
 		return true;
 	} else {
