@@ -645,7 +645,12 @@ UP.fancyLogin = function () {
 
 		$("#TB_overlay").addClass("TB_overlayBG");//use background and opacity
 
-		fancy.fadeIn(100);
+		// just show for Opera
+		if (jQuery.browser.opera) {
+			fancy.show();
+		} else {
+			fancy.fadeIn(100);
+		}
 		/*if(tb_detectMacXFF()){
 			$("#TB_overlay").addClass("TB_overlayMacFFBGHack");//use png overlay so hide flash
 		}else{
