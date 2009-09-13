@@ -25,7 +25,7 @@ if (!defined('UP')) {
 <?php
 
 //
-if (isset($addScript) && is_array ($addScript) && count ($addScript) > 0) {
+if (isset($addScript) && is_array($addScript) && count($addScript) > 0) {
 	foreach ($addScript as $script) {
 		echo ('<script src="/js/'.check_plain($script).'" type="text/javascript"></script>');
 	}
@@ -53,3 +53,4 @@ define('UP_FOOTER', 1);
 ?>
 </body>
 </html>
+<?php //ob_end_flush(); ?>

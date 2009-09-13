@@ -159,12 +159,6 @@ $regForm = <<<ZZZ
 		</div>
 	</td>
 </tr>
-<!--<tr>
-	<td colspan="2">
-		<p style="padding: 1.1em 0 1em;">Регистрируясь, вы автоматически соглашаетесь<br/>
-		с&nbsp;условиями пользовательского соглашения</a>.</p>
-	</td>
-</tr>-->
 <tr>
 	<td colspan="2">
 		<div class="formRow buttons">

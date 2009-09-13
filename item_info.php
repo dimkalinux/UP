@@ -260,7 +260,7 @@ ZZZ;
 		$similar_num = get_similar_count($search_filename, $item_id);
 
 		if ($similar_num > 0 && $similar_num < 50) {
-			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="http://up.lluga.net/search/?s='. urlencode($search_filename) .'&amp;doSubmit&amp;ft=1\">показать</a></td></tr>';
+			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="http://up.lluga.net/search/?s='. urlencode($search_filename) .'&amp;doSubmit&amp;ft=1">показать</a></td></tr>';
 		}
 	} catch (Exception $e) {
 		error($e->getMessage());

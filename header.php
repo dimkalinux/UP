@@ -203,4 +203,4 @@ ZZZ;
 	</div>
 	<div id="wrap">
 		<div id="primary">
-<?php define('UP_HEADER', 1); ?>
+<?php define('UP_HEADER', 1); //ob_start(); ?>
