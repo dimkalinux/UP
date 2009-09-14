@@ -82,7 +82,7 @@ CREATE TABLE `bookmarks`
 	KEY(userid, itemid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 */
-
+/*
 DROP TABLE IF EXISTS `storage`;
 CREATE TABLE `storage`
 (
@@ -96,4 +96,24 @@ CREATE TABLE `storage`
 	`hash` TEXT,
 	UNIQUE (upload_url,name,device,mount_point),
 	KEY(id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;*/
+
+DROP TABLE IF EXISTS `description`;
+CREATE TABLE `description`
+(
+	`id` int(10) unsigned NOT NULL auto_increment,
+	`item_id` int(10) unsigned NOT NULL,
+	`description` TEXT NOT NULL,
+	UNIQUE (item_id),
+	KEY(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*
+alter table up change column filename filename varchar(256);
+alter table up change column filename_fuse filename_fuse varchar(256);
+alter table up change column location location varchar(64);
+alter table up change column deleted_reason deleted_reason varchar(200);
+alter table up drop column group_secret_key;
+alter table up drop column group_id;
+alter table up drop column description;
+*/

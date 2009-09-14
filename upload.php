@@ -108,7 +108,7 @@ do {
 	$is_adult = is_adult($file['file_name']);
 	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
 
-	$desc = '';
+	$desc = null;
 	if (isset($_POST['uploadDesc'])) {
 		$desc = check_plain(mb_substr($_POST['uploadDesc'], 0, 512));
 	}
@@ -145,8 +145,16 @@ ZZZ;
 	// add to DB
 	try {
 		$db = new DB;
-		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?, ?)",
-			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_mime, $up_file_size, $md5, $desc, $is_spam, $is_adult, $hidden, $user['id']);
+		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
+			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+
+		// get ITEM_ID
+		$item_id = $db->lastID();
+
+		// insert DESC
+		if ($desc !== null) {
+			$db->query("INSERT INTO description VALUES('', ?, ?)", $item_id, $desc);
+		}
 
 		// dont add BAD files to DNOW
 		if (!$is_adult && !$is_spam && !$hidden) {
@@ -175,6 +183,10 @@ ZZZ;
 				unlink ($file['file_path']);
 			}
 		}
+
+		$message = $a_err_msg[$error];
+		$message .= ' '.$add_error_message;
+		exit(json_encode(array('error'=> $error, 'id'=> $item_id, 'pass' => $item_pass, 'message' => $message)));
 	}
 
 	if (is_file($uploadfile) && is_image($up_file_name, $uploadfile) && $password == '') {
@@ -223,8 +235,6 @@ if ($error != 0) {
 	$message = "OK";
 }
 
-$result = array('error'=> $error, 'id'=> $item_id, 'group' => $group_id, 'pass' => $item_pass, 'message' => $message);
-exit(json_encode($result));
-
+exit(json_encode(array('error'=> $error, 'id'=> $item_id, 'pass' => $item_pass, 'message' => $message)));
 ?>
 
