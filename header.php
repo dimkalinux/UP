@@ -32,7 +32,7 @@ $loginForm = <<<FMB
 			</div>
 		</form>
 		<div class="formRow buttons">
-			<a href="/">Напомнить пароль</a>
+			<a href="/forget_password.php">Напомните&nbsp;мне&nbsp;пароль</a>
 		</div>
 	</div>
 </div>
