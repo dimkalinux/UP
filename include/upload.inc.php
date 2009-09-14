@@ -80,6 +80,35 @@ class Upload {
 		return 'application/octet-stream';	// default, if not defined above...
 	}
 
+	public function get_upload_flood_counter() {
+		$cache = new Cache;
+		$floodKey = 'uf'.get_client_ip();
+		$floodCounter = $cache->get($floodKey);
+
+		return ($floodCounter === false) ? 1 : $floodCounter;
+	}
+
+	public function is_upload_flood() {
+		$cache = new Cache;
+		$floodKey = 'uf'.get_client_ip();
+		$floodCounter = $cache->get($floodKey);
+
+		if ($floodCounter === false) {
+			$floodCounter = 1;
+		}
+
+		if ($floodCounter < 4) {
+			return false;
+		}
+
+		// flood
+		if ($floodCounter > 4 && $floodCounter != 100) {
+			$floodCounter = 100;
+			$cache->set($floodCounter, $floodKey, 1800);
+		}
+
+		return ($floodCounter == 100);
+	}
 }
 
 ?>
