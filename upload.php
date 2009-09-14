@@ -84,7 +84,8 @@ do {
 	}
 
 	// start process file
-	$uploadfilename = a_generate_filename($upload_dir, 10, $file['file_size']);
+	$Upload = new Upload;
+	$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
 
 	try {
 		$storage = new Storage;
@@ -122,7 +123,7 @@ do {
 	// mime
 	$up_file_mime = $file['file_content_type'];
 	if (mb_strlen($up_file_mime) == 0) {
-		$up_file_mime = a_create_mime(get_file_ext($file['file_name']));
+		$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
 	}
 
 	// rename file (move)

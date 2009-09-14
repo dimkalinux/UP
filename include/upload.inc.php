@@ -1,0 +1,85 @@
+<?php
+
+// Make sure no one attempts to run this script "directly"
+if (!defined('UP')) {
+	exit;
+}
+
+
+class Upload {
+	private function generatePathname($storagepath='') {
+		if (mb_strlen($storagepath) > 0) {
+			//we have to check so that path doesn't exist already...
+			$not_unique = true;
+
+			while ($not_unique) {
+				$newdir = $this->generatePathname();
+				if (!is_dir ($storagepath.$newdir)) {
+					return $newdir;
+				}
+			}
+		} else {
+			return mb_substr(sha1(time().'24111988'), 0, 32);
+		}
+	}
+
+
+	public function generateFilename($storagepath, $messagelenght=0, $filesize=0) {
+		clearstatcache();
+
+		$not_unique = true;
+		while ($not_unique) {
+			$newfile = sha1($this->generate_pathname().$messagelenght.$filesize.'24111988').'.attach';
+
+			if (!is_file($storagepath.$newfile)) {
+				return $newfile;
+			}
+		}
+	}
+
+
+	public function createMIME($extension) {
+		$mimecodes = array (
+			'rtf' 			=>		'text/richtext',
+			'html'			=>		'text/html',
+			'htm'			=>		'text/html',
+			'aiff'			=>		'audio/x-aiff',
+			'iff'			=>		'audio/x-aiff',
+			'basic'			=>		'audio/basic',  // no idea about extention
+			'wav'			=>		'audio/wav',
+			'gif'			=>		'image/gif',
+			'jpg'			=>		'image/jpeg',
+			'jpeg'			=>		'image/pjpeg',
+			'tif'			=>		'image/tiff',
+			'png'			=>		'image/x-png',
+			'xbm'			=>		'image/x-xbitmap',  // no idea about extention
+			'bmp'			=>		'image/bmp',
+			'xjg'			=>		'image/x-jg',  // no idea about extention
+			'emf'			=>		'image/x-emf',  // no idea about extention
+			'wmf'			=>		'image/x-wmf',  // no idea about extention
+			'avi'			=>		'video/avi',
+			'mpg'			=>		'video/mpeg',
+			'mpeg'			=>		'video/mpeg',
+			'ps'			=>		'application/postscript',
+			'b64'			=>		'application/base64',  // no idea about extention
+			'macbinhex'		=>		'application/macbinhex40',  // no idea about extention
+			'pdf'			=>		'application/pdf',
+			'xzip'			=>		'application/x-compressed',  // no idea about extention
+			'zip'			=>		'application/x-zip-compressed',
+			'gzip'			=>		'application/x-gzip-compressed',
+			'java'			=>		'application/java',
+			'msdownload'	=>		'application/x-msdownload'  // no idea about extention
+		);
+
+		foreach ($mimecodes as $type => $mime ) {
+			if ($extension == $type) {
+				return $mime;
+			}
+		}
+
+		return 'application/octet-stream';	// default, if not defined above...
+	}
+
+}
+
+?>
