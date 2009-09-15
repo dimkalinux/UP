@@ -148,12 +148,23 @@ class Upload {
 	}
 
 
-	public function antivir_check_file_drweb($file) {
+	public function antivirCheckFileDrWEB($file) {
 		$ret = 2;
 
 		if (is_file($file)) {
 			$file = escapeshellcmd($file);
 			exec("/opt/drweb/drwebdc -nlocalhost -f '$file'", $output, $ret);
+		}
+
+		return $ret;
+	}
+
+	public function antivirCheckFileClam($file) {
+		$ret = 2;
+
+		if (is_file($file)) {
+			$file = escapeshellcmd($file);
+			exec("/usr/bin/clamdscan --no-summary '$file'", $output, $ret);
 		}
 
 		return $ret;
