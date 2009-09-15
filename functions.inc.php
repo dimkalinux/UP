@@ -1221,5 +1221,11 @@ function printPage($content) {
 	}
 }
 
+function getServerLoad() {
+	$load = sys_getloadavg();
+	return $load[0];
+}
+
+
 
 ?>
