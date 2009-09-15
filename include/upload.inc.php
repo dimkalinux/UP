@@ -146,6 +146,18 @@ class Upload {
 
 		return $filename;
 	}
+
+
+	public function antivir_check_file_drweb($file) {
+		$ret = 2;
+
+		if (is_file($file)) {
+			$file = escapeshellcmd($file);
+			exec("/opt/drweb/drwebdc -nlocalhost -f '$file'", $output, $ret);
+		}
+
+		return $ret;
+	}
 }
 
 ?>
