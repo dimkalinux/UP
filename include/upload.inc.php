@@ -109,6 +109,43 @@ class Upload {
 
 		return ($floodCounter == 100);
 	}
+
+	public static function getFilenameForFUSE($filename, $user_id) {
+		try {
+			$db = new DB;
+			$datas = $db->getData("SELECT filename_fuse FROM up WHERE user_id=? AND deleted=0 LIMIT 1000", $user_id);
+		} catch (Exception $e) {
+			error($e->getMessage());
+		}
+
+		if (!$datas) {
+			return $filename;
+		}
+
+		$files = array();
+
+		foreach ($datas as $item) {
+			$files[] = $item['filename_fuse'];
+		}
+
+		if (!in_array($filename, $files)) {
+			return $filename;
+		}
+
+
+		$ext = get_file_ext($filename);
+		$name = mb_substr($filename, 0, (strripos($filename, $ext)-1));
+		for ($i=1; $i<999999; $i++) {
+			$_ext = get_file_ext($filename);
+			$_name = mb_substr($filename, 0, (strripos($filename, $ext)-1));
+			$fullname = $_name.'_'.$i.'.'.$_ext;
+			if (!in_array($fullname, $files)) {
+				return $fullname;
+			}
+		}
+
+		return $filename;
+	}
 }
 
 ?>
