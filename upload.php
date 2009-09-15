@@ -88,6 +88,7 @@ do {
 	$Upload = new Upload;
 	$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
 
+
 	try {
 		$storage = new Storage;
 		$subfolder = $storage->get_upload_subdir($file['file_storage_name']);
@@ -108,6 +109,11 @@ do {
 	$is_spam = is_spam($file['file_name']);
 	$is_adult = is_adult($file['file_name']);
 	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
+
+	// get filename for FUSE
+	if (!$user['is_guest']) {
+		$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
+	}
 
 	$desc = null;
 	if (isset($_POST['uploadDesc'])) {
@@ -146,8 +152,8 @@ ZZZ;
 	// add to DB
 	try {
 		$db = new DB;
-		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
-			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
+			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
 
 		// get ITEM_ID
 		$item_id = $db->lastID();
