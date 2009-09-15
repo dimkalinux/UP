@@ -619,16 +619,20 @@ ZZZ;
 function get_download_logs() {
 	$cache = new Cache;
 	if (!$a = $cache->get('get_download_logs')) {
-		$a = array('lds'=>0, 'iteam'=>0, 'office'=>0, 'world'=>0, 'lds_p'=>0, 'iteam_p'=>0, 'world_p'=>0);
+		$a = array('lds'=>0, 'iteam'=>0, 'office'=>0, 'world'=>0, 'lds_p'=>0, 'iteam_p'=>0, 'world_p'=>0, 'lluga'=>0);
 		$handle = @fopen("/var/log/nginx/files_access_log", "r");
 		if ($handle) {
 			while (!feof($handle)) {
 				$line = chop(fgets($handle));
 				if (preg_match('/(\S+)\s(\d+)\s(\d+)\s(\S+)/', $line, $matches)) {
 					$geo = $matches[1];
+					$status = intval($matches[2], 10);
 					$size = $matches[3];
 
-					$a[$geo] += $size;
+					// Good value only in Good status
+					if ($status == 200 || $status == 206) {
+						$a[$geo] += $size;
+					}
 				}
 			}
 			fclose($handle);
