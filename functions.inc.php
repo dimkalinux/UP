@@ -834,6 +834,22 @@ function top_get($type, $page, $link_base) {
 					LIMIT $start_from,$items_per_page";
 			break;
 
+		case 'pic':
+			$cache_id = 'top_pic';
+			$header = 'Картинки';
+			$th_name = '<th class="left current">Имя файла</th>';
+			$td_name_class = "current";
+			$order_by = 'uploaded_date';
+			$query = "SELECT * FROM up
+					WHERE spam='0'
+					AND deleted='0'
+					AND hidden='0'
+					AND adult='0'
+					AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
+					ORDER BY $order_by DESC
+					LIMIT $start_from,$items_per_page";
+			break;
+
 
 		case 'popular':
 		default:
@@ -906,7 +922,6 @@ ZZZ;
 		foreach ($datas as $rec) {
 			$item_id = (int)$rec['id'];
 			$filename = get_cool_and_short_filename($rec['filename'], 45);
-			//$filename = $rec['filename'];
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = prettyDate($rec['uploaded_date']);

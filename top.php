@@ -22,36 +22,40 @@ if (!$page || $page < 1)
 
 switch ($type) {
 	case 'new':
-		$blocks = top_get ($type, $page, "/top/new");
+		$blocks = top_get($type, $page, "/top/new");
 		break;
 
 	case 'size':
-		$blocks = top_get ($type, $page, "/top/size");
+		$blocks = top_get($type, $page, "/top/size");
 		break;
 
 	case 'name':
-		$blocks = top_get ($type, $page, "/top/name");
+		$blocks = top_get($type, $page, "/top/name");
 		break;
 
 	case 'mp3':
-		$blocks = top_get ($type, $page, "/top/mp3");
+		$blocks = top_get($type, $page, "/top/mp3");
 		break;
 
 	case 'video':
-		$blocks = top_get ($type, $page, "/top/video");
+		$blocks = top_get($type, $page, "/top/video");
 		break;
 
 	case 'archive':
-		$blocks = top_get ($type, $page, "/top/archive");
+		$blocks = top_get($type, $page, "/top/archive");
 		break;
 
 	case 'image':
-		$blocks = top_get ($type, $page, "/top/image");
+		$blocks = top_get($type, $page, "/top/image");
+		break;
+
+	case 'picture':
+		$blocks = top_get($type, $page, "/top/pic");
 		break;
 
 	case 'popular':
 	default:
-		$blocks = top_get ($type, $page, "/top/popular");
+		$blocks = top_get($type, $page, "/top/popular");
 		break;
 }
 

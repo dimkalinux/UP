@@ -112,7 +112,7 @@ ZZZ;
 			<a href="/top/mp3/" class="item_line">Музыка</a>
 			<a href="/top/video/">Видео</a>
 			<a href="/top/archive/">Архивы</a>
-			<a href="/top/images/">Картинки</a>
+			<a href="/top/photo/">Картинки</a>
 			<a href="/top/image/">Образы дисков</a>
 			<a href="/on-air/" class="item_line">Прямой эфир</a>
 			<a href="/spam/" class="item_line">Спам</a>
