@@ -995,6 +995,7 @@ function get_similar_count($req, $id) {
 	return intval($row['n'], 10);
 }
 
+
 function convert_filename_to_similar($filename) {
 	$rs = '';
 	setlocale(LC_TIME, 'ru_RU', 'ru_RU.utf8', 'ru');
