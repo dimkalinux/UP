@@ -250,7 +250,7 @@ function clear_stat_cache() {
 
 
 function get_cool_and_short_filename($str, $max_len=55) {
-	if (mb_strlen($str) > 55) {
+	if (mb_strlen($str) > $max_len) {
 		$str = mb_substr($str, 0 , 39).'… '.mb_substr($str, -10);
 	}
 	return $str;
