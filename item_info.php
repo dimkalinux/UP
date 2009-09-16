@@ -115,9 +115,9 @@ FMB;
 
 
 	// Antivir
-	if ($antivir_check_result == 1)
+	if ($antivir_check_result == ANTIVIR_CLEAN)
 		$antivir_check = '<span class="green">вирусов&nbsp;нет</span>';
-	else if ($antivir_check_result == 2)
+	else if ($antivir_check_result == ANTIVIR_VIRUS)
 		$antivir_check = '<span class="red">файл заражен вирусом</span>';
 	else
 		$antivir_check = 'пока не проверен';
@@ -157,7 +157,7 @@ FMB;
 	}
 
 	// password present
-	$is_password = mb_strlen($row['password'], 'UTF-8') > 0;
+	$is_password = mb_strlen($row['password']) > 0;
 	$pass_input = $js_pass_block = null;
 	if ($is_password) {
 		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
@@ -278,8 +278,8 @@ ZZZ;
 ZZZ;
 	}
 
-	$desc_block = $desc_link = $desc_js_block = '';
 
+	$desc_block = $desc_link = $desc_js_block = '';
 	if (mb_strlen($desc) > 0) {
 		$desc_block = <<<ZZZ
 		<div id="desc_block">
