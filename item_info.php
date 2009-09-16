@@ -53,7 +53,7 @@ do {
 		<div id="status">&nbsp;</div>
 		<h2>Файл удалён</h2>
 		<p>Примечание: $deleted_reason</p>
-		<p>Дата удаление: </p>
+		<p>Дата удаление: $deleted_date</p>
 ZZZ;
 		// go
 		break;
@@ -292,10 +292,6 @@ ZZZ;
 ZZZ;
 		$desc_link = '|&nbsp;&nbsp;<span class="as_js_link" onclick="$(\'#links_block\').hide(); $(\'#desc_block\').toggle(0);">описание</span>';
 	}
-
-	// copy To clipboard
-	/*$addScript[] .= 'ZeroClipboard.js';
-	$ctc_js_block = 'UP.utils.copyToClipboard();';*/
 
 
 	$out = <<<ZZZ
