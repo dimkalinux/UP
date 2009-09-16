@@ -346,8 +346,8 @@ ZZZ;
 	</td>
 	</tr>
 	</table>
-	<!-- tucan :!:{$row['size']}:!:http://up.lluga.net{$dlink_raw}:!:{$filename}:!: -->
 ZZZ;
+
 	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block;
 } while (0);
 
@@ -357,6 +357,6 @@ if ($error === 0) {
 	require UP_ROOT.'footer.php';
 	exit();
 } else {
-	show_error_message("Ссылка не&nbsp;верна или устарела.".$error);
+	show_error_message("Ссылка не&nbsp;верна или устарела.");
 }
 ?>
