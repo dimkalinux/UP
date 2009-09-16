@@ -158,8 +158,7 @@ FMB;
 
 	// password present
 	$is_password = mb_strlen($row['password'], 'UTF-8') > 0;
-	$pass_input = null;
-	$js_pass_block = null;
+	$pass_input = $js_pass_block = null;
 	if ($is_password) {
 		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
 		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
@@ -191,7 +190,7 @@ ZZZ;
 	// thumbs handle
 	$thumbs_block = $js_thumbs_block = '';
 	$is_image = is_image_by_ext($filename);
-	if ($is_image) {
+	if ($is_image && !$is_password) {
 		$thumbs_full_url = '/thumbs/'.md5($row['md5'].$item_id).'.jpg';
 		$thumbs_preview_small_url = 'http://up.lluga.net/thumbs/'.md5($row['md5'].$item_id).'.jpg';
 		$thumbs_preview_url = '/thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
