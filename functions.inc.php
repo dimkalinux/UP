@@ -926,7 +926,6 @@ ZZZ;
 			$downloaded = $rec['downloads'];
 			$file_date = prettyDate($rec['uploaded_date']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
-			$desc = $rec['description'];
 			$spam = $rec['spam'];
 
 			if ($spam == 1) {
