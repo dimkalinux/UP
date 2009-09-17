@@ -24,7 +24,7 @@ do {
 	}
 
 	// build info
-	try {
+	try {cd
 		$db = new DB;
 		if ($magic !== null) {
 			$row = $db->getRow("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE id=? AND delete_num=? LIMIT 1", $item_id, $magic);
