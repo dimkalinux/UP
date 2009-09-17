@@ -145,20 +145,25 @@ FMB;
 
 
 	// Download row
-	if ($downloaded < 1)
+	if ($downloaded < 1) {
 		$file_last_downloaded_date = 'неизвестно';
-	else
+	} else {
 		$downloaded_text .= ', '.$file_last_downloaded_date;
-
-	// SPAM
-	$js_spam_warning_block = null;
-	if ($is_spam && !$hidden) {
-		if ($magic || $im_owner)
-			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
-		else
-			$js_spam_warning_block = "UP.statusMsg.show('Внимание: возможно это СПАМ', UP.env.msgWarn, true);";
 	}
 
+
+	// SPAM?
+	$js_spam_warning_block = null;
+	if ($is_spam && !$hidden) {
+		if ($magic || $im_owner) {
+			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
+		} else {
+			$js_spam_warning_block = "UP.statusMsg.show('Внимание: возможно это СПАМ', UP.env.msgWarn, true);";
+		}
+	}
+
+
+	// Adult?
 	$js_adult_warning_block = null;
 	if ($is_adult && !$hidden) {
 		$js_spam_warning_block = null;
@@ -169,6 +174,7 @@ FMB;
 			$js_adult_warning_block = "UP.statusMsg.show('Внимание: возможен контент «только для взрослых»', UP.env.msgWarn, true);";
 		}
 	}
+
 
 	// new magic links system
 	$dlmKey = 'dlm'.$item_id.ip2long($user_ip);
@@ -199,8 +205,9 @@ FMB;
 			&nbsp;<span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span>
 FMB;
 		}
+
 		$owner_block = <<<ZZZ
-	<tr><td class="ab">управление:</td>
+	<tr><td class="ab">управление</td>
 	<td class="bb" id="owner_links">
 		<span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span>
 		&nbsp;<span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span>
@@ -224,10 +231,8 @@ ZZZ;
 
 		$js_thumbs_block = <<<ZZZ
 			$(".thumbs a").fancybox({'zoomSpeedIn': 300, 'zoomSpeedOut': 0, 'overlayShow': false, 'hideOnContentClick': true  });
-			// preLoad
 			var img = new Image;
 			$(img).attr("src", "$thumbs_preview_url");
-
 ZZZ;
 			$addScript[] .= 'jquery.fancybox-1.2.1.js';
 	}
