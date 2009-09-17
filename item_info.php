@@ -24,7 +24,7 @@ do {
 	}
 
 	// build info
-	try {cd
+	try {
 		$db = new DB;
 		if ($magic !== null) {
 			$row = $db->getRow("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE id=? AND delete_num=? LIMIT 1", $item_id, $magic);
@@ -94,7 +94,7 @@ ZZZ;
 	}
 
 	// set title for page
-	$page_title = "Отгрузка файла «${filename}»";
+	$page_title = "Скачать «${filename}»";
 
 
 	// im owner block
