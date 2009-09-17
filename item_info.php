@@ -62,12 +62,12 @@ ZZZ;
 	$cache = new Cache;
 	// normal file
 	$location = $row['location'];
-	$filename = check_plain (get_cool_and_short_filename ($row['filename'], 45));
+	$filename = get_cool_and_short_filename($row['filename'], 45);
 	$filesize = $row['size'];
-	$filesize_text = format_filesize ($row['size']);
-	$filesize_text_plain = format_filesize_plain ($row['size']);
-	$file_date = prettyDate ($row['uploaded_date']);
-	$file_last_downloaded_date = check_plain ($row['last_downloaded_date']);
+	$filesize_text = format_filesize($row['size']);
+	$filesize_text_plain = format_filesize_plain($row['size']);
+	$file_date = prettyDate($row['uploaded_date']);
+	$file_last_downloaded_date = $row['last_downloaded_date'];
 	$downloaded = $row['downloads'];
 	$downloaded_text = format_raz($downloaded);
 	$antivir_check_result = $row['antivir_checked'];
@@ -76,8 +76,9 @@ ZZZ;
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
 	$md5 = $row['md5'];
+
 	$ndi = $row['NDI'];
-	$wakkamakka = get_time_of_die ($filesize, $downloaded, $ndi, $is_spam);
+	$wakkamakka = get_time_of_die($filesize, $downloaded, $ndi, $is_spam);
 	if ($wakkamakka < 1) {
 		$wakkamakka_text = '0 дней (сегодня будет удалён)';
 	} else {
@@ -123,12 +124,25 @@ FMB;
 
 
 	// Antivir
-	if ($antivir_check_result == ANTIVIR_CLEAN)
-		$antivir_check = '<span class="green">вирусов&nbsp;нет</span>';
-	else if ($antivir_check_result == ANTIVIR_VIRUS)
-		$antivir_check = '<span class="red">файл заражен вирусом</span>';
-	else
-		$antivir_check = 'пока не проверен';
+	switch ($antivir_check_result) {
+		case ANTIVIR_VIRUS:
+			$antivir_check = '<span class="red">файл заражен вирусом</span>';
+			break;
+
+		case ANTIVIR_ERROR:
+			$antivir_check = '<span class="red">ошибка при проверке</span>';
+			break;
+
+		case ANTIVIR_CLEAN:
+			$antivir_check = '<span class="green">вирусов&nbsp;нет</span>';
+			break;
+
+		case ANTIVIR_NOT_CHECKED:
+		default:
+			$antivir_check = 'не проверен';
+			break;
+	}
+
 
 	// Download row
 	if ($downloaded < 1)
@@ -313,6 +327,7 @@ ZZZ;
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
 			<tr><td class="ab">срок хранения</td><td class="bb">$wakkamakka_text</td></tr>
+			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
 			$mp3_block
 			$flv_block
 			$owner_block
