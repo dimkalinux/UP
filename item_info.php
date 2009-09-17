@@ -68,11 +68,10 @@ ZZZ;
 	$filesize_text_plain = format_filesize_plain ($row['size']);
 	$file_date = prettyDate ($row['uploaded_date']);
 	$file_last_downloaded_date = check_plain ($row['last_downloaded_date']);
-	$downloaded = intval ($row['downloads']);
-	$downloaded_text = format_raz ($downloaded);
+	$downloaded = $row['downloads'];
+	$downloaded_text = format_raz($downloaded);
 	$antivir_check_result = $row['antivir_checked'];
-	$user_ip = get_client_ip ();
-	$desc = htmlspecialchars_decode ($row['description']);
+	$user_ip = get_client_ip();
 	$hidden = (bool) $row['spam'];
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
@@ -85,6 +84,7 @@ ZZZ;
 		$wakkamakka_text = format_days($wakkamakka);
 	}
 
+
 	$im_owner = false;
 	if (!$user['is_guest']) {
 		$result = $db->numRows('SELECT user_id FROM up WHERE id=? AND user_id=?', $item_id, $user['id']);
@@ -95,6 +95,14 @@ ZZZ;
 
 	// set title for page
 	$page_title = "Скачать «${filename}»";
+
+	// get desc
+	try {
+		$row = $db->getRow("SELECT description FROM description WHERE id=? LIMIT 1", $item_id);
+		$desc = isset($row['description']) ? htmlspecialchars_decode($row['description']) : '';
+	} catch (Exception $e) {
+		error($e->getMessage());
+	}
 
 
 	// im owner block
