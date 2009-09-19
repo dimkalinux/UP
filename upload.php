@@ -55,10 +55,10 @@ do {
 
 
 	// antiflood
-	$ip = $file['file_ip'];
-	if ($ip && $is_web) {
+	$up_file_ip = $file['file_ip'];
+	if ($up_file_ip && $is_web) {
 		$cache = new Cache;
-		$floodCounter = $cache->inc('uf'.$ip, 120);
+		$floodCounter = $cache->inc('uf'.$up_file_ip, 120);
 		if ($floodCounter === false) {
 			$floodCounter = 1;
 		}
@@ -149,7 +149,7 @@ ZZZ;
 	try {
 		$db = new DB;
 		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
-			$password, $item_pass, $ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+			$password, $item_pass, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
 
 		// get ITEM_ID
 		$item_id = $db->lastID();
