@@ -8,6 +8,7 @@ require UP_ROOT.'functions.inc.php';
 require UP_ROOT.'include/PasswordHash.php';
 require UP_ROOT.'include/upload.inc.php';
 
+define('UPLOAD_ERROR_EMPTY_FILE', 0);
 define('UPLOAD_ERROR_FOUND_VIRUS', 1);
 define('UPLOAD_ERROR_SAVE', 2);
 define('UPLOAD_ERROR_MAX_SIZE', 3);
@@ -15,7 +16,7 @@ define('UPLOAD_ERROR_SERVER_FAIL', 4);
 define('UPLOAD_ERROR_FLOOD', 5);
 define('UPLOAD_ERROR_NO_FILE', 6);
 define('UPLOAD_ERROR_STORAGE', 7);
-define('UPLOAD_ERROR_EMPTY_FILE', 8);
+
 
 
 $log = null;
@@ -27,15 +28,16 @@ $file = $_POST;
 $is_web = isset($_POST['progress_id']);
 
 // errors text message
-$a_err_msg = array("",
-	"файл заражён вирусом",											// 1
-	"сбой при сохранении файла",									// 2
-	"превышен максимально разрешенный размер загружаемого файла",	// 3
-	"сбой при обработке файла",										// 4
-	"сработала зашита от флуда",									// 5
-	"получен запрос без файла",										// 6
+$a_err_msg = array(
+	'получен пустой файл'											// 0
+	'файл заражён вирусом',											// 1
+	'сбой при сохранении файла',									// 2
+	'превышен максимально разрешенный размер загружаемого файла',	// 3
+	'сбой при обработке файла',										// 4
+	'сработала зашита от флуда',									// 5
+	'получен запрос без файла',										// 6
 	'ошибка в системе хранения файлов',								// 7
-	'получен пустой файл');											// 8
+	);
 
 
 
@@ -56,15 +58,9 @@ do {
 	$ip = $file['file_ip'];
 	if ($ip && $is_web) {
 		$cache = new Cache;
-		$floodKey = 'uf'.$ip;
-		$floodCounter = $cache->inc($floodKey, 120);
+		$floodCounter = $cache->inc('uf'.$ip, 120);
 		if ($floodCounter === false) {
-			$floodCounter == 1;
-		}
-
-		if ($floodCounter === 100) {
-			$error = UPLOAD_ERROR_FLOOD;
-			break;
+			$floodCounter = 1;
 		}
 	}
 
