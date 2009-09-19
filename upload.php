@@ -29,7 +29,7 @@ $is_web = isset($_POST['progress_id']);
 
 // errors text message
 $a_err_msg = array(
-	'получен пустой файл'											// 0
+	'получен пустой файл',											// 0
 	'файл заражён вирусом',											// 1
 	'сбой при сохранении файла',									// 2
 	'превышен максимально разрешенный размер загружаемого файла',	// 3
@@ -40,7 +40,6 @@ $a_err_msg = array(
 	);
 
 
-
 // real start here
 do {
 	// check all required file attrs
@@ -49,7 +48,7 @@ do {
 		if (!isset($file[$fa])) {
 			$error = UPLOAD_ERROR_SERVER_FAIL;
 			$add_error_message = "'$fa' is empty";
-			break;
+			break 2;
 		}
 	}
 
