@@ -128,21 +128,15 @@ do {
 		$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
 	}
 
-	// rename file (move)
-	$ret = -1;
-	$output = null;
-	$filepath = escapeshellcmd($file['file_path']);
-	exec("/bin/mv -f '$filepath' '$uploadfile'", $output, $ret);
-	if ($ret != 0) {
+	// rename file (move) USE LINK
+	if (!link($filepath, $uploadfile)) {
 		$error = UPLOAD_ERROR_SAVE;
-		$_udir = $upload_dir.$subfolder;
-		$_udir_size = disk_free_space($_udir);
-
-		$add_error_message = <<<ZZZ
-ret: "$ret" filepath: "$filepath" uploadfile: "$uploadfile" free space: "$_udir_size" filesize: "$up_file_size"
-ZZZ;
+		$add_error_message = <<<FMB
+filepath: "$filepath" uploadfile: "$uploadfile"
+FMB;
 		break;
 	}
+
 
 	// add to DB
 	try {
