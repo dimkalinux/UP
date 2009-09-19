@@ -169,6 +169,15 @@ class Upload {
 
 		return $ret;
 	}
+
+	public static function updateUploadsCounters($uid, $upload, $uploadSize) {
+		try {
+			$db = new DB;
+			$db->query("UPDATE DELAYED users SET uploads=uploads+?, uploads_size=uploads_size+? WHERE id=?", $upload, $uploadSize, $uid);
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 
 ?>
