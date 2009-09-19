@@ -168,16 +168,12 @@ FMB;
 		$add_error_message .= ' размер: '.$file['file_size'];
 		$add_error_message .= ' имя: '.$file['file_name'];
 
-		if (isset($uploadfile)) {
-			if (is_file($uploadfile)) {
-				unlink($uploadfile);
-			}
+		if (isset($uploadfile) && is_file($uploadfile)) {
+			unlink($uploadfile);
 		}
 
-		if (isset($file['file_path'])) {
-			if (is_file($file['file_path'])) {
-				unlink ($file['file_path']);
-			}
+		if (isset($file['file_path']) && is_file($file['file_path'])) {
+			unlink($file['file_path']);
 		}
 
 		$message = $a_err_msg[$error];
@@ -197,9 +193,6 @@ FMB;
 			}
 			$log->error("создание миниатюры для графического файла. ID: '$item_id'");
 		}
-
-		// make link to original
-		//symlink($uploadfile, $thumbs_original_filename);
 	}
 
 	// clear stat cache
@@ -209,15 +202,12 @@ FMB;
 
 // error
 if ($error != 0) {
-	if (isset($uploadfile)) {
-		// unlink file (uploaded)
-		if (is_file($uploadfile))
-			unlink($uploadfile);
+	if (isset($uploadfile) && is_file($uploadfile)) {
+		unlink($uploadfile);
 	}
 
-	if (isset($file['file_path'])) {
-		if (is_file($file['file_path']))
-			unlink ($file['file_path']);
+	if (isset($file['file_path']) && is_file($file['file_path'])) {
+		unlink($file['file_path']);
 	}
 
 	$message = $a_err_msg[$error];
