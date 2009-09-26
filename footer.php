@@ -17,7 +17,7 @@ if (!defined('UP')) {
 		</ul>
 		<div class="clear separator"></div>
 			<p>
-		© <? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="/">iTeam</a>.</p>
+		© <? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="http://iteam.net.ua/">iTeam</a>.</p>
 		</div>
 		<div id="footerBottom">&nbsp;</div>
 		<script src="/js/jquery-1.3.2.min.js" type="text/javascript"></script>
