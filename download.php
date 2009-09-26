@@ -12,7 +12,7 @@ if (!isset ($_GET['item']) || !isset ($_GET['magic'])) {
 }
 
 $item_id = intval($_GET['item'], 10);
-$geo = get_geo($user['ip']);
+$geo = get_geo();
 $magic = $_GET['magic'];
 
 try {

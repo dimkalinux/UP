@@ -402,7 +402,7 @@ function ip_check($IP, $CIDR) {
 }
 
 
-function get_geo($user_ip='1.1.1.1') {
+function get_geo() {
 	$apache_geo = 'world';	// default is 'world'
 
 	if (!function_exists('apache_request_headers')) {
