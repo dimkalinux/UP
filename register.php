@@ -155,7 +155,7 @@ $regForm = <<<ZZZ
 	<td colspan="2">
 		<div class="formRow">
 			<label for="e" id="label_e" class="$emailLabelClass">Электропочта</label>
-			<input type="text" id="e" name="e" tabindex="3" maxlength="128" minlength="4" required="1" pattern="^[a-z0-9_\-\.]+@([a-z0-9\-]+\.)+[a-z0-9\-]{2,}$"/>
+			<input type="text" id="e" name="e" tabindex="3" maxlength="128" minlength="4" required="1" pattern="\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$"/>
 		</div>
 	</td>
 </tr>
