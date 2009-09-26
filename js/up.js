@@ -975,7 +975,7 @@ UP.formCheck = {
 					// check for pattern
 					if ($(el).attr("pattern")) {
 						var pattern = new RegExp($(el).attr("pattern").toString(), "i");
-						//var pattern = $(el).attr("pattern");
+
 						if (pattern.test($(el).val())) {
 							$(el).removeClass('bad').addClass('good');
 						} else {
@@ -1004,13 +1004,15 @@ UP.log = function () {
 	return {
 		debug: function () {
 			 if (UP.env.debug === true && window.console && window.console.log) {
-        		window.console.log('[up] ' + Array.prototype.join.call(arguments,''));
+        		window.console.log('[АП] ' + Array.prototype.join.call(arguments,''));
 			}
 		}
 	};
 }();
 
 
+
+// On start on every page
 jQuery(function () {
 	UP.fancyLogin.init();
 });
