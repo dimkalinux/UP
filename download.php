@@ -32,7 +32,7 @@ $cache = new Cache;
 $dlmValue = $cache->get('dlm'.$item_id.ip2long($user['ip']));
 if ($dlmValue != $magic) {
 	$unuiq = uniqid();
-	show_error_message("Сcылка не&nbsp;верна или устарела.<br/>
+	show_error_message("Сcылка для скачивания не&nbsp;верна или устарела.<br/>
 	Чтобы обновить ссылку перейдите по&nbsp;адресу <a href=\"/$item_id/?$unuiq\">http://up.lluga.net/$item_id/?$unuiq</a>.");
 }
 
