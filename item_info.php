@@ -3,7 +3,6 @@ if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
 require UP_ROOT.'functions.inc.php';
-$addScript[] = 'jquery.tools.min.js';
 
 
 $error = 0;
@@ -153,7 +152,7 @@ FMB;
 
 
 	// SPAM?
-	$js_spam_warning_block = null;
+	$js_spam_warning_block = '';
 	if ($is_spam && !$hidden) {
 		if ($magic || $im_owner) {
 			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
@@ -164,9 +163,9 @@ FMB;
 
 
 	// Adult?
-	$js_adult_warning_block = null;
+	$js_adult_warning_block = '';
 	if ($is_adult && !$hidden) {
-		$js_spam_warning_block = null;
+		$js_spam_warning_block = '';
 
 		if ($magic || $im_owner) {
 			$js_adult_warning_block = "UP.statusMsg.show('Обнаружен контент «только для взрослых». Файл не будет показан в общем списке', UP.env.msgWarn, false);";
@@ -186,7 +185,7 @@ FMB;
 
 	// password present
 	$is_password = mb_strlen($row['password']) > 0;
-	$pass_input = $js_pass_block = null;
+	$pass_input = $js_pass_block = '';
 	if ($is_password) {
 		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
 		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
@@ -197,7 +196,7 @@ FMB;
 	$dlink_raw = "/download/$item_id/$dlmValue/";
 	$dlink = '<input type="submit" value="Скачать файл" style="font-size: 1.1em; margin: .5em 0;"/>';
 
-	$owner_block = null;
+	$owner_block = '';
 	if ($magic || $im_owner) {
 		$md5_link = '';
 		if (empty($md5)) {
@@ -239,7 +238,7 @@ ZZZ;
 
 
 	// flv block
-	$flv_block = $js_video_block = null;
+	$flv_block = $js_video_block = '';
 	if (is_flv($filename, $row['mime'])) {
 		$flv_block = <<<ZZZ
 		<tr><td class="ab">видео</td>
