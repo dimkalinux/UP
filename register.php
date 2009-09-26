@@ -164,7 +164,7 @@ $regForm = <<<ZZZ
 		<div class="formRow buttons">
 			<label for="a" id="label_a" class="$agreementLabelClass">
 			<input type="checkbox" id="a" name="a" tabindex="4" required="1"/>
-			Да, я принимаю условия <a href="/agreement.php" target="_blank">соглашения</a> <em>(Откроется в&nbsp;новом окне)</em></label>
+			Я&nbsp;принимаю условия <a href="/agreement.php" target="_blank">соглашения</a><br/> <em>(Откроется в&nbsp;новом окне)</em></label>
 		</div>
 	</td>
 </tr>
