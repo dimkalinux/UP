@@ -161,8 +161,8 @@ table#file_info_table tr.header td { padding-bottom: .7em;  }
 
 table#set_files_table { width: 90%; margin-top: 2em;}
 table.t1 a { font-weight: normal; }
-table.t1 thead th { font-weight: normal; padding: .1em .4em .1em .5em; border-bottom: solid 2px #eee; font-size: .9em; /*text-transform: uppercase;*/ color: #000;}
-table.t1 td { padding: .3em .5em .2em; font-size: .93em;  }
+table.t1 thead th { font-weight: normal; padding: .1em .4em .1em .5em; border-bottom: solid 2px #eee; font-size: .9em; text-transform: uppercase; color: #000;}
+table.t1 td { padding: .3em .5em .3em; font-size: .95em;  }
 table.t1#file_info_table td { padding: .1em .3em .2em;}
 #top_files_table tbody tr:hover { background: #fafafa; }
 .t1 td.first, .t1 th.first { border-left: none !important; }
@@ -316,40 +316,16 @@ input[name=cancel] { margin-right: 1em; }
 textarea#uploadDesc { width: 25em; height: 7em; font-size: .9em; }
 
 
-/* tooltip styling. uses a background image (a black box with an arrow) */
-div.tooltip {
-    background:transparent url('/img/white_big.png') no-repeat scroll 0 0;
-    font-size:14px;
-    height:153px;
-    padding:30px;
-    width:340px;
-    display:none;
-    color:#000 !important;
-	z-index: 999;
-	overflow: none;
-}
 
-.tooltip p {  font-size: .9em !important; }
-
-/* tooltip title element (h3) */
-div.tooltip h3 {
-	margin-bottom: .2em;
-    font-size: 1.1em;
-    color:#000 !important;
-}
 
 .blueSpacer {
-	/*background-color:#9EC8F7;
-	border-bottom:1px solid #90ADCE;*/
-	/*border-top:1px solid #eee;*/
+
 	font-size:1px;
 	height:4px;
 	line-height:0;
 	margin: 0 auto;
 	width: 910px;
 }
-
-/*#uploadFile { width: 30em !important; }*/
 
 #selectFilesLink { margin: .7em 0 .2em; }
 a#selectLink, #uploadFilesLink { font-size: 1.1em; color: #1057AE; font-weight: bold; text-decoration: underline; font-family:Arial,Helvetica,sans-serif; }
@@ -374,7 +350,6 @@ div#loginMenu {
 .hint {
 	padding: .5em .5em .5em 0;
 	margin: .5em 0 1em;
-	/*border: solid 1px #ABC0CE;*/
 }
 
 #fancyLogin {  margin-top: 1.7em; display: none; z-index: 1000;  position: absolute; top: 0; left: 0; padding: 1px; }
@@ -746,9 +721,9 @@ ul.inlineList li { display:inline; position:relative; margin-right: .5em; }
 table#myFilesTable { width: 90%; margin: .5em 0 1em; }
 #myFilesTable th { white-space: nowrap !important; vertical-align: top !important; color: #333 !important; font-weight: bold !important; text-transform: normal !important; }
 #myFilesTable th.checkbox { width: 10px !important; }
-#myFilesTable th.size { width: 7em !important; }
-#myFilesTable th.name { width: 100% !important; }
-#myFilesTable th.download { width: 7em !important; }
+#myFilesTable th.size, #search_files_table td.size { width: 7em !important; }
+#myFilesTable th.name, #search_files_table td.name { width: 100% !important; }
+#myFilesTable th.download, #search_files_table td.download { width: 7em !important; }
 #myFilesTable th.time { width: 10em !important; }
 
 #myFilesTable td, #myFilesTable td a { color: #666; }

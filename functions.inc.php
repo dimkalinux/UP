@@ -586,10 +586,10 @@ function makeSearch($req, $fooltext=false) {
 			$file_date = $rec['uploaded_date'];
 
 			$r .= <<<ZZZ
-				<tr>
-					<td class="right">$filesize_text</td>
-					<td class="left"><a rel="nofollow" href="/$item_id/">$filename</a></td>
-					<td class="center">$downloaded</td>
+			<tr>
+				<td class="right size">$filesize_text</td>
+				<td class="left name"><a rel="nofollow" href="/$item_id/">$filename</a></td>
+				<td class="center download">$downloaded</td>
 			</tr>
 ZZZ;
 			}
