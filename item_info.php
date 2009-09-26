@@ -294,14 +294,13 @@ ZZZ;
 	$is_password ? $form_method = 'post' : $form_method = 'get';
 
 	// links block
+	$links_bbcode_raw = '';
 	if ($is_image) {
-		$links_bbcode = <<<ZZZ
-			<input size="35" value="[url=http://up.lluga.net/{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>
-ZZZ;
+		$links_bbcode_raw = "[url=http://up.lluga.net/{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]";
+		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
 	} else {
-		$links_bbcode = <<<ZZZ
-			<input size="35" value="[url=http://up.lluga.net/{$item_id}/]{$filename} — {$filesize_text_plain}[/url]" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>
-ZZZ;
+		$links_bbcode_raw = "[url=http://up.lluga.net/{$item_id}/]{$filename} — {$filesize_text_plain}[/url]";
+		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
 	}
 
 
@@ -353,15 +352,56 @@ ZZZ;
 		<div class="tt-wedge tt-wedge-up tt-wedge-links"></div>
 		<div id="formBlock">
 			<label for="link">ссылка</label>
+			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
+				<param name="movie" value="/flash/clippy.swf">
+				<param name="allowScriptAccess" value="always">
+				<param name="quality" value="high">
+				<param name="scale" value="noscale">
+				<param name="FlashVars" value="text=http://up.lluga.net/$item_id/">
+				<param name="bgcolor" value="#DFEBF7">
+				<param name="wmode" value="opaque">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=http://up.lluga.net/$item_id/" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+			</object>
+
 			<input size="35" value="http://up.lluga.net/$item_id/" readonly="readonly" type="text" id="link" onclick="this.select()"/>
 
 			<label for="html">для сайта или блога</label>
+			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
+				<param name="movie" value="/flash/clippy.swf">
+				<param name="allowScriptAccess" value="always">
+				<param name="quality" value="high">
+				<param name="scale" value="noscale">
+				<param name="FlashVars" value="text=&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;">
+				<param name="bgcolor" value="#DFEBF7">
+				<param name="wmode" value="opaque">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+			</object>
 			<input size="35" value="&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" readonly="readonly" type="text" id="html" onclick="this.select()"/>
 
 			<label for="bbcode">для форума</label>
+			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
+				<param name="movie" value="/flash/clippy.swf">
+				<param name="allowScriptAccess" value="always">
+				<param name="quality" value="high">
+				<param name="scale" value="noscale">
+				<param name="FlashVars" value="text=$links_bbcode_raw">
+				<param name="bgcolor" value="#DFEBF7">
+				<param name="wmode" value="opaque">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=$links_bbcode_raw" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+			</object>
 			$links_bbcode
 
 			<label for="dlink">прямая ссылка (только для скачивания)</label>
+			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
+				<param name="movie" value="/flash/clippy.swf">
+				<param name="allowScriptAccess" value="always">
+				<param name="quality" value="high">
+				<param name="scale" value="noscale">
+				<param name="FlashVars" value="text=http://up.lluga.net{$dlink_raw}">
+				<param name="bgcolor" value="#DFEBF7">
+				<param name="wmode" value="opaque">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=http://up.lluga.net{$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+			</object>
 			<input size="35" value="http://up.lluga.net{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
 		</div>
 	</div>

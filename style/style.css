@@ -144,9 +144,8 @@ td#owner_links span[status=off] { color: #999; border: none; cursor: default; }
 
 
 #links_block {  -moz-border-radius: 7px; margin-top: 1em; background: #DFEBF7; /*padding: 1em;*/ float: left; }
-#links_block label { display: block; font-weight: normal; color: #000; font-size: .9em; }
-#links_block input[type="text"] { border: solid 1px #89BCEF; font-size: .85em; color: #484848; margin-bottom: .6em; padding: 1px 2px; width: 30em; }
-
+#links_block label { display: block; float: left; font-weight: normal; color: #000; font-size: .92em;  margin-right: 5px; }
+#links_block input[type="text"] { border: solid 1px #89BCEF; font-size: .85em; color: #484848; margin-bottom: .6em; padding: 1px 2px; width: 30em; display: block; }
 #download_link { margin: .7em 0 .7em; }
 
 
