@@ -136,6 +136,9 @@ div.message p { font-size: 100% !important; }
 .file_info { margin-bottom: 1.5em; }
 .buttons { padding: .7em 0; }
 
+input[type=text],
+input[type=password] { width: 12.5em; }
+
 
 .as_js_link { cursor: pointer; border-bottom: dotted 1px rgb(0, 136, 204); text-decoration: none; outline: none; -moz-user-select: none; -khtml-user-select: none; }
 .as_js_link:hover { border-bottom: dotted 1px rgb(204, 51, 0); color: rgb(204, 51, 0); text-decoration: none; outline: none; -moz-user-select: none; -khtml-user-select: none; }
