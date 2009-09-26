@@ -19,11 +19,10 @@ define('UPLOAD_ERROR_STORAGE', 7);
 
 
 
-$log = null;
 $error = UPLOAD_ERROR_SERVER_FAIL;
 $item_id = -1;
 $owner_id = 0;
-$item_pass = $message = $add_error_message = null;
+$log = $owner_key = $message = $add_error_message = null;
 $file = $_POST;
 $is_web = isset($_POST['progress_id']);
 
@@ -97,7 +96,7 @@ do {
 
 
 	$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
-	$item_pass = mt_rand();
+	$owner_key = mt_rand();
 	$up_file_name = $file['file_name'];
 	$up_file_size = $file['file_size'];
 	$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
@@ -131,9 +130,7 @@ do {
 	// rename file (move) USE LINK
 	if (!link($filepath, $uploadfile)) {
 		$error = UPLOAD_ERROR_SAVE;
-		$add_error_message = <<<FMB
-filepath: "$filepath" uploadfile: "$uploadfile"
-FMB;
+		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
 		break;
 	}
 
@@ -142,7 +139,7 @@ FMB;
 	try {
 		$db = new DB;
 		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
-			$password, $item_pass, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+			$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
 
 		// get ITEM_ID
 		$item_id = $db->lastID();
@@ -154,8 +151,8 @@ FMB;
 
 		// dont add BAD files to DNOW
 		if (!$is_adult && !$is_spam && !$hidden) {
-			$db->query("DELETE from dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
-			$db->query("INSERT INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
+			$db->query("DELETE DELAYED FROM dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
+			$db->query("INSERT DELAYED INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
 		}
 
 		// update counters
@@ -178,7 +175,7 @@ FMB;
 
 		$message = $a_err_msg[$error];
 		$message .= ' '.$add_error_message;
-		exit(json_encode(array('error'=> $error, 'id'=> $item_id, 'pass' => $item_pass, 'message' => $message)));
+		exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
 	}
 
 	if (is_file($uploadfile) && is_image($up_file_name, $uploadfile) && $password == '') {
@@ -221,6 +218,6 @@ if ($error != 0) {
 	$message = "OK";
 }
 
-exit(json_encode(array('error'=> $error, 'id'=> $item_id, 'pass' => $item_pass, 'message' => $message)));
+exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
 ?>
 
