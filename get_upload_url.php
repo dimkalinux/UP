@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -12,9 +13,9 @@ try {
 	$out['error'] = 0;
 } catch (Exception $e) {
 	$out['message'] = $e->getMessage();
+	exit(json_encode($out));
 }
 
 exit(json_encode($out));
-
 
 ?>
