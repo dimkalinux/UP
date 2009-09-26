@@ -391,7 +391,7 @@ ZZZ;
 			</object>
 			$links_bbcode
 
-			<label for="dlink">прямая ссылка (только для скачивания)</label>
+			<label for="dlink">прямая ссылка</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
 				<param name="movie" value="/flash/clippy.swf">
 				<param name="allowScriptAccess" value="always">
