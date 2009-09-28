@@ -55,6 +55,12 @@ define('ACTION_ADMIN_MARK_AS_ADULT_FILE', 28);
 define('ACTION_ADMIN_UNMARK_AS_ADULT_FILE', 29);
 
 
+// BASE URL aka CDN
+define('CSS_BASE_URL', 'http://up.lluga.net/');
+define('JS_BASE_URL', 'http://ftp.lluga.net/');
+define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
+
+
 
 $base_url = 'http://up.lluga.net/';
 

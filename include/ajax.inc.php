@@ -50,7 +50,7 @@ class AJAX {
 	}
 
 
-	public function exitWithError($msg) {
+	protected function exitWithError($msg) {
 		exit(json_encode(array('result'=> 0, 'message' => $msg)));
 	}
 }

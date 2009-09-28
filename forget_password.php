@@ -155,13 +155,14 @@ FMB;
 	<form method="POST" action="$form_action" name="forget_password" accept-charset="utf-8" autocomplete="on">
 		<input type="hidden" name="form_sent" value="1"/>
 		<input type="hidden" name="csrf_token" value="$csrf"/>
+		<input type="hidden" name="form_check_required_num" value="1"/>
 		<div class="formRow">
 			<label for="op" id="label_op" class="$oldPasswordLabelClass">Имя пользователя</label>
 			<input type="text" id="op" name="op" tabindex="1" maxlength="64" minlength="8" required="1"/>
 		</div>
 		<div class="formRow">
 			<label for="np" id="label_np" class="$newPasswordLabelClass">Электропочта</label>
-			<input type="text" id="np" name="np" tabindex="2" maxlength="64" minlength="8" required="1"/>
+			<input type="text" id="np" name="np" tabindex="2" maxlength="128" minlength="4" required="1" pattern="\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$"/>
 		</div>
 		<div class="formRow buttons">
 			<input type="submit" name="do" value="Напомнить" tabindex="3"/>
@@ -183,7 +184,6 @@ $onDOMReady = <<<ZZZ
 	$('#wrap')
 		.stopTime('checkChangePasswordFormTimer')
 		.everyTime(500, 'checkChangePasswordFormTimer', function () { UP.formCheck.register(form); });
-
 
 	// form
 	var options = {

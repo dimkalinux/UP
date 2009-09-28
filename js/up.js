@@ -1,5 +1,3 @@
-"use strict";
-
 if (typeof UP === "undefined" || !UP) {
 	var UP = {};
 }
@@ -261,14 +259,12 @@ UP.uploadForm = function () {
 			active = false;
 			$('#uploadFile').removeAttr("disabled");
 			$('#uploadForm').stopTime('progressTime');
-			// go to new page
-			document.location = ['http://up.lluga.net/', id, '/', pass].join('');
 
-			/*var options = {
+			var options = {
 				pass: pass,
 			}
 
-			UP.utils.makePOSTRequest('/'+id+'/', options);*/
+			UP.utils.makePOSTRequest('/'+id+'/', options);
 		},
 
 
@@ -651,11 +647,6 @@ UP.fancyLogin = function () {
 		} else {
 			fancy.fadeIn(100);
 		}
-		/*if(tb_detectMacXFF()){
-			$("#TB_overlay").addClass("TB_overlayMacFFBGHack");//use png overlay so hide flash
-		}else{
-			$("#TB_overlay").addClass("TB_overlayBG");//use background and opacity
-		}*/
 	}
 
 
@@ -767,34 +758,6 @@ UP.fancyLogin = function () {
 
 //
 UP.utils = {
-	copyToClipboard: function() {
-		$("#copyToCP").bind("click", function () {
-			//Create a new clipboard client
-            var clip = new ZeroClipboard.Client();
-
-            //Cache the last td and the parent row
-            var lastTd = $(this);
-            var parentRow = lastTd.parent("tr");
-
-            //Glue the clipboard client to the last td in each row
-            //clip.glue($(this));
-
-            //Grab the text from the parent row of the icon
-            var txt = $.trim("123");
-            clip.setText(txt);
-
-            //Add a complete event to let the user know the text was copied
-            clip.addEventListener('complete', function(client, text) {
-                alert("Copied text to clipboard:\n" + text);
-            });
-		});
-
-	},
-
-	wait: function () {
-		UP.statusMsg.show('Ожидайте&hellip;', UP.env.msgWait, false);
-	},
-
 	makePOSTRequest: function (url, options) {
 		try {
 		  	var form = $('<form/>');
@@ -955,12 +918,16 @@ UP.formCheck = {
 	register: function (form) {
 		var input = 0,
 			checkbox = 0,
-			all = 0;
+			all = 0,
+			minRequired = 0;
 
 		if (!form || !form.not(":visible")) {
 			//UP.log.debug('no form or not visible');
 			return;
 		}
+
+		// set minRequired
+		minRequired = parseInt($(form).find("input[name='form_check_required_num']").val(), 10) || 0;
 
 		$(form).find('"input[required], textarea[required]').each(function () {
 			var el = $(this),
@@ -980,6 +947,7 @@ UP.formCheck = {
 							$(el).removeClass('bad').addClass('good');
 						} else {
 							$(el).removeClass('good').addClass('bad');
+							input++;
 						}
 					} else {
 						$(el).removeClass('bad').addClass('good');
@@ -995,7 +963,7 @@ UP.formCheck = {
 		});
 
 		all = input + checkbox;
-		form.find("input[type='submit']").attr("disabled", !!(all > 0));
+		form.find("input[type='submit']").attr("disabled", !!(all > minRequired));
 	}
 };
 
@@ -1016,3 +984,4 @@ UP.log = function () {
 jQuery(function () {
 	UP.fancyLogin.init();
 });
+

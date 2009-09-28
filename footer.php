@@ -20,8 +20,8 @@ if (!defined('UP')) {
 		© <? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="http://iteam.net.ua/">iTeam</a>.</p>
 		</div>
 		<div id="footerBottom">&nbsp;</div>
-		<script src="/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-		<script src="/js/up.js" type="text/javascript"></script>
+		<script src="<?php echo JS_BASE_URL; ?>js/jquery-1.3.2.min.js" type="text/javascript"></script>
+		<script src="<?php echo JS_BASE_URL_1; ?>js/up.js" type="text/javascript"></script>
 <?php
 
 //
@@ -33,7 +33,7 @@ if (isset($addScript) && is_array($addScript) && count($addScript) > 0) {
 
 //
 if (isset($onDOMReady)) {
-	echo ('<script type="text/javascript">jQuery(function () { window.setTimeout(function () {'.$onDOMReady.'}, 100);});</script>');
+	echo ('<script type="text/javascript">jQuery(function () { '.$onDOMReady.'});</script>');
 }
 
 ?>

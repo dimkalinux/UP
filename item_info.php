@@ -330,12 +330,12 @@ ZZZ;
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
 			<tr><td class="ab">срок хранения</td><td class="bb">$wakkamakka_text</td></tr>
-			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
 			$mp3_block
 			$flv_block
-			$owner_block
-			$pass_input
 			$search_like_block
+			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
+			$pass_input
+			$owner_block
 			<tr><td class="ab"></td><td class="bb"><div id="download_link">$dlink</div></td></tr>
 			<tr>
 				<td class="ab"></td>

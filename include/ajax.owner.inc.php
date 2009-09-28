@@ -47,7 +47,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			$this->exitWithError('невозможно удалить файл');
+			parent::exitWithError('невозможно удалить файл');
 		}
 
 		$out = "невозможно удалить файл";
@@ -85,7 +85,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			$this->exitWithError('невозможно отменить удаление');
+			parent::exitWithError('невозможно отменить удаление');
 		}
 
 		$out = "невозможно отменить удаление";
@@ -120,7 +120,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			$this->exitWithError('невозможно сменить владельца файла');
+			parent::exitWithError('невозможно сменить владельца файла');
 		}
 
 		$out = "невозможно сменить владельца файла";
@@ -164,7 +164,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			$this->exitWithError('невозможно переименовать файл');
+			parent::exitWithError('невозможно переименовать файл');
 		}
 
 		$out = "невозможно переименовать файл";
@@ -226,7 +226,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			$this->exitWithError('невозможно вычислить контрольную сумму');
+			parent::exitWithError('невозможно вычислить контрольную сумму');
 		}
 
 		$out = "невозможно вычислить контрольную сумму";
