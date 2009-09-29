@@ -219,8 +219,7 @@ $onDOMReady = <<<ZZZ
 					form.clearForm().resetForm();
 					$('#primary').fadeOut(350, function() {
 						$('#primary').html('<div id="status">&nbsp;</div><h2>Поздравляем</h2><p>Вы успешно изменили пароль.</p>' +
-								'<div style="margin-top: .6em;">' +
-								'<a href="/">Перейти на главную страницу</a></div>');
+								'<a href="/" class="oneLineLink">Перейти на&nbsp;главную страницу</a>');
 							}).fadeIn(250);
 				} else {
 					UP.statusMsg.show(r.message, UP.env.msgError, true);

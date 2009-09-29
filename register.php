@@ -230,10 +230,9 @@ $onDOMReady = <<<ZZZ
 				if (parseInt(r.error, 10) === 0) {
 					form.clearForm().resetForm();
 					$('#primary').fadeOut(350, function() {
-						$('#primary').html('<div id="status">&nbsp;</div><div id="r1"><h2>Поздравляем, регистрация завершена</h2>' +
-								'<p>Спасибо, что потратили время на регистрацию.</p></div>' +
-								'<div style="margin-top: .6em;">' +
-								'<a href="/">Перейти на главную страницу</a></div>');
+						$('#primary').html('<div id="status">&nbsp;</div><h2>Поздравляем, регистрация завершена</h2>' +
+								'<p>Спасибо, что потратили время на&nbsp;регистрацию.</p>' +
+								'<a href="/" class="oneLineLink">Перейти на&nbsp;главную страницу</a>');
 							}).fadeIn(250);
 				} else {
 					UP.statusMsg.show(r.message, UP.env.msgError, true);

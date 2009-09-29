@@ -13,18 +13,12 @@ $ex = $examples_a[array_rand($examples_a)];
 
 $search_form = <<<ZZZ
 	<form method="get" action="/search.php" name="search" id="search_form">
-		<input type="search" id="search_req2" name="s" size="50" minLength="3" maxlength="80" placeholder="поиск" results="15" required="1" />
-		<input type="submit" name="doSubmit" value="Найти" disabled="disabled"/>
+		<div class="formRow">
+			<input type="search" id="search_req2" name="s" size="50" minLength="3" maxlength="80" placeholder="поиск" results="15" required="1" />
+			<input type="submit" name="doSubmit" value="Найти" disabled="disabled"/>
+			<div class="inputHelp">Слова, в&nbsp;которых меньше трех букв, мы&nbsp;чаще всего игнорируем</div>
+		</div>
 	</form>
-	<div class="" style="margin: .5em 0 1em; font-size: .94em; color: #666;">
-		<!--Например:&nbsp;
-		<span class="as_js_link"
-			id="search_example"
-			onmousedown="
-				$('#search_req2').val($('#search_example').text());
-				$('input[type=submit]').removeAttr('disabled');">$ex</span><br/>-->
-				Слова, в которых меньше трех букв, мы чаще всего игнорируем
-	</div>
 ZZZ;
 
 $wasErrror = 0;

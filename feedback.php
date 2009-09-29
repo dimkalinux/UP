@@ -130,9 +130,9 @@ require UP_ROOT.'header.php';
 $out = <<<ZZZ
 	<div id="status">$errMsg</div>
 	<h2>Обратная связь</h2>
-	<p style="margin-bottom: 1em;">Перед вами специальная штука.<br />
+	<p>Перед вами специальная штука.<br />
 С&nbsp;её помощью можно задать вопрос администраторам, высказать свои мысли и&nbsp;предложения, выругаться матом или попросить денег в&nbsp;долг.
-А&nbsp;если <nobr>какая-то</nobr> штуковина на&nbsp;сайте не&nbsp;работает&nbsp;&mdash; здесь можно рассказать об&nbsp;этом службе поддержки.</p>
+А&nbsp;если <nobr>какая-то</nobr> штуковина на&nbsp;сайте не&nbsp;работает&nbsp;&mdash; здесь можно рассказать об&nbsp;этом службе поддержки.<br/></p>
 	$form
 ZZZ;
 echo ($out);
@@ -177,10 +177,9 @@ $onDOMReady = <<<ZZZ
 				if (parseInt(r.error, 10) === 0) {
 					form.clearForm().resetForm();
 					$('#primary').fadeOut(350, function() {
-						$('#primary').html('<div id="status">&nbsp;</div><div id="r1"><h2>Сообщение отправлено</h2>' +
-								'<p>Спасибо, что потратили время для связи&nbsp;с&nbsp;нами. Мы&nbsp;ценим все ваши комментарии, касающиеся работы сервиса.</p></div>' +
-								'<div style="margin-top: .6em;">' +
-								'<a href="/">Перейти на главную страницу</a></div>');
+						$('#primary').html('<div id="status">&nbsp;</div><h2>Сообщение отправлено</h2>' +
+								'<p>Спасибо, что потратили время для связи&nbsp;с&nbsp;нами. Мы&nbsp;ценим все ваши комментарии, касающиеся работы сервиса.</p>' +
+								'<a href="/" class="oneLineLink">Перейти на&nbsp;главную страницу</a>');
 							}).fadeIn(250);
 				} else {
 					UP.statusMsg.show(r.message, UP.env.msgError, true);

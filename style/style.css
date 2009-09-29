@@ -127,7 +127,7 @@ label,
 div.message p { font-size: 100% !important; }
 .dberr { padding: 1em; border: solid 1px #ddd; margin: 1em 0; }
 
-#primary p { margin-bottom: .5em; }
+#primary p { margin-bottom: .8em; }
 #primary ol { list-style-type: decimal; list-style-position: inside; margin: 0 1em 0 0em; }
 #primary ul { list-style-type: square; list-style-position: inside; margin: .5em 1em 0 0em; }
 #primary li { margin-bottom: .3em; line-height: 1.5em; }
@@ -209,7 +209,7 @@ a.page_links, a.page_links:visited { color: #0055cc !important; }
 
 
 .formRow { padding-bottom: .6em; }
-.inputHelp { font-size: .85em; padding: .2em 0; color: #444; }
+.inputHelp { font-size: .88em; padding: .2em 0; color: #444; }
 label { color: #000; font-weight: normal; display: block;}
 
 
@@ -729,3 +729,5 @@ table#myFilesTable { width: 90%; margin: .5em 0 1em; }
 #myFilesTable td, #myFilesTable td a { color: #666; }
 
 .userPanel { padding-left: 2.8em; font-size: .9em; margin-top: 1em !important; }
+
+a.oneLineLink { margin-top: .6em; display: block; }

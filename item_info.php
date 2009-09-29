@@ -194,7 +194,7 @@ FMB;
 
 	// create download link
 	$dlink_raw = "/download/$item_id/$dlmValue/";
-	$dlink = '<input type="submit" value="Скачать файл" style="font-size: 1.1em; margin: .5em 0;"/>';
+	$dlink = '<input type="submit" value="Скачать файл"/>';
 
 	$owner_block = '';
 	if ($magic || $im_owner) {
