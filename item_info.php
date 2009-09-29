@@ -245,7 +245,7 @@ ZZZ;
 		<td class="bb" id="videoBlock">
 			<a href="#flvBlock" class="as_js_link" id="fancyVideo">смотреть</span>
 		</td>
-		<div id="flvBlock" style="display: none;"></div>
+		<div id="flvBlock superHidden"></div>
 ZZZ;
 
 		$js_video_block = <<<FMB
@@ -325,7 +325,7 @@ ZZZ;
 	<h2 id="item_info_filename">$filename</h2>
 	<form method="$form_method" action="/download/$item_id/$dlmValue/" autocomplete="off">
 	<table class="asDiv">
-	<tr><td style="vertical-align: top;">
+	<tr><td>
 		<table class="t1" id="file_info_table">
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
@@ -339,7 +339,7 @@ ZZZ;
 			<tr><td class="ab"></td><td class="bb"><div id="download_link">$dlink</div></td></tr>
 			<tr>
 				<td class="ab"></td>
-				<td class="bb" style="color: #666;">
+				<td class="bb">
 				<span class="as_js_link" onclick="$('#desc_block').hide(); $('#links_block').toggle(0);">ссылки на файл</span>
 				&nbsp;
 				$desc_link

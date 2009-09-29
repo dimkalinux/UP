@@ -53,6 +53,8 @@ body { padding: 0px 2em; color: #101010; background: #f8f8f8;
 #nicemenu a { color: red; text-decoration:none; }
 #nicemenu a:hover { text-decoration: underline !important; color: #0063DC !important; }
 #nicemenu li { display:inline; position:relative; margin-right: .1em;}
+#nicemenu li.first { padding-right: 1em; }
+#nicemenu li.last { padding-left: 1em; }
 #nicemenu li.on a { text-decoration: none; color: #ff7700; }
 #nicemenu li span { position:relative; z-index:10; padding: .3em .1em .2em .2em; border: solid 1px #fff; }
 #nicemenu li span a { padding: 0 .3em 0 .2em;  }
@@ -153,6 +155,7 @@ td#owner_links span[status=off] { color: #999; border: none; cursor: default; }
 
 
 table { border-collapse: collapse; }
+td { vertical-align: top; }
 table#top_files_table, table#search_files_table, table#myFilesTable { width: 90%; margin-top: 1em;}
 table#top_files_table tbody td, table#search_files_table tbody td { border-bottom: solid 1px #eee !important;  }
 table#file_info_table tr.header td { padding-bottom: .7em;  }
@@ -169,7 +172,7 @@ table.t1#file_info_table td { padding: .1em .3em .2em;}
 .t1 td.last, .t1 th.last { border-right: none !important; }
 
 /* file info */
-.t1 td { border: none !important; vertical-align: top; }
+.t1 td { border: none !important;  }
 td.ab { font-weight: normal; text-align: right; color: #555; }
 td.bb { color: #000; }
 
@@ -280,6 +283,7 @@ br.clear { clear: both !important; width: 0; height: 0; }
 .left { text-align: left !important; }
 .right { text-align: right !important; }
 .hidden { visibility: hidden; }
+.superHidden { display: none; }
 .nobr { white-space: nowrap; }
 .green { color: green !important; }
 .lightgrey { color: #999 !important; }
@@ -288,6 +292,7 @@ br.clear { clear: both !important; width: 0; height: 0; }
 .asTable { display: table; border-collapse: collapse; }
 .asRow { display: table-row; vertical-align: top;}
 .asCell { display: table-cell; vertical-align: top;}
+.relative { position: relative; }
 
 
 form[name=feedback] input[type=text],
