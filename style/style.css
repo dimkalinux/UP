@@ -285,6 +285,7 @@ br.clear { clear: both !important; width: 0; height: 0; }
 .hidden { visibility: hidden; }
 .superHidden { display: none; }
 .nobr { white-space: nowrap; }
+.red { color: red !important; }
 .green { color: green !important; }
 .lightgrey { color: #999 !important; }
 .noborder { border: none !important; }
