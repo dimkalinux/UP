@@ -2,28 +2,12 @@
 
 define('DEBUG', true);
 
-//
-define('ANTIVIR_NOT_CHECKED', 7);
-define('ANTIVIR_CLEAN', 0);
-define('ANTIVIR_VIRUS', 1);
-define('ANTIVIR_ERROR', 2);
-
-
-// db
-/*define('MYSQL_ADDRESS', '194.146.132.67');
-define('MYSQL_LOGIN', 'up');
-define('MYSQL_PASSWORD', 'upupdown2.0');
-define('MYSQL_DB', 'up');
-define('MYSQL_CHARSET', 'utf8');
-*/
 
 define('MYSQL_ADDRESS', 'localhost');
 define('MYSQL_LOGIN', 'root');
 define('MYSQL_PASSWORD', '');
 define('MYSQL_DB', 'up');
 define('MYSQL_CHARSET', 'utf8');
-
-
 
 // memcache
 define('MEMCACHE_HOST', '194.146.132.66');
@@ -45,6 +29,12 @@ define('ACTION_MAKE_ME_OWNER', 5);
 define('ACTION_SEARCH', 10);
 define('ACTION_GET_PE', 11);
 define('ACTION_GET_UPLOAD_URL', 13);
+
+//
+define('ANTIVIR_NOT_CHECKED', 7);
+define('ANTIVIR_CLEAN', 0);
+define('ANTIVIR_VIRUS', 1);
+define('ANTIVIR_ERROR', 2);
 
 // admin
 define('ACTION_ADMIN_UNDELETE_FILE', 24);
@@ -81,12 +71,10 @@ $small_file_size = 200;
 $max_file_size_for_upload_antivir_check = 10;
 
 
-
 // PATH SECTION
 $upload_dir = '/var/upload/';
 $thumbs_dir = $upload_dir.'/thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
-
 
 
 // TIMEOUT SECTION
