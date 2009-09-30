@@ -85,6 +85,10 @@ $thumbs_dir = $upload_dir.'/thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
 
 
+// CACHE TIMEOUTS
+$cache_timeout_rss = 300;
+
+
 // TIMEOUT SECTION
 // in days
 $undelete_interval = 2;
