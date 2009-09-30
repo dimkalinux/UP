@@ -9,9 +9,9 @@ if (!defined('UP')) {
 
 	<div id="footer">
 		<ul class="sitenav">
-			<li><a href="/map/">Карта сайта</a></li>
-			<li><a href="/agreement/">Пользовательское соглашение</a></li>
-			<li><a href="/feedback/" title="Форма для связи с администрацией сервиса">Обратная связь</a></li>
+			<li><a href="<?php echo $base_url; ?>map/">Карта сайта</a></li>
+			<li><a href="<?php echo $base_url; ?>agreement/">Пользовательское соглашение</a></li>
+			<li><a href="<?php echo $base_url; ?>feedback/" title="Форма для связи с администрацией сервиса">Обратная связь</a></li>
 			<li><a href="http://forum.lluga.net/forum/up/" title="Форум технчиеской поддержки">Форум</a></li>
 			<li><a href="http://twitter.com/up_ua" title="Твиттер проекта">@up_ua</a></li>
 		</ul>
