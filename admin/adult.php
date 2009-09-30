@@ -1,24 +1,23 @@
 <?
+define('ADMIN_PAGE', 1);
+
 if (!defined('UP_ROOT')) {
-	define('UP_ROOT', './');
+	define('UP_ROOT', '../');
 }
 require UP_ROOT.'functions.inc.php';
-require UP_ROOT.'header.php';
-
-
-$admin = is_admin();
-if (!$admin) {
-	show_error_message('Недостаточно прав для выполнения операции.');
-	exit();
-}
 
 // admin js function
 $admin_th_row = '<th class="first center"><input id="allCB" type="checkbox"/></th>';
 $admin_actions_block = '<input type="button" value="not adult" onmousedown="UP.admin.unmarkItemAdult(false);" disabled="disabled" />';
 $addScript[] = 'up.admin.js';
 
-$db = new DB;
-$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND hidden='0' AND adult='1' ORDER BY uploaded_date DESC");
+try {
+	$db = new DB;
+	$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND hidden='0' AND adult='1' ORDER BY uploaded_date DESC");
+} catch (Exception $e) {
+	error($e->getMessage());
+}
+
 
 if ($datas) {
 	$out = <<<ZZZ
@@ -38,11 +37,10 @@ if ($datas) {
 		</thead>
 		<tbody>
 ZZZ;
-	echo($out);
 
-	array_walk($datas, 'print_files_list_callback', $admin);
+	array_walk($datas, 'print_files_list_callback', $admin, $out);
 
-	$out = <<<ZZZ
+	$out .= <<<ZZZ
 		</tbody>
 		</table>
 ZZZ;
@@ -51,12 +49,14 @@ ZZZ;
 	$out = '<div id="status">&nbsp;</div><h2>Adult</h2><p>Отсутствует.</p>';
 }
 
+
+require UP_ROOT.'header.php';
 echo($out);
 require UP_ROOT.'footer.php';
 exit();
 
 
-function print_files_list_callback ($item, $key, $admin) {
+function print_files_list_callback ($item, $key, $admin, &$out) {
 	$item_id = intval ($item['id']);
 	$filename = get_cool_and_short_filename ($item['filename'], 40);
 	$filesize_text = format_filesize ($item['size']);
@@ -64,14 +64,13 @@ function print_files_list_callback ($item, $key, $admin) {
 	$ip = $item['ip'];
 	$file_date = prettyDate($item['uploaded_date']);
 
+	$admin_td_row = '';
 	if ($admin) {
 		$admin_td_row = '<td class="center"><input type="checkbox" value="1" id="item_cb_'.$item_id.'"/></td>';
-	} else {
-		$admin_td_row = '';
 	}
 
 
-	$out = <<<ZZZ
+	$out .= <<<FMB
 		<tr id="row_item_$item_id">
 			$admin_td_row
 			<td class="right">$filesize_text</td>
@@ -80,8 +79,7 @@ function print_files_list_callback ($item, $key, $admin) {
 			<td class="center">$downloaded</td>
 			<td class="right">$file_date</td>
 		</tr>
-ZZZ;
-	echo($out);
+FMB;
 }
 
 ?>
