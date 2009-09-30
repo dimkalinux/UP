@@ -219,13 +219,11 @@ ZZZ;
 	$thumbs_block = $js_thumbs_block = '';
 	$is_image = is_image_by_ext($filename);
 	if ($is_image && !$is_password) {
-		$thumbs_full_url = '/thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_small_url = 'http://up.lluga.net/thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_url = '/thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_full_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
 		$thumbs_block = <<<ZZZ
-		<div class="thumbs">
-			<a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a>
-		</div>
+		<div class="thumbs"><a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a></div>
 ZZZ;
 
 		$js_thumbs_block = <<<ZZZ
@@ -285,7 +283,7 @@ ZZZ;
 		$similar_num = get_similar_count($search_filename, $item_id);
 
 		if ($similar_num > 0 && $similar_num < 50) {
-			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="http://up.lluga.net/search/?s='. urlencode($search_filename) .'&amp;doSubmit&amp;ft=1">показать</a></td></tr>';
+			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="'.$base_url.'search/?s='. urlencode($search_filename) .'&amp;doSubmit&amp;ft=1">показать</a></td></tr>';
 		}
 	} catch (Exception $e) {
 		error($e->getMessage());
@@ -296,10 +294,10 @@ ZZZ;
 	// links block
 	$links_bbcode_raw = '';
 	if ($is_image) {
-		$links_bbcode_raw = "[url=http://up.lluga.net/{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]";
+		$links_bbcode_raw = "[url={$base_url}{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]";
 		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
 	} else {
-		$links_bbcode_raw = "[url=http://up.lluga.net/{$item_id}/]{$filename} — {$filesize_text_plain}[/url]";
+		$links_bbcode_raw = "[url={$base_url}{$item_id}/]{$filename} — {$filesize_text_plain}[/url]";
 		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
 	}
 
@@ -357,13 +355,13 @@ ZZZ;
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
-				<param name="FlashVars" value="text=http://up.lluga.net/$item_id/">
+				<param name="FlashVars" value="text={$base_url}{$item_id}/">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=http://up.lluga.net/$item_id/" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$base_url}{$item_id}/" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
 
-			<input size="35" value="http://up.lluga.net/$item_id/" readonly="readonly" type="text" id="link" onclick="this.select()"/>
+			<input size="35" value="{$base_url}{$item_id}" readonly="readonly" type="text" id="link" onclick="this.select()"/>
 
 			<label for="html">для сайта или блога</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
@@ -371,12 +369,12 @@ ZZZ;
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
-				<param name="FlashVars" value="text=&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;">
+				<param name="FlashVars" value="text=&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
-			<input size="35" value="&lt;a href=&quot;http://up.lluga.net/$item_id/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" readonly="readonly" type="text" id="html" onclick="this.select()"/>
+			<input size="35" value="&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" readonly="readonly" type="text" id="html" onclick="this.select()"/>
 
 			<label for="bbcode">для форума</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
@@ -397,12 +395,12 @@ ZZZ;
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
-				<param name="FlashVars" value="text=http://up.lluga.net{$dlink_raw}">
+				<param name="FlashVars" value="text={$base_url}{$dlink_raw}">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=http://up.lluga.net{$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$base_url}{$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
-			<input size="35" value="http://up.lluga.net{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
+			<input size="35" value="{$base_url}{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
 		</div>
 	</div>
 	$desc_block
