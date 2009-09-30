@@ -1,4 +1,5 @@
-<?
+<?php
+
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -7,8 +8,7 @@ require 'include/PasswordHash.php';
 
 // item
 if (!isset ($_GET['item']) || !isset ($_GET['magic'])) {
-	header('Location: /404.html');
-	exit();
+	httpError404();
 }
 
 $item_id = intval($_GET['item'], 10);
@@ -19,13 +19,11 @@ try {
 	$db = new DB;
 	$row = $db->getRow("SELECT * FROM up WHERE id=? LIMIT 1", $item_id);
 } catch (Exception $e) {
-	header('Location: /404.html');
-	exit();
+	httpError404();
 }
 
 if (!$row) {
-	header('Location: /404.html');
-	exit();
+	httpError404();
 }
 
 $cache = new Cache;
@@ -33,7 +31,7 @@ $dlmValue = $cache->get('dlm'.$item_id.ip2long($user['ip']));
 if ($dlmValue != $magic) {
 	$unuiq = uniqid();
 	show_error_message("Сcылка для скачивания не&nbsp;верна или устарела.<br/>
-	Чтобы обновить ссылку перейдите по&nbsp;адресу <a href=\"/$item_id/?$unuiq\">http://up.lluga.net/$item_id/?$unuiq</a>.");
+	Чтобы обновить ссылку перейдите по&nbsp;адресу <a href=\"{$base_url}{$item_id}/?$unuiq\">{$base_url}{$item_id}/?$unuiq</a>.");
 }
 
 // password?
@@ -65,7 +63,6 @@ if (mb_strlen($filemime) !== 0) {
 header("Content-Disposition: attachment; filename=\"$filename\"");
 header("X-Accel-Buffering: yes");
 header("X-Accel-Redirect: /files/".$path);
-//header('Location: http://up.lluga.net/'.$item_id.'/?'.uniqid());
 exit();
 
 ?>

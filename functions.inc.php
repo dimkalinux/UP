@@ -1225,6 +1225,12 @@ function getServerLoad() {
 	return $load[0];
 }
 
+function httpError404() {
+	global $base_url;
+
+	header("Location: {$base_url}404.html");
+	exit();
+}
 
 
 ?>
