@@ -176,7 +176,7 @@ FMB;
 		</div>
 ZZZ;
 
-	echo $menu;
+	return $menu;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -184,14 +184,14 @@ ZZZ;
 <head>
 	<title><?php echo $page_title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="keywords" content="скачать, upload, загрузить, файлы, выложить, files, файлообменник, обменник">
-	<meta name="robots" content="index, follow">
-	<meta name="document-state" content="Dynamic">
-	<meta name="resource-type" content="Document">
+	<meta name="keywords" content="скачать, upload, загрузить, файлы, выложить, files, файлообменник, обменник"/>
+	<meta name="robots" content="index, follow"/>
+	<meta name="document-state" content="Dynamic"/>
+	<meta name="resource-type" content="Document"/>
 	<link rel="stylesheet" type="text/css" href="/style/style.css"/>
 	<!--[if IE]><link rel="stylesheet" type="text/css" href="/style/ie_style.css" /><![endif]-->
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="http://up.lluga.net/rss/"/>
-	<link rel="search" type="application/opensearchdescription+xml" title="up@lluga.net search" href="http://up.lluga.net/misc/up_search.xml"/>
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $base_url; ?>rss/"/>
+	<link rel="search" type="application/opensearchdescription+xml" title="up@lluga.net search" href="<?php echo $base_url; ?>misc/up_search.xml"/>
 </head>
 <?php flush(); ?>
 <body>
@@ -199,7 +199,7 @@ ZZZ;
 	<div id="headerTop">&nbsp;</div>
 	<div id="header">
 		<h1><strong>ап</strong><em>, сервис обмена и&nbsp;хранения файлов</em></h1>
-<?php print_menu(); ?>
+<?php echo print_menu(); ?>
 	</div>
 	<div id="wrap">
 		<div id="primary">
