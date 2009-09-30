@@ -6,14 +6,19 @@ require UP_ROOT.'functions.inc.php';
 
 $out = <<<FMB
 auth_ok:-1
-uid:5000
-gid:5000
+uid:-1
+gid:-1
 dir:/tmp
 end
 \n
 FMB;
 
 do {
+	// no FTP access
+	if ($ftpAccessEnabled === FALSE) {
+		break;
+	}
+
 	$login = mb_substr(getenv('AUTHD_ACCOUNT'), 0, 32);
 	$pass = mb_substr(getenv('AUTHD_PASSWORD'), 0, 64);
 
@@ -38,15 +43,12 @@ do {
 			break;
 		} else {
 			$dir = '/var/fuse/'.stripslashes($row['username']);
-			$uid = intval(5000+$user_id, 10);
-			$gid = intval(5000+$user_id, 10);
+			$uid = intval($ftpUIDBase+$user_id, 10);
+			$gid = intval($ftpGIDBase+$user_id, 10);
 
 			if (is_dir($dir) === FALSE) {
 				break;
 			}
-
-			$uploadRate = 1048576*5;
-			$downloadRate = 1048576*5;
 
 			// login ok
 			$out = <<<FMB
@@ -54,8 +56,8 @@ auth_ok:1
 uid:$uid
 gid:$gid
 dir:$dir
-throttling_bandwidth_ul:$uploadRate
-throttling_bandwidth_dl:$downloadRate
+throttling_bandwidth_ul:$ftpUploadRate
+throttling_bandwidth_dl:$ftpDownloadRate
 end
 \n
 FMB;

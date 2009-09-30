@@ -71,6 +71,14 @@ $small_file_size = 200;
 $max_file_size_for_upload_antivir_check = 10;
 
 
+// FTP access
+$ftpAccessEnabled = TRUE;
+$ftpUploadRate = 1048576*5;
+$ftpDownloadRate = 1048576*5;
+$ftpUIDBase = 5000;
+$ftpGIDBase = 5000;
+
+
 // PATH SECTION
 $upload_dir = '/var/upload/';
 $thumbs_dir = $upload_dir.'/thumbs/';
