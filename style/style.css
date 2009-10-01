@@ -36,7 +36,7 @@ caption, th, td { text-align: left; font-weight: normal; }
 blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
-html { 	min-height: 100%; margin-bottom: 1px;}
+html { 	min-height: 101%; margin-bottom: 1px !important;}
 iframe#target_upload { width: 0; height: 0; border: none;}
 * html .clear, * html .section { height: 1%; }
 .clear, .section { display: block; clear: both; }
@@ -50,12 +50,14 @@ body { padding: 0px 2em; color: #101010; background: #f8f8f8;
 
 /* menu */
 #nicemenu { margin: 0 0 .7em 0; border-bottom: dotted 1px #E5E5E5; padding-bottom: .3em; }
-#nicemenu a { text-decoration:none; }
-#nicemenu a:hover { text-decoration: underline !important; color: #0063DC !important; }
+/*.head_menu a:hover { text-decoration:none; }*/
+.head_menu a:hover,
+.niceMenuFirst > a:hover,
+.niceMenuLast > a:hover
+{ text-decoration: underline !important; color: #0063DC !important; }
 #nicemenu li { display:inline; position:relative; margin-right: .1em;}
-#nicemenu li.first { padding-right: 1em; }
-#nicemenu li.last { padding-left: 1em; }
-/*#nicemenu li.on a { text-decoration: none; color: #ff7700; }*/
+#nicemenu li.niceMenuFirst { padding-right: 1em; }
+#nicemenu li.niceMenuLast { padding-left: 1em; }
 #nicemenu span { position:relative; z-index:10; padding: .3em .1em .2em .2em; border: solid 1px #fff; }
 #nicemenu span a { padding: 0 .3em 0 .2em;  }
 #nicemenu .over { padding: .3em .1em .2em .2em;  border-top:solid 1px #E5E5E5; border-left:solid 1px #E5E5E5;  border-right:solid 1px #999999; border-bottom:solid 1px #fff;  }
@@ -73,8 +75,10 @@ body { padding: 0px 2em; color: #101010; background: #f8f8f8;
 #nicemenu a.item_line { border-top:solid 1px #E5E5E5; padding-top:4px !important; margin-top:3px; }
 .sub_menu a:link,
 .sub_menu a:visited
-{ color: #000; display:block; font-size: .95em; padding: .1em 1.2em .2em 1.5em; font-weight: normal; white-space: nowrap; text-decoration: none;}
-.sub_menu a:hover { z-index: 556; cursor: default; text-decoration: none !important; color: #000 !important; background: #B3D4FF !important; }
+{ color: #000; display:block; font-size: .95em; padding: .1em 1.2em .2em 1.5em; font-weight: normal; white-space: nowrap; text-decoration: none; }
+
+.sub_menu a:hover { z-index: 556; cursor: default; text-decoration: none !important; background: #B3D4FF !important; }
+
 .header_submenu { color: #a4a4a4; font-weight: bold; font-size: .95em; padding: .1em 1.2em .2em .8em; white-space: nowrap; }
 .sub_menu a + .header_submenu { border-top:solid 1px #E5E5E5; }
 

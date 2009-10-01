@@ -65,12 +65,12 @@ function print_menu() {
 
 	$cpage == '/index.php' ? $class = "current" : $class = "z";
 	$main_url = <<<ZZZ
-		<li class="$class first" style="padding-right: 6px;"><a href="/" title="Вернуться на главную страницу">Главная</a></li>
+		<li class="$class niceMenuFirst" style="padding-right: 6px;"><a href="/" title="Вернуться на главную страницу">Главная</a></li>
 ZZZ;
 
 	$cpage == '/search/' ? $class = "current" : $class = "z";
 	$search_url = <<<ZZZ
-		<li class="$class last" style="padding-left: 6px;"><a href="/search/">Поиск</a></li>
+		<li class="$class niceMenuLast" style="padding-left: 6px;"><a href="/search/">Поиск</a></li>
 ZZZ;
 
 	stripos($cpage, 'about') !== false ? $class = "current" : $class = "z";
