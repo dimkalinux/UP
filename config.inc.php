@@ -124,6 +124,10 @@ $thumbs_preview_w = 1024;
 $thumbs_preview_h = 768;
 
 
+// GOOGLE ANALYTICS SECTION
+$googleAnalyticsCode = '';
+
+
 
 // STORAGE SECTION
 $storage_1 = array(

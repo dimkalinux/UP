@@ -24,31 +24,29 @@ if (!defined('UP')) {
 		<script src="<?php echo JS_BASE_URL_1; ?>js/up.js" type="text/javascript"></script>
 <?php
 
-//
+
+// ADDON JS-SCRIPT BLOCK
 if (isset($addScript) && is_array($addScript) && count($addScript) > 0) {
 	foreach ($addScript as $script) {
-		echo ('<script src="/js/'.check_plain($script).'" type="text/javascript"></script>');
+		echo '<script src="/js/'.check_plain($script).'" type="text/javascript"></script>';
 	}
 }
 
-//
+
+// ON-DOM-READY BLOCK
 if (isset($onDOMReady)) {
-	echo ('<script type="text/javascript">jQuery(function () { '.$onDOMReady.'});</script>');
+	echo '<script type="text/javascript">jQuery(function () { '.$onDOMReady.'});</script>';
 }
 
-?>
-	<script type="text/javascript">
-		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-		try {
-			var pageTracker = _gat._getTracker("UA-6106025-1");
-			pageTracker._trackPageview();
-		} catch(err) {}
-	</script>
 
-<?
+// GOOGLE ANALYTICS BLOCK
+if (isset($googleAnalyticsCode) && !empty($googleAnalyticsCode)) {
+	$gaCodeBlock = <<<FMB
+<script type="text/javascript">$(document).ready( function() { $.ga.load('$googleAnalyticsCode'); } );</script>
+FMB;
+	echo $gaCodeBlock;
+}
+
 define('UP_FOOTER', 1);
 ?>
 </body>
