@@ -1,4 +1,5 @@
-<?
+<?php
+
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -23,7 +24,7 @@ if (!$user['is_guest']) {
 	$user_email = User::getUserEmail($user['id']);
 }
 
-$form_action = $base_url.'feedback';
+$form_action = $base_url.'feedback/';
 $csrf = generate_form_token($form_action);
 $form = <<<ZZZ
 	<form method="post" action="$form_action" name="feedback" enctype="multipart/form-data" accept-charset="utf-8">
@@ -50,7 +51,7 @@ $form = <<<ZZZ
 	</form>
 ZZZ;
 
-$wasError = 0;
+$wasError = 1;
 $errMsg = "&nbsp;";
 
 
@@ -58,26 +59,23 @@ if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
 	do {
 		// 1. check csrf
 		if (!check_form_token($csrf)) {
-			$wasError=1;
-			$errMsg='Действие заблокировано системой безопасности.';
+			$errMsg = 'Действие заблокировано системой безопасности.';
 			break;
 		}
 
-		if (!isset($_POST['feedbackText']) ||
-			(mb_strlen($_POST['feedbackText'], 'UTF-8') < 1)) {
-			$wasError=1;
-			$errMsg='Заполните все необходимые поля';
+		if (!isset($_POST['feedbackText']) || (mb_strlen($_POST['feedbackText']) < 1)) {
+			$errMsg = 'Заполните все необходимые поля';
 			break;
 		}
 
 		// get all inputs
 		$ip = get_client_ip();
 		$subject = '';
-		$message = mb_substr($_POST['feedbackText'], 0, 2048, 'UTF-8');
+		$message = mb_substr($_POST['feedbackText'], 0, 2048);
 
 		$email = '';
 		if (isset($_POST['feedbackUserEmail'])) {
-			$email = mb_substr($_POST['feedbackUserEmail'], 0, 80, 'UTF-8');
+			$email = mb_substr($_POST['feedbackUserEmail'], 0, 80);
 		}
 
 		$uploadfilename = '';
@@ -85,8 +83,7 @@ if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
 			$up_file = $_FILES['feedbackUserFile'];
 			// check for errors
 			if ($up_file['error'] != 0 && !is_uploaded_file($up_file['tmp_name'])) {
-				$wasError=1;
-				$errMsg='Ошибка при загрузке файла';
+				$errMsg = 'Ошибка при загрузке файла';
 				break;
 			}
 
@@ -94,26 +91,35 @@ if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
 			$uploadfile = $GLOBALS['feedback_upload_dir'].'/'.$uploadfilename;
 
 			if (!move_uploaded_file($up_file['tmp_name'], $uploadfile)) {
-				$wasError=1;
-				$errMsg='Ошибка при сохранении файла';
+				$errMsg = 'Ошибка при сохранении файла';
 				break;
 			}
 		}
 
 		// add to database
-		$db = new DB;
-		if (!$db->query("INSERT INTO feedback VALUES('', ?, NOW(), ?, ?, ?, '0')", $ip, $message, $email, $uploadfilename)) {
-			$wasError=1;
-			$errMsg='Ошибка на сервере. Попробуйте позже';
-			break;
+		try {
+			$db = new DB;
+			$db->query("INSERT INTO feedback VALUES('', ?, NOW(), ?, ?, ?, '0')", $ip, $message, $email, $uploadfilename);
+		} catch (Exception $e) {
+			$errMsg = 'Ошибка на сервере. Попробуйте позже';
+
+			if (isset($_GET['json'])) {
+				exit(json_encode(array('error'=> 1, 'message' => $errMsg)));
+			} else {
+				show_error_message($errMsg);
+			}
 		}
+
 
  		$headers = "MIME-Version: 1.0\n" ;
         $headers .= "Content-Type: text/html; charset=\"utf-8\"\n";
-		mail('dark@lluga.net', 'UP feedback', $message, $headers);
+		mail($feedback_email, 'UP feedback', $message, $headers);
+
+		// if we here — no errors
+		$wasError = 0;
 
 		if (isset($_GET['do'])) {
-			header('Location: http://up.lluga.net/feedback?thanks');
+			header("Location: {$base_url}feedback?thanks");
 		}
 	}
 	while (0);
@@ -126,16 +132,14 @@ if (isset($_GET['json'])) {
 
 
 
-require UP_ROOT.'header.php';
-$out = <<<ZZZ
+$out = <<<FMB
 	<div id="status">$errMsg</div>
 	<h2>Обратная связь</h2>
 	<p>Перед вами специальная штука.<br />
 С&nbsp;её помощью можно задать вопрос администраторам, высказать свои мысли и&nbsp;предложения, выругаться матом или попросить денег в&nbsp;долг.
 А&nbsp;если <nobr>какая-то</nobr> штуковина на&nbsp;сайте не&nbsp;работает&nbsp;&mdash; здесь можно рассказать об&nbsp;этом службе поддержки.<br/></p>
 	$form
-ZZZ;
-echo ($out);
+FMB;
 
 $onDOMReady = <<<ZZZ
 	var form = $("form[name='feedback']");
@@ -199,6 +203,7 @@ $onDOMReady = <<<ZZZ
 	$("[required='1'][value='']:first").focus();
 ZZZ;
 
-//
+require UP_ROOT.'header.php';
+echo $out;
 require UP_ROOT.'footer.php';
 ?>

@@ -85,6 +85,10 @@ $thumbs_dir = $upload_dir.'/thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
 
 
+// EMAIL
+$feedback_email = 'dark@iteam.net.ua';
+
+
 // CACHE TIMEOUTS
 $cache_timeout_rss = 300;
 
