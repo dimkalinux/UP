@@ -231,7 +231,7 @@ FMB;
 
 
 function is_admin() {
-	return false;
+	return True;
 	if (get_client_ip() === '192.168.10.50') {
 		return true;
 	} else {

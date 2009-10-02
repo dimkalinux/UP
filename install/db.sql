@@ -34,8 +34,9 @@ CREATE TABLE `feedback`
    	`ip` INT UNSIGNED NOT NULL,
    	`date` datetime NOT NULL,
    	`message` blob NOT NULL,
-	`email` varchar(255),
+	`email` varchar(129),
 	`file` varchar(255),
+	`filename` varchar(255),
 	`readed` bool,
    	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

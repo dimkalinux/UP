@@ -13,32 +13,21 @@ $feedbackList = getFeedbackList();
 $out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	<h2>Сообщения «обратной связи»</h2>
-
-	<table class="t1" id="search_files_table">
-	<thead>
-	<tr>
-		<th class="first center"><input id="allCB" type="checkbox"/></th>
-		<th style="width: 10em;">Дата</th>
-		<th>Текст</th>
-	</tr>
-	</thead>
-	<tbody>
 	$feedbackList
-	</tbody>
-	</table>
+
 ZZZ;
 
 
 require UP_ROOT.'header.php';
-echo($out);
+echo $out;
 $addScript[] = 'up.admin.js';
-$onDOMReady = 'UP.admin.cbStuffStart();';
 require UP_ROOT.'footer.php';
 exit();
 
 
 
 function getFeedbackList() {
+	global $base_url;
 	$out = '';
 
 	try {
@@ -49,21 +38,22 @@ function getFeedbackList() {
 			foreach ($datas as $rec) {
 				$id = $rec['id'];
 				$date = $rec['date'];
-				$email = $rec['email'];
+				$email = (empty($rec['email'])) ? 'Посторонний&nbsp;К' : "<a href=\"mailto:{$rec['email']}\">{$rec['email']}</a>";
 				$file = $rec['file'];
-				$message = $rec['message'];
+				$message = stripslashes($rec['message']);
 				$title = mb_substr($message, 0, 70);
 
-			/*if ($file) {
-				$file = '<enclosure url="http://up.lluga.net/up_feedback/'.$file.'"/>';
-			}*/
+				if ($file) {
+					$file = ", <a href=\"$base_url/up_feedback/$file\">файл</a>";
+				}
+
 				$out .= <<<FMB
-				<tr>
-					<td class="center"><input type="checkbox" value="1" id="item_cb_'.$id.'"/></td>
-					<td>$date</td>
-					<td id="text_$id"><span id="title_$id">$title</span></td>
-					<td style="display: none;"><span id="title_$id">$title</span><span id="message_$id">$message</span></td>
-				</tr>
+				<div class="adminFeedbackBlock">
+					<p>
+						$message
+						<div class="adminFeedbackBlockFooter">$email — {$date}{$file}</div>
+					</p>
+				</div>
 FMB;
 
 			}

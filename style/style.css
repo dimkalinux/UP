@@ -686,3 +686,6 @@ td#fancy_title_right {
 .userPanel { padding-left: 2.8em; font-size: .9em; margin-top: 1em !important; }
 
 a.oneLineLink { margin-top: .6em; display: block; }
+
+.adminFeedbackBlock { color: #333; background: #f5f5f5; padding: 1em 1em 1em 1em; margin-bottom: .8em; }
+.adminFeedbackBlockFooter { margin-left: 1em; }
