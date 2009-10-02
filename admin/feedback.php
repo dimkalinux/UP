@@ -38,7 +38,7 @@ function getFeedbackList() {
 			foreach ($datas as $rec) {
 				$id = $rec['id'];
 				$date = $rec['date'];
-				$email = (empty($rec['email'])) ? 'Посторонний&nbsp;К' : "<a href=\"mailto:{$rec['email']}\">{$rec['email']}</a>";
+				$email = (empty($rec['email'])) ? 'Mr. Anonymous' : "<a href=\"mailto:{$rec['email']}\">{$rec['email']}</a>";
 				$file = $rec['file'];
 				$message = stripslashes($rec['message']);
 				$title = mb_substr($message, 0, 70);
@@ -52,6 +52,9 @@ function getFeedbackList() {
 					<p>
 						$message
 						<div class="adminFeedbackBlockFooter">$email — {$date}{$file}</div>
+						<div class="adminFeedbackBlockControl">
+							<span class="as_js_link">ссылка</span> | <span class="as_js_link">удалить</span>
+						</div>
 					</p>
 				</div>
 FMB;
