@@ -946,11 +946,20 @@ ZZZ;
 				$file_last_downloaded_date = 'неизвестно';
 			}
 
+			$popularLabel = '';
+			if ($downloaded > 1000) {
+					$popularLabel = '<span class="popularLabel" title="Более 1000 скачиваний">+1k</span>';
+			} else if ($downloaded > 100) {
+					$popularLabel = '<span class="popularLabel" title="Более 100 скачиваний">+100</span>';
+			} else if ($downloaded > 50) {
+					$popularLabel = '<span class="popularLabel" title="Более 50 скачиваний">+50</span>';
+			}
+
 			$blocks .= <<<ZZZ
 		<tr id="row_item_{$rec['id']}">
 			$admin_td_row
 			<td class="right $td_size_class">$filesize</td>
-			<td id="cell_item_{$rec['id']}" class="left $td_name_class"><a href="/{$rec['id']}/" title="{$rec['filename']}">${filename}&nbsp;</a></td>
+			<td id="cell_item_{$rec['id']}" class="left $td_name_class">$popularLabel <a href="/{$rec['id']}/" title="{$rec['filename']}">${filename}&nbsp;</a></td>
 			<td class="center $td_downloads_class">$downloaded</td>
 			<td class="right $td_date_class">$file_date</td>
 		</tr>
