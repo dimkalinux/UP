@@ -9,12 +9,15 @@ if (!defined('UP')) {
 class User {
 
 	public static function getCurrentUser() {
-		$user = array("ip" => '', "id" => 0, "login" => '', "is_admin" => false, "is_guest" => true);
+		$user = array("email" => '', "ip" => '', "id" => 0, "login" => '', "is_admin" => false, "is_guest" => true, "gravatar" => '');
 
 		$user['ip'] = get_client_ip();
 
 		try {
 			$is_logged = User::logged();
+			if ($is_logged !== false) {
+				$userinfo = User::getUserInfo($is_logged);
+			}
 		} catch(Exception $e) {
 			throw new Exception($e->getMessage());
 		}
@@ -24,10 +27,18 @@ class User {
 			$user['id'] = 0;
 			$user['is_admin'] = false;
 			$user['is_guest'] = true;
+			$user['gravatar'] = '';
 		} else {
 			$user['id'] = $is_logged;
 			$user['is_guest'] = false;
-			$user['login'] = User::getUsername($is_logged);
+			$user['login'] = $userinfo['username'];
+			$user['email'] = $userinfo['email'];
+
+			// get gravatar
+        	$gravatar = new Gravatar($user['email'], '');
+        	$gravatar->size = 64;
+        	$gravatar->rating = "G";
+			$user['gravatar'] = $gravatar->toHTML();
 		}
 
 		return $user;
@@ -238,6 +249,22 @@ FMB;
 		} catch(Exception $e) {
 			throw new Exception($e->getMessage());
 		}
+	}
+
+	public static function getUserInfo($uid) {
+		try {
+			$db = new DB;
+
+			$row = $db->getRow("SELECT username, email FROM session WHERE uid=? LIMIT 1", $uid);
+			if ($row) {
+				return array("username" => $row['username'], "email" => $row['email']);
+			}
+
+			return '';
+		} catch(Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+
 	}
 
 
