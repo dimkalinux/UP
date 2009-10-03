@@ -57,7 +57,7 @@ if (isset($_POST['form_sent'])) {
 		// part 2
 		try {
 			$db = new DB;
-			$row = $db->getRow('SELECT id,password,email FROM users WHERE username=? LIMIT 1', $form_username);
+			$row = $db->getRow('SELECT id,password,email,admin FROM users WHERE username=? LIMIT 1', $form_username);
 			if (!$row) {
 				$err = 1;
 				$errMsg = 'Неверный логин или пароль';
@@ -68,6 +68,7 @@ if (isset($_POST['form_sent'])) {
 			$user_id = $row['id'];
 			$user_password_hash = $row['password'];
 			$user_email = $row['email'];
+			$is_admin = $row['admin'];
 
 			// check password
 			require UP_ROOT.'include/PasswordHash.php';
@@ -91,7 +92,7 @@ if (isset($_POST['form_sent'])) {
 
 
 		// realy login
-		User::login($form_username, $user_id, $user_email, true);
+		User::login($form_username, $user_id, $user_email, $is_admin, true);
 		if (isset($_POST['do'])) {
 			header('Location: /');
 			exit();

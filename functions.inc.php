@@ -56,9 +56,11 @@ try {
 	error($e->getMessage());
 }
 
+
+//print_r($user);
 // is admin rights?
 if (defined('ADMIN_PAGE')) {
-	if (is_admin() != true) {
+	if ($user['is_admin'] !== True) {
 		show_error_message('Доступ защищён зарослями фиалок и лютиков.');
 		exit();
 	}
@@ -231,14 +233,14 @@ FMB;
 }
 
 
-function is_admin() {
+/*function is_admin() {
 	return True;
 	if (get_client_ip() === '192.168.10.50') {
 		return true;
 	} else {
 		return false;
 	}
-}
+}*/
 
 
 function clear_stat_cache() {
@@ -701,11 +703,12 @@ ZZZ;
 
 
 function top_get($type, $page, $link_base) {
-	if ($page > 15 && !is_admin()) {
+	global $user;
+	if ($page > 15 && !$user['is_admin']) {
 		return '<div id="status">&nbsp;</div><h2>Внимание</h2><p>Для просмотра более старых файлов воспользуйтесь <a href="/search/">поиском</a>.</p>';
 	}
 
-	$admin = is_admin();
+	$admin = $user['is_admin'];
 	$items_per_page = 100;
 
 	try {

@@ -159,7 +159,7 @@ ZZZ;
 FMB;
 
 
-	if (!is_admin()) {
+	if (!$user['is_admin']) {
 		$adminMenu = '';
 	}
 

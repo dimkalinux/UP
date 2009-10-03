@@ -104,7 +104,7 @@ if (isset($_POST['form_sent'])) {
 			$t_hasher = new PasswordHash(8, FALSE);
 			$cryptPassword = $t_hasher->HashPassword($password);
 
-			$db->query("INSERT INTO users VALUES('', ?, ?, ?, NOW(), 0, 0)", $username, $cryptPassword, $email);
+			$db->query("INSERT INTO users VALUES('', ?, ?, ?, NOW(), 0, 0, 0)", $username, $cryptPassword, $email);
 		} catch (Exception $e) {
 			// is async request
 			if (isset($_GET['json'])) {

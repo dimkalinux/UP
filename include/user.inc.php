@@ -33,7 +33,7 @@ class User {
 			$user['is_guest'] = false;
 			$user['login'] = $userinfo['username'];
 			$user['email'] = $userinfo['email'];
-			$user['is_admin'] = is_admin();
+			$user['is_admin'] = (bool) $userinfo['is_admin'];
 
 			// get gravatar
         	$gravatar = new Gravatar($user['email'], '');
@@ -46,7 +46,7 @@ class User {
 	}
 
 
-	public static function login($login, $uid, $email, $savePass=true) {
+	public static function login($login, $uid, $email, $is_admin, $savePass=true) {
 		global $cookie_name, $cookieSalt;
 
 		$sid = sha1(uniqid(rand(), true));
@@ -59,7 +59,7 @@ class User {
 		try {
 			$db = new DB;
        		$db->query("DELETE FROM session WHERE sid=? AND uid=?", $sid, $uid);
-		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?, ?)", $sid, $uid, $ip, $login, $email);
+		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?, ?, ?)", $sid, $uid, $ip, $login, $email, $is_admin);
 		} catch(Exception $e) {
 			error($e->getMessage());
 		}
@@ -257,9 +257,9 @@ FMB;
 		try {
 			$db = new DB;
 
-			$row = $db->getRow("SELECT username, email FROM session WHERE uid=? LIMIT 1", $uid);
+			$row = $db->getRow("SELECT username,email,admin FROM session WHERE uid=? LIMIT 1", $uid);
 			if ($row) {
-				return array("username" => $row['username'], "email" => $row['email']);
+				return array("username" => $row['username'], "email" => $row['email'], "is_admin" => $row['admin']);
 			}
 
 			return '';
