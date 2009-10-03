@@ -99,6 +99,7 @@ CREATE TABLE `storage`
 	KEY(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;*/
 
+/*
 DROP TABLE IF EXISTS `description`;
 CREATE TABLE `description`
 (
@@ -107,6 +108,18 @@ CREATE TABLE `description`
 	`description` TEXT NOT NULL,
 	UNIQUE (item_id),
 	KEY(id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+*/
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments`
+(
+	`id` int(10) unsigned NOT NULL auto_increment,
+	`item_id` int(10) unsigned NOT NULL,
+	`user_id` int(10) unsigned NOT NULL,
+   	`date` datetime NOT NULL,
+   	`message` blob NOT NULL,
+   	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*
