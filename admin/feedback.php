@@ -88,7 +88,6 @@ function getFeedbackList() {
 				$email = (empty($rec['email'])) ? 'Mr. Anonymous' : "<a href=\"mailto:{$rec['email']}\">{$rec['email']}</a>";
 				$file = $rec['file'];
 				$message = stripslashes($rec['message']);
-				$title = mb_substr($message, 0, 70);
 
 				if (empty($rec['email'])) {
 					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=64&amp;hash='.md5("Mr. Anonymous").'" height="64" width="64" alt="Mr. Anonymous"/>';

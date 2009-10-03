@@ -12,7 +12,7 @@ do {
 		break;
 	}
 
-	$item_id = intval(get_get('item'), 10);
+	$item_id = intval($_GET['item'], 10);
 
 	// first maybe GET
 	isset ($_GET['pass']) ? $magic = intval(get_get('pass'), 10) : $magic = null;
@@ -61,7 +61,7 @@ ZZZ;
 	$cache = new Cache;
 	// normal file
 	$location = $row['location'];
-	$fullFilename = $row['filename'];
+	$fullFilename = htmlspecialchars_decode(stripslashes($row['filename']));
 	$filename = get_cool_and_short_filename($fullFilename, 45);
 	$filesize = $row['size'];
 	$filesize_text = format_filesize($row['size']);
@@ -314,7 +314,59 @@ ZZZ;
 		</div>
 		<br class="clear"/>
 ZZZ;
-		$desc_link = '|&nbsp;&nbsp;<span class="as_js_link" onclick="$(\'#links_block\').hide(); $(\'#desc_block\').toggle(0);">описание</span>';
+		$desc_link = '<li><span class="as_js_link" rel="desc_block">описание</span></li>';
+	}
+
+	// COMMENTS SECTION
+	require UP_ROOT.'include/comments.inc.php';
+	try {
+		$comments = new Comments($item_id);
+
+		if (isset($_POST['action'])) {
+			switch(intval($_POST['action'], 10)) {
+				case ACTION_COMMENTS_ADD:
+					$comments->addComment($_POST['commentText']);
+					break;
+
+				default:
+					throw new Exception('Неизвестный код команды');
+			}
+		}
+
+		$commentsNum = $comments->commentsNum();
+
+		if ($commentsNum > 0) {
+			$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии ('.$commentsNum.')</span></li>';
+		} else {
+			$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии</span></li>';
+		}
+
+		$commentAddFormAction = $base_url.$item_id.'/';
+		$commentAddFormActionCSRF = generate_form_token($commentAddFormAction);
+		$commentActionAdd = ACTION_COMMENTS_ADD;
+
+		$commentsBlock = <<<FMB
+		<div id="commentsBlock" class="superHidden">
+			<h3>Комментарии</h3>
+				<ul class="commentList"><li>Ожидайте, комментарии загружаются&hellip;</li></ul>
+				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
+				<input type="hidden" name="form_sent" value="1"/>
+				<input type="hidden" name="action" value="$commentActionAdd"/>
+				<input type="hidden" name="csrf_token" value="$commentAddFormActionCSRF"/>
+				<div class="formRow">
+					<label for="feedbackText">Ваш комментарий</label>
+					<textarea name="commentText" rows="6" minLength="1" maxLength="2048" required="1" tabindex="1"></textarea>
+				</div>
+				<div class="formRow buttons">
+					<input type="submit" name="do" value="Отправить" tabindex="4"/>
+				</div>
+			</form>
+		</div>
+FMB;
+
+
+	} catch (Exception $e) {
+		show_error_message($e->getMessage());
 	}
 
 
@@ -339,9 +391,11 @@ ZZZ;
 			<tr>
 				<td class="ab"></td>
 				<td class="bb">
-				<span class="as_js_link" onclick="$('#desc_block').hide(); $('#links_block').toggle(0);">ссылки на файл</span>
-				&nbsp;
-				$desc_link
+				<ul class="as_js_link_list">
+					<li><span class="as_js_link" rel="links_block">ссылки на файл</span></li>
+					{$commentsLink}
+					{$desc_link}
+				</ul>
 				</td>
 			</tr>
 		</table>
@@ -405,6 +459,7 @@ ZZZ;
 		</div>
 	</div>
 	$desc_block
+	$commentsBlock
 	</td>
 	<td>
 		$thumbs_block
@@ -414,7 +469,10 @@ ZZZ;
 	</table>
 ZZZ;
 
-	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block;
+	$jsBindActionList = '$(".as_js_link_list li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
+	$jsGetCommentsList = "UP.utils.loadCommentsList($item_id)";
+
+	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;
 } while (0);
 
 if ($error === 0) {

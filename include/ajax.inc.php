@@ -5,11 +5,34 @@ if (!defined('UP')) {
 	exit;
 }
 
+if (!defined('UP_ROOT')) {
+	define('UP_ROOT', '../');
+}
+
 if (DEBUG === true) {
 	require_once UP_ROOT.'include/formaldehyde.inc.php';
 }
 
 class AJAX {
+
+	public function getComments() {
+		global $out, $result;
+
+		if (!isset($_POST['t_id'])) {
+			$this->exitWithError('Отсутствует аргумент');
+		}
+
+		$item_id = intval($_POST['t_id'], 10);
+
+		try {
+			require UP_ROOT.'include/comments.inc.php';
+			$comments = new Comments($item_id);
+			$out = $comments->getCommentList();
+			$result = 1;
+		} catch (Exception $e) {
+			$this->exitWithError($e->getMessage());
+		}
+	}
 
 	public function search() {
 		global $out, $result;

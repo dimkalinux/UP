@@ -147,7 +147,7 @@ input[type=password] { min-width: 12.5em; }
 #owner_links span[status=off] { color: #999; border: none; cursor: default; }
 
 
-#links_block {  -webkit-border-radius: 7px; -moz-border-radius: 7px; margin-top: 1em; background: #DFEBF7; /*padding: 1em;*/ float: left; }
+#links_block {  -webkit-border-radius: 7px; -moz-border-radius: 7px; /*margin-top: 1em;*/ background: #DFEBF7; /*padding: 1em;*/ float: left; }
 #links_block label { display: block; float: left; font-weight: normal; color: #000; font-size: .92em;  margin-right: 5px; }
 #links_block input[type="text"] { border: solid 1px #89BCEF; font-size: .85em; color: #484848; margin-bottom: .6em; padding: 1px 2px; width: 30em; display: block; }
 #download_link { margin: .7em 0 .7em; }
@@ -278,7 +278,8 @@ br.clear { clear: both !important; width: 0; height: 0; }
 
 
 form[name=feedback] input[type=text],
-form[name=feedback] textarea { width: 33em; }
+form[name=feedback] textarea,
+form[name=comments] textarea { width: 33em; }
 
 
 #footer { clear: both; color: #474747; }
@@ -688,11 +689,13 @@ td#fancy_title_right {
 a.oneLineLink { margin-top: .6em; display: block; }
 
 .popularLabel { font-weight: bold; color: #fff; background: #1086A4; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
-ol.feedbackList { list-style-type: none !important; }
-.feedbackList li { color: #333; /*background: #f5f5f5;*/ padding: 1em 1em 1em 1em; margin-bottom: .8em; font-size: .95em; }
-.feedbackList img.avatar { float: left; padding: 0 25px 0 0; }
+
+.feedbackList, .commentList { list-style-type: none !important; }
+.feedbackList li, .commentList li { color: #333; padding: .5em 1em .5em 1em; margin-bottom: .5em; font-size: .95em; }
+.feedbackList img.avatar, .commentList img.avatar { float: left; padding: 0 1.2em 0 0; }
 
 small { font-size: .9em; }
 ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   }
 .as_js_link_list li { display: inline; border-right: solid 1px #ddd; margin-right: .3em; padding-right: .8em; }
 
+#commentsBlock { margin-top: 1.5em; }

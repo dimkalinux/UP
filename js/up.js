@@ -26,6 +26,7 @@ UP.env = UP.env || {
 	actionLive: 11,
 	actionGetPage: 12,
 	actionGetUploadUrl: 13,
+	actionGetComments: 14,
 
 	actionAdminRemoveFeedbackMessage: 50,
 
@@ -760,6 +761,42 @@ UP.fancyLogin = function () {
 
 //
 UP.utils = {
+	loadCommentsList: function (item_id) {
+		$.ajax({
+			type: 	'POST',
+			url: 	UP.env.ajaxBackend,
+			data: 	{ t_action: UP.env.actionGetComments, t_id: item_id },
+			dataType: 'json',
+			error: function() {
+				UP.wait.stop();
+				UP.statusMsg.show('Невозможно загрузить комментарии', UP.env.msgError, false);
+			},
+			success: function(data) {
+				UP.wait.stop();
+				if (parseInt(data.result, 10) === 1) {
+					$(".commentList").html(data.message);
+				} else {
+					UP.statusMsg.show(data.message, UP.env.msgError, false);
+				}
+			}
+		});
+	},
+
+	JSLinkListToggle: function (t) {
+		var itemShowID = t.attr("rel"),
+			list = t.parent().parent();
+
+		// hide all
+		list.children("li").each(function () {
+			var itemHideID = $(this).children("span.as_js_link").attr("rel");
+			if (itemHideID != itemShowID) {
+				$("#"+itemHideID).hide();
+			}
+		});
+
+		$("#"+itemShowID).toggle();
+	},
+
 	makePOSTRequest: function (url, options) {
 		try {
 		  	var form = $('<form/>');

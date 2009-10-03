@@ -18,6 +18,13 @@ if (!isset($_REQUEST['t_action'])) {
 }
 
 switch ($action) {
+
+	case ACTION_GET_COMMENTS:
+		$ajax = new AJAX;
+		$ajax->getComments();
+		break;
+
+
 	case ACTION_SEARCH:
 		$ajax = new AJAX;
 		$ajax->search();
