@@ -189,9 +189,9 @@ class DB {
 
 	private function close() {
 		if ($this->link) {
-			if ($this->query_result) {
+			/*if ($this->query_result) {
 				@mysqli_free_result($this->query_result);
-			}
+			}*/
 
 			return @mysqli_close($this->link);
 		} else {

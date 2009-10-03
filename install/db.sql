@@ -117,4 +117,5 @@ alter table up change column deleted_reason deleted_reason varchar(200);
 alter table up drop column group_secret_key;
 alter table up drop column group_id;
 alter table up drop column description;
+ALTER TABLE session ADD COLUMN email VARCHAR(129);
 */

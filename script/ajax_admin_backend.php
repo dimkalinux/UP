@@ -19,7 +19,12 @@ if (!isset($_REQUEST['t_action'])) {
 
 
 switch ($action) {
-	case ACTION_ADMIN_DELETE_FILE:
+	case ACTION_ADMIN_DELETE_FEEDBACK_MESSAGE:
+		$ajax = new AJAX_ADMIN;
+		$ajax->deleteFeedbackMessage();
+		break;
+
+	/*case ACTION_ADMIN_DELETE_FILE:
 		action_admin_delete_file();
 		break;
 
@@ -41,16 +46,16 @@ switch ($action) {
 
 	case ACTION_ADMIN_UNMARK_AS_ADULT_FILE:
 		action_admin_unmark_as_adult_file();
-		break;
+		break;*/
 
 	default:
-		$out = 'Отсутствует код действия';
+		$out = 'Неизвестная команда';
 		break;
 }
 
 
 // Log errors
-if ($result == 0) {
+if ($result === 0) {
 	$log = new Logger;
 	$ip = $user['ip'];
 	$login = $user['login'];

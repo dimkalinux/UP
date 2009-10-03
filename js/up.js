@@ -27,6 +27,8 @@ UP.env = UP.env || {
 	actionGetPage: 12,
 	actionGetUploadUrl: 13,
 
+	actionAdminRemoveFeedbackMessage: 50,
+
 	debug: true,
 };
 

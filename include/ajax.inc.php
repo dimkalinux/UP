@@ -5,6 +5,9 @@ if (!defined('UP')) {
 	exit;
 }
 
+if (DEBUG === true) {
+	require_once UP_ROOT.'include/formaldehyde.inc.php';
+}
 
 class AJAX {
 

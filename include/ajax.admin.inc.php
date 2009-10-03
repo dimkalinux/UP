@@ -9,12 +9,36 @@ require_once UP_ROOT.'include/ajax.inc.php';
 
 
 class AJAX_ADMIN extends AJAX {
-	public function action_admin_delete_file() {
-		if (!is_admin ()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
+	public function __construct() {
+		global $user;
+
+		if ($user['is_admin'] !== True) {
+			parent::exitWithError('Недостаточно прав для выполнения операции');
+		}
+	}
+
+	public function deleteFeedbackMessage() {
+		global $user, $out, $result;
+
+		$item_id = intval(get_get('t_id'), 10);
+
+		try {
+			$db = new DB;
+			$db->query("DELETE FROM feedback WHERE id=? LIMIT 1", $item_id);
+
+			if ($db->affected() == 1) {
+				$out = '';
+				$result = 1;
+				return;
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно удалить сообщение: '.$e->getMessage());
 		}
 
+		$out = "Невозможно удалить сообщение";
+	}
+
+	/*public function action_admin_delete_file() {
 		$reason = 'удалён администрацией сервера';
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
@@ -46,11 +70,6 @@ class AJAX_ADMIN extends AJAX {
 
 
 	public function action_admin_undelete_file() {
-		if (!is_admin ()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
-		}
-
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
 		$num = 0;
@@ -83,11 +102,6 @@ class AJAX_ADMIN extends AJAX {
 
 
 	public function action_admin_mark_as_spam_file() {
-		if (!is_admin()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
-		}
-
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
 		$num = 0;
@@ -112,11 +126,6 @@ class AJAX_ADMIN extends AJAX {
 	}
 
 	public function action_admin_unmark_as_spam_file() {
-		if (!is_admin ()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
-		}
-
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
 		$num = 0;
@@ -142,11 +151,6 @@ class AJAX_ADMIN extends AJAX {
 
 
 	public function action_admin_mark_as_adult_file() {
-		if (!is_admin()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
-		}
-
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
 		$num = 0;
@@ -172,11 +176,6 @@ class AJAX_ADMIN extends AJAX {
 
 
 	public function action_admin_unmark_as_adult_file() {
-		if (!is_admin ()) {
-			$out = 'недостаточно прав для выполнения операции';
-			return;
-		}
-
 		$items = get_post('t_ids');
 		$items = explode(':', $items, 100);
 		$num = 0;
@@ -198,7 +197,7 @@ class AJAX_ADMIN extends AJAX {
 		$out = implode(":", $itemsOK);
 		$result = 1;
 		return;
-	}
+	}*/
 }
 
 ?>

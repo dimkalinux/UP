@@ -1,4 +1,3 @@
-"use strict";
 
 // class for admin functions
 UP.admin = function () {

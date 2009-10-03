@@ -33,6 +33,7 @@ class User {
 			$user['is_guest'] = false;
 			$user['login'] = $userinfo['username'];
 			$user['email'] = $userinfo['email'];
+			$user['is_admin'] = is_admin();
 
 			// get gravatar
         	$gravatar = new Gravatar($user['email'], '');
@@ -45,8 +46,9 @@ class User {
 	}
 
 
-	public static function login($login, $uid, $savePass=true) {
+	public static function login($login, $uid, $email, $savePass=true) {
 		global $cookie_name, $cookieSalt;
+
 		$sid = sha1(uniqid(rand(), true));
 		$ip = get_client_ip();
 
@@ -57,7 +59,7 @@ class User {
 		try {
 			$db = new DB;
        		$db->query("DELETE FROM session WHERE sid=? AND uid=?", $sid, $uid);
-		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?)", $sid, $uid, $ip, $login);
+		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?, ?)", $sid, $uid, $ip, $login, $email);
 		} catch(Exception $e) {
 			error($e->getMessage());
 		}

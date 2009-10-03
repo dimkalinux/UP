@@ -581,7 +581,7 @@ function makeSearch($req, $fooltext=false) {
 
 		foreach ($datas as $rec) {
 			$item_id = intval ($rec['id']);
-			$filename = get_cool_and_short_filename ($rec['filename'], 40);
+			$filename = get_cool_and_short_filename ($rec['filename'], 45);
 			$filesize_text = format_filesize ($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = $rec['uploaded_date'];
@@ -706,7 +706,7 @@ function top_get($type, $page, $link_base) {
 	}
 
 	$admin = is_admin();
-	$items_per_page = 50;
+	$items_per_page = 100;
 
 	try {
 		$db = new DB;

@@ -61,7 +61,8 @@ ZZZ;
 	$cache = new Cache;
 	// normal file
 	$location = $row['location'];
-	$filename = get_cool_and_short_filename($row['filename'], 45);
+	$fullFilename = $row['filename'];
+	$filename = get_cool_and_short_filename($fullFilename, 45);
 	$filesize = $row['size'];
 	$filesize_text = format_filesize($row['size']);
 	$filesize_text_plain = format_filesize_plain($row['size']);
@@ -320,7 +321,7 @@ ZZZ;
 	$out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	$im_owner_block
-	<h2 id="item_info_filename">$filename</h2>
+	<h2 id="item_info_filename" title="$fullFilename">$filename</h2>
 	<form method="$form_method" action="/download/$item_id/$dlmValue/" autocomplete="off">
 	<table class="asDiv">
 	<tr><td>

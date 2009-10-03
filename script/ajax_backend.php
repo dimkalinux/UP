@@ -59,13 +59,13 @@ switch ($action) {
 		break;
 
 	default:
-		$out = 'Отсутствует код действия';
+		$out = 'Неизвестная команда';
 		break;
 }
 
 
 // Log errors
-if ($result == 0) {
+if ($result === 0) {
 	$log = new Logger;
 	$ip = $user['ip'];
 	$login = $user['login'];
