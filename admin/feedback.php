@@ -53,7 +53,7 @@ $onDOMReady = <<<FMB
 							li.animate({backgroundColor: "#FA9CAC"}, 250)
 								.animate({backgroundColor: "#ffffff"}, 250)
 								.animate({backgroundColor: "#FA9CAC"}, 250)
-								.animate({backgroundColor: "#ffffff"}, 250)
+								.animate({backgroundColor: "#ffffff"}, 250);
 
 							UP.statusMsg.show(data.message, UP.env.msgError, false);
 						}

@@ -191,11 +191,17 @@ tr.canceled td, tr.selected td { background: #ffffcc !important; }
 
 #status { text-align: center;  font: .95em/1 Verdana, Tahoma, Arial, sans-serif; margin-bottom: .4em; }
 #status a, #status .as_js_link { font-weight: normal !important; margin-left: .5em; text-decoration: underline !important; border: none !important; color: #fff; }
-#status span { padding: .2em .6em; -webkit-border-radius: .3em; -moz-border-radius: .3em; color: #fff; }
+#status span, #commentStatus span { padding: .2em .6em; -webkit-border-radius: .3em; -moz-border-radius: .3em; color: #fff; }
 #status span[type=waiting] { background: #00A7E3; }
 #status span[type=info] { background: #75A900; }
 #status span[type=error] { background: #cc0000; }
 #status span[type=warning] { background: #E44329; }
+
+#commentStatus { text-align: left;  font: .95em/1 Verdana, Tahoma, Arial, sans-serif; margin: .5em 0; }
+#commentStatus span[type=waiting] { color: #006C93; }
+#commentStatus span[type=info] { color: #75A900; }
+#commentStatus span[type=error] { color: #cc0000; }
+#commentStatus span[type=warning] { color: #E44329; }
 
 #item_info_admin_panel span { margin-right: 1em; }
 #item_info_admin_panel span.active,
@@ -700,5 +706,5 @@ ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   
 .as_js_link_list li { display: inline;  margin-right: .6em;  }
 .as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .7em; }
 
-#commentsBlock { margin-top: 1.5em; }
+/*#commentsBlock { margin-top: 1em; }*/
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}

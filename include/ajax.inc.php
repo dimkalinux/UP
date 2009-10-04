@@ -22,12 +22,17 @@ class AJAX {
 			$this->exitWithError('Отсутствует аргумент');
 		}
 
+		$lastCommentID = 0;
+		if (isset($_POST['t_last_id'])) {
+			$lastCommentID = intval($_POST['t_last_id'], 10);
+		}
+
 		$item_id = intval($_POST['t_id'], 10);
 
 		try {
 			require UP_ROOT.'include/comments.inc.php';
 			$comments = new Comments($item_id);
-			$out = $comments->getCommentList();
+			$out = $comments->getCommentList($lastCommentID);
 			$result = 1;
 		} catch (Exception $e) {
 			$this->exitWithError($e->getMessage());

@@ -527,7 +527,6 @@ UP.owner = function () {
 
 // class for pretty messaging
 UP.statusMsg = function () {
-	// private
 	// Remove message if mouse is moved or key is pressed
 	function bindEvents() {
 		jQuery(window).mousemove(this.clear).click(this.clear).keypress(this.clear);
@@ -548,7 +547,7 @@ UP.statusMsg = function () {
 				.unbind('keypress', this.clear);
 
 			var empty = function () {
-					$("#status").css({opacity: "0"}).html("&nbsp;");
+				$("#status").css({opacity: "0"}).html("&nbsp;");
 			};
 
 			$("#status").stop();
@@ -768,25 +767,49 @@ UP.utils = function () {
 			$.ajax({
 				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
-				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id },
+				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id, t_last_id: lastCommentID },
 				dataType: 'json',
 				beforeSend: function () {
 					$(document).oneTime(250, 'commentAddWaitTimer', function () {
-						$("#commentResult").html('Ожидайте, загружаются новые комментарии&hellip;').show(200);
+						$("#commentStatus").html('<span type="waiting">Ожидайте, загружаются новые комментарии&hellip;</span>').show(200);
 					});
 				},
 				error: function () {
-					UP.wait.stop();
 					$(document).stopTime('commentAddWaitTimer');
-					UP.statusMsg.show('Невозможно загрузить комментарии', UP.env.msgError, false);
+					$("#commentStatus").html('<span type="error">Невозможно загрузить комментарии</span>').show(200);
 				},
 				success: function (data) {
-					UP.wait.stop();
 					$(document).stopTime('commentAddWaitTimer');
+					$("#commentStatus").html('&nbsp;');
 					if (parseInt(data.result, 10) === 1) {
-						$(".commentList").html(data.message);
+						$(".commentList").append(data.message);
+						// mark new comments
+						if (lastCommentID != 0) {
+							$(".commentList li").each(function () {
+								var item = $(this),
+									item_id = parseInt(item.attr('id').split('comment_')[1], 10);
+
+									//UP.log.debug("Flash new : #"+item_id)
+
+								if (lastCommentID < item_id) {
+									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350)
+										.animate({backgroundColor: "#ffffff"}, 350)
+										.animate({backgroundColor: "#E4F2FD"}, 350)
+										.animate({backgroundColor: "#ffffff"}, 350);
+								}
+							});
+						}
+						// get last comment ID
+						if ($(".commentList li").size() > 0) {
+							lastCommentID = parseInt($(".commentList li:last").attr('id').split('comment_')[1], 10) || 0;
+						} else {
+							lastCommentID = 1;
+						}
+
+						// update coments counter
+						$("#commentsNum").text($(".commentList li").size());
 					} else {
-						UP.statusMsg.show(data.message, UP.env.msgError, false);
+						$("#commentStatus").html('<span type="error">'+data.message+'</span>').show(200);
 					}
 				}
 			});

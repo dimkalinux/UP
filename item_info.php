@@ -123,12 +123,7 @@ FMB;
 		}
 
 		$commentsNum = $comments->commentsNum();
-
-		if ($commentsNum > 0) {
-			$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии ('.$commentsNum.')</span></li>';
-		} else {
-			$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии</span></li>';
-		}
+		$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии (<span id="commentsNum">'.$commentsNum.'</span>)</span></li>';
 
 
 
@@ -136,14 +131,14 @@ FMB;
 		<div id="commentsBlock" class="superHidden">
 			<h3>Комментарии</h3>
 				<ul class="commentList"></ul>
-				<div id="commentResult" class="superHidden"></div>
+				<div id="commentStatus">&nbsp;</div>
 				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
 				<input type="hidden" name="form_sent" value="1"/>
 				<input type="hidden" name="action" value="$commentActionAdd"/>
 				<input type="hidden" name="csrf_token" value="$commentAddFormActionCSRF"/>
 				<div class="formRow">
 					<label for="feedbackText">Ваш комментарий</label>
-					<textarea name="commentText" rows="5" minLength="5" maxLength="2048" required="1" tabindex="1"></textarea>
+					<textarea name="commentText" rows="5" minLength="5" maxLength="1024" required="1" tabindex="1"></textarea>
 				</div>
 				<div class="formRow buttons">
 					<input type="submit" name="do" value="Отправить" tabindex="2"/>
@@ -523,27 +518,26 @@ ZZZ;
 		data: { json: 1 },
 
 		beforeSubmit: function (formArray, jqForm) {
-			UP.wait.start();
 			$('#wrap').stopTime('checkCommentsFormTimer');
+			$("#commentStatus").html('&nbsp;');
 			form.find("input[type='submit']").attr("disabled", "disabled");
 
 			$(document).oneTime(250, 'commentAddWaitTimer', function () {
-				$("#commentResult").html('Ожидайте, комментарий добавляется&hellip;').show(200);
+				$("#commentStatus").html('<span type="waiting">Ожидайте, комментарий добавляется&hellip;</span>').show(200);
 			});
 
 			return true;
 		},
 
 		error: function () {
-			UP.wait.stop();
 			$(document).stopTime('commentAddWaitTimer');
 			$('#wrap').everyTime(500, 'checkCommentsFormTimer', function () { UP.formCheck.register(form); });
-			UP.statusMsg.show('Невозможно добавить комментарий. Попробуйте позже.', UP.env.msgError, true);
+			$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
 		},
 
 		success: function (r) {
-			UP.wait.stop();
 			$(document).stopTime('commentAddWaitTimer');
+			$("#commentStatus").html('&nbsp;');
 			form.find("input[type='submit']").removeAttr("disabled");
 
 			if (r) {
@@ -551,10 +545,10 @@ ZZZ;
 					form.clearForm().resetForm();
 					UP.utils.loadCommentsList($item_id);
 				} else {
-					UP.statusMsg.show(r.message, UP.env.msgError, true);
+					$("#commentStatus").html('<span type="error">'+r.message+'</span>').show();
 				}
 			} else {
-				UP.statusMsg.show('Невозможно добавить комментарий. Попробуйте позже.', UP.env.msgError, true);
+				$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
 			}
 		}
 	};
