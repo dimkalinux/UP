@@ -1032,11 +1032,11 @@ UP.comments = function () {
 			});
 		},
 
-		loadCommentsList: function (item_id) {
+		loadCommentsList: function (item_id, owner_id) {
 			$.ajax({
 				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
-				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id, t_last_id: lastCommentID },
+				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id, t_last_id: lastCommentID, t_owner_id: owner_id },
 				dataType: 'json',
 				beforeSend: function () {
 					$(document).oneTime(250, 'commentAddWaitTimer', function () {

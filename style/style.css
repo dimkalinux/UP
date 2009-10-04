@@ -697,7 +697,7 @@ a.oneLineLink { margin-top: .6em; display: block; }
 .popularLabel { font-weight: bold; color: #fff; background: #1086A4; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
 
 .feedbackList, .commentList { list-style-type: none !important; }
-.feedbackList li, .commentList li { color: #333; padding: .5em 1em .5em 1em; margin-bottom: .5em; font-size: .95em; }
+.feedbackList li, .commentList li { color: #333; padding: .8em 1em .1em 1em; margin-bottom: .5em; font-size: .95em; }
 .feedbackList img.avatar, .commentList img.avatar { float: left; padding: 0 1.2em 0 0; }
 
 small { font-size: .9em; }
@@ -708,3 +708,5 @@ ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   
 
 /*#commentsBlock { margin-top: 1em; }*/
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
+li.itemOwner { background: #E4F2FD !important; }
+

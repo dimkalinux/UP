@@ -27,11 +27,17 @@ class AJAX {
 			$lastCommentID = intval($_POST['t_last_id'], 10);
 		}
 
+		$owner_id = -1;
+		if (isset($_POST['t_owner_id'])) {
+			$owner_id = intval($_POST['t_owner_id'], 10);
+		}
+
 		$item_id = intval($_POST['t_id'], 10);
+
 
 		try {
 			require UP_ROOT.'include/comments.inc.php';
-			$comments = new Comments($item_id);
+			$comments = new Comments($item_id, $owner_id);
 			$out = $comments->getCommentList($lastCommentID);
 			$result = 1;
 		} catch (Exception $e) {

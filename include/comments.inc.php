@@ -8,16 +8,19 @@ if (!defined('UP')) {
 
 class Comments {
 	private $item_id;
+	private $item_owner_id;
 
-	public function __construct($item_id) {
+	public function __construct($item_id, $owner_id=-1) {
 		if ($item_id < 1) {
 			throw new Exception('Неверный ID в классе Comments');
 		}
 		$this->item_id = $item_id;
+		$this->item_owner_id = $owner_id;
 	}
 
 	public function __destruct() {
 		$this->item_id = 0;
+		$this->item_owner_id = -1;
 	}
 
 
@@ -88,7 +91,10 @@ class Comments {
 						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
 					}
 
-					($user['id'] == $rec['user_id']) ? $ownerClass = 'itemOwner' : $ownerClass = '';
+					$ownerClass = '';
+					if ($user['id'] == $this->item_owner_id) {
+						$ownerClass = 'itemOwner';
+					}
 
 					$out .= <<<FMB
 				<li id="comment_$id" class="$ownerClass">

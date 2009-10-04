@@ -74,6 +74,7 @@ FMB;
 	$hidden = (bool) $row['spam'];
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
+	$owner_id = intval($row['user_id'], 10);
 	$md5 = $row['md5'];
 
 	$ndi = $row['NDI'];
@@ -98,7 +99,7 @@ FMB;
 	$commentActionAdd = ACTION_COMMENTS_ADD;
 
 	try {
-		$comments = new Comments($item_id);
+		$comments = new Comments($item_id, $owner_id);
 
 		if (isset($_POST['action'])) {
 			// 1. check csrf
@@ -293,7 +294,7 @@ FMB;
 		$md5_link = '';
 		if (empty($md5)) {
 			$md5_link = <<<FMB
-			&nbsp;<span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span>
+			<li><span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span></li>
 FMB;
 		}
 
@@ -501,7 +502,7 @@ ZZZ;
 
 	$jsBindActionList = '$(".itemNotWonerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
 	$jsGetCommentsList = <<<FMB
-	UP.comments.loadCommentsList($item_id);
+	UP.comments.loadCommentsList($item_id, $owner_id);
 	var form = $("form[name='comments']");
 	UP.formCheck.register(form);
 
@@ -548,7 +549,7 @@ ZZZ;
 			if (r) {
 				if (parseInt(r.error, 10) === 0) {
 					form.clearForm().resetForm();
-					UP.comments.loadCommentsList($item_id);
+					UP.comments.loadCommentsList($item_id, $owner_id);
 				} else {
 					$("#commentStatus").html('<span type="error">'+r.message+'</span>').show();
 				}
