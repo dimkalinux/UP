@@ -34,15 +34,14 @@ class Comments {
 	public function addComment($text) {
 		global $user;
 
+		$text = mb_substr($text, 0, 2048);
+		if (mb_strlen($text) < 1) {
+			throw new Exception("Слишком короткий комментарий");
+		}
 
-			$text = mb_substr($text, 0, 2048);
-			if (mb_strlen($text) < 1) {
-				throw new Exception("Слишком короткий комментарий");
-			}
-
-			if ($user['is_guest']) {
-				throw new Exception("Анонимные комментарии запрещены");
-			}
+		if ($user['is_guest']) {
+			throw new Exception("Анонимные комментарии запрещены");
+		}
 
 		try {
 			$db = new DB;

@@ -110,12 +110,13 @@ function top_get($type, $page, $link_base) {
 
 	$td_date_class = $td_name_class = $td_size_class = $td_downloads_class = '';
 	$admin_th_row = $admin_td_row = $admin_actions_block = '';
-	$colspan = 4;
+	$colspanPreAdmin = 1;
+	$colspan = 3;
 
 	switch ($type) {
 		case 'new':
 			$cache_id = 'top_new';
-			$header = '<em>Top</em>&nbsp;свежих файлов';
+			$header = '<em>Список</em>&nbsp;свежих файлов';
 			$th_date = '<th class="right current">Время</th>';
 			$td_date_class = "current";
 			$order_by = 'uploaded_date';
@@ -123,7 +124,7 @@ function top_get($type, $page, $link_base) {
 
 		case 'size':
 			$cache_id = 'top_size';
-			$header = '<em>Top</em>&nbsp;больших файлов';
+			$header = '<em>Список</em>&nbsp;больших файлов';
 			$th_size = '<th class="right current">Размер</th>';
 			$td_size_class = "current";
 			$order_by = 'size';
@@ -221,7 +222,7 @@ function top_get($type, $page, $link_base) {
 		case 'popular':
 		default:
 			$cache_id = 'top_top';
-			$header = '<em>Top</em>&nbsp;популярных файлов';
+			$header = '<em>Список</em>&nbsp;популярных файлов';
 			$th_downloads = '<th class="center current">Скачан</th>';
 			$td_downloads_class = "current";
 			$order_by = 'downloads';
@@ -231,18 +232,14 @@ function top_get($type, $page, $link_base) {
 
 
 	if ($admin) {
-		$colspan = 5;
+		$colspanPreAdmin = 2;
+		$colspan = 2;
 		$admin_th_row = '<th class="center"><input type="checkbox" id="allCB"/></th>';
 		$admin_actions_block = '
-			<div>
-			Выбранные файлы:
-				<span class="as_js_link" onlick="UP.admin.markItemSpam();">спам</span>
-				<span class="as_js_link" onlick="UP.admin.markItemSpam();">adult</span>
-				<span class="as_js_link" onlick="UP.admin.markItemSpam();">удалить</span>
-				<span class="as_js_link" onlick="UP.admin.markItemSpam();">скрыть</span>
-				<!--<input type="button" value="spam" onmousedown="UP.admin.markItemSpam();" disabled="disabled"/>
-				<input type="button" value="delete" onmousedown="UP.admin.deleteItem();" disabled="disabled"/>
-				<input type="button" value="adult" onmousedown="UP.admin.markItemAdult();" disabled="disabled"/>-->
+			<div class="controlButtonsBlock">
+				<input type="button" value="спам" onmousedown="UP.admin.markItemSpam();" disabled="disabled"/>
+				<input type="button" value="+16" onmousedown="UP.admin.markItemAdult();" disabled="disabled"/>
+				<input type="button" value="удалить" onmousedown="UP.admin.deleteItem();" disabled="disabled"/>
 			</div>';
 	}
 
@@ -269,10 +266,11 @@ function top_get($type, $page, $link_base) {
 		$blocks = <<<ZZZ
 		<div id="status">&nbsp;</div>
 		<h2>$header</h2>
-		$admin_actions_block
 		<table class="t1" id="top_files_table">
 		<thead>
 		<tr>
+			<th class="noborder" colspan="$colspanPreAdmin"></th>
+			<th class="left noborder">$admin_actions_block</th>
 			<th class="right noborder" id="pageLinks" colspan="$colspan">$back_page $page $next_page</th>
 		</tr>
 		<tr>
@@ -335,7 +333,9 @@ ZZZ;
 		</tbody>
 		<tfoot>
 		<tr>
-			<td class="right noborder" style="" id="pageLinks" colspan="$colspan">$back_page $page $next_page</td>
+			<td class="noborder" colspan="$colspanPreAdmin"></td>
+			<td class="left noborder"></td>
+			<td class="right noborder" id="pageLinks" colspan="$colspan">$back_page $page $next_page</td>
 		</tr>
 		</tfoot>
 		</table>
