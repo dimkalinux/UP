@@ -57,7 +57,7 @@ class Comments {
 
 		try {
 			$db = new DB;
-			$datas = $db->getData("SELECT comments.id,user_id,date,message,username FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? ORDER BY id DESC", $this->item_id);
+			$datas = $db->getData("SELECT comments.id,user_id,date,message,username FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? ORDER BY id", $this->item_id);
 
 			if ($datas) {
 				$out = '';

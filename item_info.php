@@ -326,6 +326,7 @@ ZZZ;
 			switch(intval($_POST['action'], 10)) {
 				case ACTION_COMMENTS_ADD:
 					$comments->addComment($_POST['commentText']);
+					header("Location: {$base_url}{$item_id}/");
 					break;
 
 				default:
