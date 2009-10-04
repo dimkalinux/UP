@@ -26,6 +26,8 @@ if (!defined('UP')) {
 
 // ADDON JS-SCRIPT BLOCK
 if (isset($addScript) && is_array($addScript) && count($addScript) > 0) {
+	// remove non-uniq values
+	$addScript = array_unique($addScript);
 	foreach ($addScript as $script) {
 		echo '<script src="/js/'.check_plain($script).'" type="text/javascript"></script>';
 	}
