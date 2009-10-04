@@ -111,6 +111,16 @@ CREATE TABLE `description`
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 */
 
+
+DROP TABLE IF EXISTS `downloads`;
+CREATE TABLE `downloads`
+(
+	`item_id` int(10) unsigned NOT NULL,
+	`date` datetime NOT NULL,
+	KEY(item_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments`
 (
@@ -121,6 +131,7 @@ CREATE TABLE `comments`
    	`message` blob NOT NULL,
    	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+*/
 
 /*
 alter table up change column filename filename varchar(256);
