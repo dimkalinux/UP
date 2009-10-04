@@ -285,7 +285,12 @@ function top_get($type, $page, $link_base) {
 ZZZ;
 		foreach ($datas as $rec) {
 			$item_id = (int)$rec['id'];
-			$filename = get_cool_and_short_filename($rec['filename'], 45);
+			$fullFilename = htmlspecialchars_decode(stripslashes($rec['filename']));
+			$filename = get_cool_and_short_filename($fullFilename, 55);
+			$filenameTitle = '';
+			if (5 < (mb_strlen($fullFilename) - mb_strlen($filename))) {
+				$filenameTitle = 'title="Полное имя: '.$fullFilename.'"';
+			}
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = prettyDate($rec['uploaded_date']);
@@ -322,7 +327,7 @@ ZZZ;
 		<tr id="row_item_{$rec['id']}">
 			$admin_td_row
 			<td class="right $td_size_class">$filesize</td>
-			<td id="cell_item_{$rec['id']}" class="left $td_name_class">$popularLabel <a href="/{$rec['id']}/" title="{$rec['filename']}">${filename}&nbsp;</a></td>
+			<td id="cell_item_{$rec['id']}" class="left $td_name_class" $filenameTitle>$popularLabel <a href="/{$rec['id']}/">${filename}</a></td>
 			<td class="center $td_downloads_class">$downloaded</td>
 			<td class="right $td_date_class">$file_date</td>
 		</tr>
