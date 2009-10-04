@@ -330,7 +330,7 @@ UP.owner = function () {
 
 	function wait(label, timeout) {
 		UP.statusMsg.clear();
-		$('#wrap')
+		$(document)
 			.stopTime(label)
 			.oneTime(timeout, label, function () {
 					UP.statusMsg.show('Ожидайте&hellip;', UP.env.msgWait, false);
@@ -342,7 +342,7 @@ UP.owner = function () {
 	}
 
 	function stopWait() {
-		$('#wrap').stopTime('waitTimer');
+		$(document).stopTime('waitTimer');
 	}
 
 	function onError(msg) {
@@ -539,7 +539,7 @@ UP.statusMsg = function () {
 		// Unbind mouse & keyboard
 		clear: function() {
 			// clear
-			$('#wrap').stopTime('t1').stopTime('t2');
+			$(document).stopTime('t1').stopTime('t2');
 
 			// unbind events
 			jQuery(window)
@@ -564,7 +564,7 @@ UP.statusMsg = function () {
 			var msgClass = '';
 
 			// clearTimeouts
-			$('#wrap').stopTime('t1').stopTime('t2');
+			$(document).stopTime('t1').stopTime('t2');
 			$("#status").stop();
 
 			jQuery(window)
@@ -606,11 +606,11 @@ UP.statusMsg = function () {
 
 		defferedClear: function() {
 			// set mouse and keyboard
-			$('#wrap').stopTime('t1').oneTime(2000, 't1', function () { bindEvents(); });
+			$(document).stopTime('t1').oneTime(2000, 't1', function () { bindEvents(); });
 
 			// set just timeout gone
 			var that = this;
-			$('#wrap').stopTime('t2').oneTime(5000, 't2', function () { that.clear(); });
+			$(document).stopTime('t2').oneTime(5000, 't2', function () { that.clear(); });
 		}
 	};
 }();
@@ -666,7 +666,7 @@ UP.fancyLogin = function () {
 				.change(function () { UP.formCheck.register(form); })
 				.keyup(function () { UP.formCheck.register(form);	})
 
-			$('#wrap')
+			$(document)
 				.stopTime('checkFancyLoginFormTimer')
 				.everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
 
@@ -702,14 +702,14 @@ UP.fancyLogin = function () {
 				cleanForm: false,
 				beforeSubmit: function (formArray, jqForm) {
 					UP.wait.start();
-					$('#wrap').stopTime('checkFancyLoginFormTimer');
+					$(document).stopTime('checkFancyLoginFormTimer');
 					submit.attr("disabled", "disabled");
 					return true;
 				},
 
 				error: function () {
 					UP.wait.stop();
-					$('#wrap').everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
+					$(document).everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
 					UP.statusMsg.show('Невозможно авторизироваться. Попробуйте позже.', UP.env.msgError, false);
 				},
 
@@ -742,7 +742,7 @@ UP.fancyLogin = function () {
 							}
 
 							$(".bad:first").focus();
-							$('#wrap').everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
+							$(document).everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
 						}
 					} else {
 						UP.statusMsg.show('Невозможно авторизироваться. Попробуйте позже.', UP.env.msgError, false);
@@ -1005,32 +1005,31 @@ UP.comments = function () {
 			}
 
 			$.ajax({
-					type: 	'GET',
-					url: 	UP.env.ajaxAdminBackend,
-					data: 	{ t_action: UP.env.actionAdminRemoveComment, t_id: id },
-					dataType: 'json',
-					error: function() {
-						UP.wait.stop();
-						UP.statusMsg.show('Невозможно удалить комментарий', UP.env.msgError, false);
-					},
-					success: function(data) {
-						UP.wait.stop();
-						var comment = $("#comment_"+id);
+				type: 	'GET',
+				url: 	UP.env.ajaxAdminBackend,
+				data: 	{ t_action: UP.env.actionAdminRemoveComment, t_id: id },
+				dataType: 'json',
+				error: function() {
+					UP.wait.stop();
+					UP.statusMsg.show('Невозможно удалить комментарий', UP.env.msgError, false);
+				},
+				success: function(data) {
+					UP.wait.stop();
+					var comment = $("#comment_"+id);
 
-						if (parseInt(data.result, 10) === 1) {
-							comment.hide(350, function () {
-								$(this).remove();
-								updateNumComments();
-							});
-						} else {
-							comment.animate({backgroundColor: "#FA9CAC"}, 350)
-								.animate({backgroundColor: "#ffffff"}, 350);
+					if (parseInt(data.result, 10) === 1) {
+						comment.hide(350, function () {
+							$(this).remove();
+							updateNumComments();
+						});
+					} else {
+						comment.animate({backgroundColor: "#FA9CAC"}, 350)
+							.animate({backgroundColor: "#ffffff"}, 350);
 
-							UP.statusMsg.show(data.message, UP.env.msgError, false);
-						}
+						UP.statusMsg.show(data.message, UP.env.msgError, false);
 					}
-				});
-
+				}
+			});
 		},
 
 		loadCommentsList: function (item_id) {

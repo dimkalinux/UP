@@ -88,8 +88,10 @@ class Comments {
 						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
 					}
 
+					($user['id'] == $rec['user_id']) ? $ownerClass = 'itemOwner' : $ownerClass = '';
+
 					$out .= <<<FMB
-				<li id="comment_$id">
+				<li id="comment_$id" class="$ownerClass">
 					$identicon
 					$username<br/>
 					<small>
