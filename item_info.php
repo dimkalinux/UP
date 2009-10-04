@@ -92,14 +92,29 @@ FMB;
 
 	// COMMENTS SECTION
 	require UP_ROOT.'include/comments.inc.php';
+
+	$commentAddFormAction = $base_url.$item_id.'/';
+	$commentAddFormActionCSRF = generate_form_token($commentAddFormAction);
+	$commentActionAdd = ACTION_COMMENTS_ADD;
+
 	try {
 		$comments = new Comments($item_id);
 
 		if (isset($_POST['action'])) {
+			// 1. check csrf
+			if (!check_form_token($commentAddFormActionCSRF)) {
+				throw new Exception('действие заблокировано системой безопасности');
+			}
+
 			switch(intval($_POST['action'], 10)) {
 				case ACTION_COMMENTS_ADD:
 					$comments->addComment($_POST['commentText']);
-					header("Location: {$base_url}{$item_id}/");
+					if (isset($_REQUEST['json'])) {
+						exit(json_encode(array('error'=> 0, 'message' => '')));
+					} else {
+						header("Location: {$base_url}{$item_id}/");
+						exit();
+					}
 					break;
 
 				default:
@@ -115,30 +130,33 @@ FMB;
 			$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии</span></li>';
 		}
 
-		$commentAddFormAction = $base_url.$item_id.'/';
-		$commentAddFormActionCSRF = generate_form_token($commentAddFormAction);
-		$commentActionAdd = ACTION_COMMENTS_ADD;
+
 
 		$commentsBlock = <<<FMB
 		<div id="commentsBlock" class="superHidden">
 			<h3>Комментарии</h3>
-				<ul class="commentList"><li>Ожидайте, комментарии загружаются&hellip;</li></ul>
+				<ul class="commentList"></ul>
+				<div id="commentResult" class="superHidden"></div>
 				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
 				<input type="hidden" name="form_sent" value="1"/>
 				<input type="hidden" name="action" value="$commentActionAdd"/>
 				<input type="hidden" name="csrf_token" value="$commentAddFormActionCSRF"/>
 				<div class="formRow">
 					<label for="feedbackText">Ваш комментарий</label>
-					<textarea name="commentText" rows="6" minLength="1" maxLength="2048" required="1" tabindex="1"></textarea>
+					<textarea name="commentText" rows="5" minLength="5" maxLength="2048" required="1" tabindex="1"></textarea>
 				</div>
 				<div class="formRow buttons">
-					<input type="submit" name="do" value="Отправить" tabindex="4"/>
+					<input type="submit" name="do" value="Отправить" tabindex="2"/>
 				</div>
 			</form>
 		</div>
 FMB;
 	} catch (Exception $e) {
-		show_error_message($e->getMessage());
+		if (isset($_POST['json'])) {
+			exit(json_encode(array('error'=> 1, 'message' => $e->getMessage())));
+		} else {
+			show_error_message($e->getMessage());
+		}
 	}
 
 
@@ -482,7 +500,73 @@ FMB;
 ZZZ;
 
 	$jsBindActionList = '$(".itemNotWonerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
-	$jsGetCommentsList = "UP.utils.loadCommentsList($item_id)";
+	$jsGetCommentsList = <<<FMB
+	UP.utils.loadCommentsList($item_id);
+	var form = $("form[name='comments']");
+	UP.formCheck.register(form);
+
+	form.find("input[required],textarea[required]")
+		.change(function () { UP.formCheck.register(form);})
+		.keyup(function () { UP.formCheck.register(form); })
+
+	$('#wrap')
+		.stopTime('checkCommentsFormTimer')
+		.everyTime(500, 'checkCommentsFormTimer', function () { UP.formCheck.register(form); });
+
+	// form
+	var options = {
+		url:	'$commentAddFormAction',
+		dataType: 'json',
+		resetForm: false,
+		cleanForm: false,
+		type: 'POST',
+		data: { json: 1 },
+
+		beforeSubmit: function (formArray, jqForm) {
+			UP.wait.start();
+			$('#wrap').stopTime('checkCommentsFormTimer');
+			form.find("input[type='submit']").attr("disabled", "disabled");
+
+			$(document).oneTime(250, 'commentAddWaitTimer', function () {
+				$("#commentResult").html('Ожидайте, комментарий добавляется&hellip;').show(200);
+			});
+
+			return true;
+		},
+
+		error: function () {
+			UP.wait.stop();
+			$(document).stopTime('commentAddWaitTimer');
+			$('#wrap').everyTime(500, 'checkCommentsFormTimer', function () { UP.formCheck.register(form); });
+			UP.statusMsg.show('Невозможно добавить комментарий. Попробуйте позже.', UP.env.msgError, true);
+		},
+
+		success: function (r) {
+			UP.wait.stop();
+			$(document).stopTime('commentAddWaitTimer');
+			form.find("input[type='submit']").removeAttr("disabled");
+
+			if (r) {
+				if (parseInt(r.error, 10) === 0) {
+					form.clearForm().resetForm();
+					UP.utils.loadCommentsList($item_id);
+				} else {
+					UP.statusMsg.show(r.message, UP.env.msgError, true);
+				}
+			} else {
+				UP.statusMsg.show('Невозможно добавить комментарий. Попробуйте позже.', UP.env.msgError, true);
+			}
+		}
+	};
+
+	form.submit(function () {
+		$(this).ajaxSubmit(options);
+		return false;
+	});
+
+	UP.statusMsg.defferedClear();
+	$("[required='1'][value='']:first").focus();
+FMB;
 
 	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;
 } while (0);

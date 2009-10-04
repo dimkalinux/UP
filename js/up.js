@@ -760,158 +760,169 @@ UP.fancyLogin = function () {
 
 
 //
-UP.utils = {
-	loadCommentsList: function (item_id) {
-		$.ajax({
-			type: 	'POST',
-			url: 	UP.env.ajaxBackend,
-			data: 	{ t_action: UP.env.actionGetComments, t_id: item_id },
-			dataType: 'json',
-			error: function() {
-				UP.wait.stop();
-				UP.statusMsg.show('Невозможно загрузить комментарии', UP.env.msgError, false);
-			},
-			success: function(data) {
-				UP.wait.stop();
-				if (parseInt(data.result, 10) === 1) {
-					$(".commentList").html(data.message);
-				} else {
-					UP.statusMsg.show(data.message, UP.env.msgError, false);
-				}
-			}
-		});
-	},
+UP.utils = function () {
+	var lastCommentID = 0;
 
-	JSLinkListToggle: function (t) {
-		var itemShowID = t.attr("rel"),
-			list = t.parent().parent();
-
-		// hide all
-		list.children("li").each(function () {
-			var itemHideID = $(this).children("span.as_js_link").attr("rel");
-			if (itemHideID != itemShowID) {
-				$("#"+itemHideID).hide();
-			}
-		});
-
-		$("#"+itemShowID).toggle();
-	},
-
-	makePOSTRequest: function (url, options) {
-		try {
-		  	var form = $('<form/>');
-
-		  	form.attr('action', url);
-		  	form.attr('method', 'post');
-		  	form.appendTo('body');
-
-			 if (options) {
-             	for (var n in options) {
-	                $('<input type="hidden" name="'+n+'" value="'+options[n]+'"/>').appendTo(form);
-				}
-			}
-
-			form.submit();
-		} finally {
-			form.remove();
-		}
-	},
-
-	formatSize: function(bytes) {
-		// bytes
-		if (bytes < 1024) {
-			return [bytes, ' б'].join('');
-		} else if (bytes < 1048576) {
-			return [Math.round(bytes/1024), ' КБ'].join('');
-		} else if (bytes < 1073741824) {
-			return [Math.round(bytes/1048576), ' МБ'].join('');
-		} else if (bytes < 1099511627776) {
-			return [Math.round((bytes / 1073741824) * 100) / 100, ' ГБ'].join('');
-		} else {
-			return [Math.round((bytes/1099511627776) * 100) / 100, ' ТБ'].join('');
-		}
-	},
-
-
-	formatSpeed: function(bit) {
-		if (bit < 1000) {
-			return Math.round(bit) +'&nbsp;б/с';
-		} else if (bit < 1000000) {
-			return Math.round(bit/1000) +'&nbsp;кб/с';
-		} else if (bit < 1000000000) {
-			return Math.round(bit/1000000) +'&nbsp;мб/с';
-		} else if (bit < 1000000000000) {
-			return Math.round(bit/1000000000) +'&nbsp;гб/с';
-		} else {
-			return Math.round(bit/1000000000000) +'&nbsp;тб/с';
-		}
-	},
-
-
-	formatTime: function(sec) {
-		var sec = parseInt(sec, 10) || 0,
-			minutes = ["минут","минуты","минуту"],
-			seconds = ["секунд","секунды","секунду"];
-
-		if (sec < 11) {
-			return 'меньше 10 секунд';
-		} else if (sec < 91) {
-			return [sec, '&nbsp;', UP.utils.getCase(parseInt(sec, 10),seconds[0],seconds[1],seconds[2])].join('');
-		} else if (sec < 3601) {
-			return [Math.round(sec/60), '&nbsp;', UP.utils.getCase(parseInt(Math.round(sec/60), 10),minutes[0],minutes[1],minutes[2])].join('');
-		} else {
-			return [Math.round(sec/3600), '&nbsp;часов'].join('');
-		}
-	},
-
-
-	getCase: function (value, gen_pl, gen_sg, nom_sg)
-	{
-		if ((value % 100 >= 5) & (value % 100 <= 20)) {
-			return gen_pl;
-		}
-
-		value = value % 10;
-		if (((value >= 5) & (value <= 9)) | (value === 0)) {
-			return gen_pl;
-		}
-
-		if ((value >= 2) & (value <= 4)) {
-			return gen_sg;
-		}
-
-		if (value == 1) {
-			return nom_sg;
-		}
-	},
-
-	gct: function () {
-		return new Date().getTime();
-	},
-
-	getPE: function () {
-		$.ajax({
-   			type: 	'GET',
-   			url: 	UP.env.ajaxBackend,
-   			data: 	{ t_action: UP.env.actionLive },
-			dataType: 'json',
-			error: function() { UP.statusMsg.show('<strong>Ошибка: </strong>AJAX запроса', UP.env.msgError, true); },
-   			success: function(r) {
-				if (r.result === 1) {
-					var chash = $.sha1(r.message),
-						hash = $('#wrap').data('hash');
-
-					if (hash !== chash) {
-						$('#wrap').data('hash', chash);
-						$('#result').html(r.message);
+	return {
+		loadCommentsList: function (item_id) {
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxBackend,
+				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id },
+				dataType: 'json',
+				beforeSend: function () {
+					$(document).oneTime(250, 'commentAddWaitTimer', function () {
+						$("#commentResult").html('Ожидайте, загружаются новые комментарии&hellip;').show(200);
+					});
+				},
+				error: function () {
+					UP.wait.stop();
+					$(document).stopTime('commentAddWaitTimer');
+					UP.statusMsg.show('Невозможно загрузить комментарии', UP.env.msgError, false);
+				},
+				success: function (data) {
+					UP.wait.stop();
+					$(document).stopTime('commentAddWaitTimer');
+					if (parseInt(data.result, 10) === 1) {
+						$(".commentList").html(data.message);
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, false);
 					}
-				} else {
-					UP.statusMsg.show(r.message, UP.env.msgError, true);
 				}
+			});
+		},
+
+		JSLinkListToggle: function (t) {
+			var itemShowID = t.attr("rel"),
+				list = t.parent().parent();
+
+			// hide all
+			list.children("li").each(function () {
+				var itemHideID = $(this).children("span.as_js_link").attr("rel");
+				if (itemHideID != itemShowID) {
+					$("#"+itemHideID).hide();
+				}
+			});
+
+			$("#"+itemShowID).toggle();
+		},
+
+		makePOSTRequest: function (url, options) {
+			try {
+			  	var form = $('<form/>');
+
+			  	form.attr('action', url);
+			  	form.attr('method', 'post');
+			  	form.appendTo('body');
+
+				 if (options) {
+	             	for (var n in options) {
+		                $('<input type="hidden" name="'+n+'" value="'+options[n]+'"/>').appendTo(form);
+					}
+				}
+
+				form.submit();
+			} finally {
+				form.remove();
 			}
-		 });
-	}
-};
+		},
+
+		formatSize: function(bytes) {
+			// bytes
+			if (bytes < 1024) {
+				return [bytes, ' б'].join('');
+			} else if (bytes < 1048576) {
+				return [Math.round(bytes/1024), ' КБ'].join('');
+			} else if (bytes < 1073741824) {
+				return [Math.round(bytes/1048576), ' МБ'].join('');
+			} else if (bytes < 1099511627776) {
+				return [Math.round((bytes / 1073741824) * 100) / 100, ' ГБ'].join('');
+			} else {
+				return [Math.round((bytes/1099511627776) * 100) / 100, ' ТБ'].join('');
+			}
+		},
+
+
+		formatSpeed: function(bit) {
+			if (bit < 1000) {
+				return Math.round(bit) +'&nbsp;б/с';
+			} else if (bit < 1000000) {
+				return Math.round(bit/1000) +'&nbsp;кб/с';
+			} else if (bit < 1000000000) {
+				return Math.round(bit/1000000) +'&nbsp;мб/с';
+			} else if (bit < 1000000000000) {
+				return Math.round(bit/1000000000) +'&nbsp;гб/с';
+			} else {
+				return Math.round(bit/1000000000000) +'&nbsp;тб/с';
+			}
+		},
+
+
+		formatTime: function(sec) {
+			var sec = parseInt(sec, 10) || 0,
+				minutes = ["минут","минуты","минуту"],
+				seconds = ["секунд","секунды","секунду"];
+
+			if (sec < 11) {
+				return 'меньше 10 секунд';
+			} else if (sec < 91) {
+				return [sec, '&nbsp;', UP.utils.getCase(parseInt(sec, 10),seconds[0],seconds[1],seconds[2])].join('');
+			} else if (sec < 3601) {
+				return [Math.round(sec/60), '&nbsp;', UP.utils.getCase(parseInt(Math.round(sec/60), 10),minutes[0],minutes[1],minutes[2])].join('');
+			} else {
+				return [Math.round(sec/3600), '&nbsp;часов'].join('');
+			}
+		},
+
+
+		getCase: function (value, gen_pl, gen_sg, nom_sg)
+		{
+			if ((value % 100 >= 5) & (value % 100 <= 20)) {
+				return gen_pl;
+			}
+
+			value = value % 10;
+			if (((value >= 5) & (value <= 9)) | (value === 0)) {
+				return gen_pl;
+			}
+
+			if ((value >= 2) & (value <= 4)) {
+				return gen_sg;
+			}
+
+			if (value == 1) {
+				return nom_sg;
+			}
+		},
+
+		gct: function () {
+			return new Date().getTime();
+		},
+
+		getPE: function () {
+			$.ajax({
+	   			type: 	'GET',
+	   			url: 	UP.env.ajaxBackend,
+	   			data: 	{ t_action: UP.env.actionLive },
+				dataType: 'json',
+				error: function() { UP.statusMsg.show('<strong>Ошибка: </strong>AJAX запроса', UP.env.msgError, true); },
+	   			success: function(r) {
+					if (r.result === 1) {
+						var chash = $.sha1(r.message),
+							hash = $('#wrap').data('hash');
+
+						if (hash !== chash) {
+							$('#wrap').data('hash', chash);
+							$('#result').html(r.message);
+						}
+					} else {
+						UP.statusMsg.show(r.message, UP.env.msgError, true);
+					}
+				}
+			 });
+		}
+	};
+}();
 
 
 UP.wait = function () {

@@ -54,6 +54,8 @@ class Comments {
 	public function getCommentList() {
 		global $base_url;
 
+		$out = '';
+
 		try {
 			$db = new DB;
 			$datas = $db->getData("SELECT comments.id,user_id,date,message,username FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? ORDER BY id", $this->item_id);
@@ -62,7 +64,7 @@ class Comments {
 				$out = '';
 				foreach ($datas as $rec) {
 					$id = $rec['id'];
-					$text = $rec['message'];
+					$text = check_plain(stripslashes($rec['message']));
 					$date = $rec['date'];
 					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
 					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=48&amp;hash='.md5($rec["username"]).'" height="48" width="48" alt="'.$rec["username"].'"/>';
@@ -78,8 +80,9 @@ class Comments {
 				</li>
 FMB;
 				}
-				return $out;
 			}
+			return $out;
+
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

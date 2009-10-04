@@ -200,10 +200,11 @@ $onDOMReady = <<<ZZZ
 
 	// form
 	var options = {
-		url:	'/register/?json',
+		url:	'/register/',
 		dataType: 'json',
 		resetForm: false,
 		cleanForm: false,
+		data: { json: 1 },
 
 		beforeSubmit: function (formArray, jqForm) {
 			UP.wait.start();
