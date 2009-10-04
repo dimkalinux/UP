@@ -111,7 +111,7 @@ CREATE TABLE `description`
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 */
 
-
+/*
 DROP TABLE IF EXISTS `downloads`;
 CREATE TABLE `downloads`
 (
@@ -119,6 +119,7 @@ CREATE TABLE `downloads`
 	`date` datetime NOT NULL,
 	KEY(item_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+*/
 
 /*
 DROP TABLE IF EXISTS `comments`;
