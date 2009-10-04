@@ -7,7 +7,7 @@ require UP_ROOT.'functions.inc.php';
 
 $error = 0;
 do {
-	if (!isset ($_GET['item'])) {
+	if (!isset($_GET['item'])) {
 		$error = 1;
 		break;
 	}
@@ -15,11 +15,11 @@ do {
 	$item_id = intval($_GET['item'], 10);
 
 	// first maybe GET
-	isset ($_GET['pass']) ? $magic = intval(get_get('pass'), 10) : $magic = null;
+	isset($_GET['pass']) ? $magic = intval(get_get('pass'), 10) : $magic = null;
 
 	// try a POST
 	if ($magic === null) {
-		isset ($_POST['pass']) ? $magic = intval(get_post('pass'), 10) : $magic = null;
+		isset($_POST['pass']) ? $magic = intval(get_post('pass'), 10) : $magic = null;
 	}
 
 	// build info
@@ -30,36 +30,35 @@ do {
 		} else {
 			$row = $db->getRow("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE id=? LIMIT 1", $item_id);
 		}
+
+		if (!$row) {
+			$error = 2;
+			break;
+		}
 	} catch (Exception $e) {
 		error($e->getMessage());
 	}
 
-	if (!$row) {
-		$error = 2;
-		break;
-	}
 
-	// first - check for deleted
+	// CHECK FOR DELETED
 	if ($row['deleted'] == 1) {
 		$deleted_reason = $row['deleted_reason'];
 		$deleted_date = $row['deleted_date'];
 
-		if (! $deleted_reason) {
+		if (empty($deleted_reason)) {
 			$deleted_reason = "неизвестна";
 		}
 
-		$out = <<<ZZZ
+		$out = <<<FMB
 		<div id="status">&nbsp;</div>
 		<h2>Файл удалён</h2>
 		<p>Примечание: $deleted_reason</p>
 		<p>Дата удаление: $deleted_date</p>
-ZZZ;
-		// go
+FMB;
 		break;
 	}
 
-	$cache = new Cache;
-	// normal file
+
 	$location = $row['location'];
 	$fullFilename = htmlspecialchars_decode(stripslashes($row['filename']));
 	$filename = get_cool_and_short_filename($fullFilename, 45);
@@ -85,237 +84,11 @@ ZZZ;
 		$wakkamakka_text = format_days($wakkamakka);
 	}
 
-
-	$im_owner = false;
-	if (!$user['is_guest']) {
-		$result = $db->numRows('SELECT user_id FROM up WHERE id=? AND user_id=?', $item_id, $user['id']);
-		if ($result === 1) {
-			$im_owner = true;
-		}
-	}
-
 	// set title for page
 	$page_title = "Скачать «${filename}»";
 
-	// get desc
-	try {
-		$row = $db->getRow("SELECT description FROM description WHERE id=? LIMIT 1", $item_id);
-		$desc = isset($row['description']) ? htmlspecialchars_decode($row['description']) : '';
-	} catch (Exception $e) {
-		error($e->getMessage());
-	}
 
 
-	// im owner block
-	$im_owner_block = '';
-	if ($magic && !$user['is_guest']) {
-		// check for owner
-		$result = $db->numRows('SELECT user_id FROM up WHERE id=? AND user_id=0', $item_id);
-		if ($result === 1) {
-			$im_owner_block = <<<FMB
-			<div id="im_owner_block" class="hint">
-			Вы не являетесь владельцем этого файла, но вы можите добавить его к своим файлам.<br/>
-			<span class="as_js_link" onclick="UP.owner.makeMeOWner({$user['id']}, '$item_id', '$magic');" title="Стать владельцем файла">Добавить</span> или <span class="as_js_link" onclick="$('#im_owner_block').hide(400);">отменить</span>?
-			</div>
-FMB;
-		}
-	}
-
-
-
-	// Antivir
-	switch ($antivir_check_result) {
-		case ANTIVIR_VIRUS:
-			$antivir_check = '<span class="red">файл заражен вирусом</span>';
-			break;
-
-		case ANTIVIR_ERROR:
-			$antivir_check = '<span class="red">ошибка при проверке</span>';
-			break;
-
-		case ANTIVIR_CLEAN:
-			$antivir_check = '<span class="green">вирусов&nbsp;нет</span>';
-			break;
-
-		case ANTIVIR_NOT_CHECKED:
-		default:
-			$antivir_check = 'не проверен';
-			break;
-	}
-
-
-	// Download row
-	if ($downloaded < 1) {
-		$file_last_downloaded_date = 'неизвестно';
-	} else {
-		$downloaded_text .= ', '.$file_last_downloaded_date;
-	}
-
-
-	// SPAM?
-	$js_spam_warning_block = '';
-	if ($is_spam && !$hidden) {
-		if ($magic || $im_owner) {
-			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
-		} else {
-			$js_spam_warning_block = "UP.statusMsg.show('Внимание: возможно это СПАМ', UP.env.msgWarn, true);";
-		}
-	}
-
-
-	// Adult?
-	$js_adult_warning_block = '';
-	if ($is_adult && !$hidden) {
-		$js_spam_warning_block = '';
-
-		if ($magic || $im_owner) {
-			$js_adult_warning_block = "UP.statusMsg.show('Обнаружен контент «только для взрослых». Файл не будет показан в общем списке', UP.env.msgWarn, false);";
-		} else {
-			$js_adult_warning_block = "UP.statusMsg.show('Внимание: возможен контент «только для взрослых»', UP.env.msgWarn, true);";
-		}
-	}
-
-
-	// new magic links system
-	$dlmKey = 'dlm'.$item_id.ip2long($user_ip);
-	if (!$dlmValue = $cache->get($dlmKey)) {
-		$prefix = substr(md5($user_ip.'operaisSux'), 0, 4);
-		$dlmValue = uniqid($prefix);
-		$cache->set($dlmValue, $dlmKey, 36000);
-	}
-
-	// password present
-	$is_password = mb_strlen($row['password']) > 0;
-	$pass_input = $js_pass_block = '';
-	if ($is_password) {
-		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
-		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
-	}
-
-
-	// create download link
-	$dlink_raw = "/download/$item_id/$dlmValue/";
-	$dlink = '<input type="submit" value="Скачать файл"/>';
-
-	$owner_block = '';
-	if ($magic || $im_owner) {
-		$md5_link = '';
-		if (empty($md5)) {
-			$md5_link = <<<FMB
-			&nbsp;<span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span>
-FMB;
-		}
-
-		$owner_block = <<<ZZZ
-	<tr><td class="ab">управление</td>
-	<td class="bb" id="owner_links">
-		<span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span>
-		&nbsp;<span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span>
-		$md5_link
-	</td></tr>
-ZZZ;
-	}
-
-	// thumbs handle
-	$thumbs_block = $js_thumbs_block = '';
-	$is_image = is_image_by_ext($filename);
-	if ($is_image && !$is_password) {
-		$thumbs_full_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_block = <<<ZZZ
-		<div class="thumbs"><a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a></div>
-ZZZ;
-
-		$js_thumbs_block = <<<ZZZ
-			$(".thumbs a").fancybox({'zoomSpeedIn': 300, 'zoomSpeedOut': 0, 'overlayShow': false, 'hideOnContentClick': true  });
-			var img = new Image;
-			$(img).attr("src", "$thumbs_preview_url");
-ZZZ;
-			$addScript[] .= 'jquery.fancybox-1.2.1.js';
-	}
-
-
-	// flv block
-	$flv_block = $js_video_block = '';
-	if (is_flv($filename, $row['mime'])) {
-		$flv_block = <<<ZZZ
-		<tr><td class="ab">видео</td>
-		<td class="bb" id="videoBlock">
-			<a href="#flvBlock" class="as_js_link" id="fancyVideo">смотреть</span>
-		</td>
-		<div id="flvBlock superHidden"></div>
-ZZZ;
-
-		$js_video_block = <<<FMB
-			UP.media.flv('flvBlock', '$dlink_raw');
-
-			$("#fancyVideo").fancybox({
-				zoomSpeedIn: 300,
-				zoomSpeedOut: 0,
-				overlayShow: false,
-				hideOnContentClick: false,
-				frameWidth: 512,
-				frameHeight: 384,
-				padding: 1,
-			});
-FMB;
-
-		$addScript[] .= 'swfobject.js';
-		$addScript[] .= 'jquery.fancybox-1.2.1.js';
-	}
-
-	// mp3 block
-	$mp3_block = null;
-	if (is_mp3 ($filename, $row['mime'])) {
-		$mp3_block = <<<ZZZ
-		<tr><td class="ab">аудио</td>
-		<td class="bb" id="mp3Block">
-			<span onclick="UP.media.mp3('mp3Block', '$dlink_raw');" class="as_js_link">слушать</span>
-		</td>
-		</tr>
-ZZZ;
-	}
-
-
-	try {
-		$search_like_block = $similar_num = '';
-		$search_filename = convert_filename_to_similar($filename);
-		$similar_num = get_similar_count($search_filename, $item_id);
-
-		if ($similar_num > 0 && $similar_num < 50) {
-			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="'.$base_url.'search/?s='. urlencode($search_filename) .'&amp;doSubmit&amp;ft=1">показать</a></td></tr>';
-		}
-	} catch (Exception $e) {
-		error($e->getMessage());
-	}
-
-	$is_password ? $form_method = 'post' : $form_method = 'get';
-
-	// links block
-	$links_bbcode_raw = '';
-	if ($is_image) {
-		$links_bbcode_raw = "[url={$base_url}{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]";
-		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
-	} else {
-		$links_bbcode_raw = "[url={$base_url}{$item_id}/]{$filename} — {$filesize_text_plain}[/url]";
-		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
-	}
-
-
-	$desc_block = $desc_link = $desc_js_block = '';
-	if (mb_strlen($desc) > 0) {
-		$desc_block = <<<ZZZ
-		<div id="desc_block">
-			<div class="tt-wedge tt-wedge-up tt-wedge-desc"></div>
-			<div id="formBlock">
-			<h3>Описание</h3>
-	    	<div id="desc_text">$desc</div>
-		</div>
-		<br class="clear"/>
-ZZZ;
-		$desc_link = '<li><span class="as_js_link" rel="desc_block">описание</span></li>';
-	}
 
 	// COMMENTS SECTION
 	require UP_ROOT.'include/comments.inc.php';
@@ -364,11 +137,250 @@ ZZZ;
 			</form>
 		</div>
 FMB;
-
-
 	} catch (Exception $e) {
 		show_error_message($e->getMessage());
 	}
+
+
+
+	// OWNER SECTION
+	try {
+		$im_owner = false;
+		if (!$user['is_guest']) {
+			$result = $db->numRows('SELECT user_id FROM up WHERE id=? AND user_id=?', $item_id, $user['id']);
+			if ($result === 1) {
+				$im_owner = true;
+			}
+		}
+
+		$im_owner_block = '';
+		if ($magic && !$user['is_guest']) {
+			// check for owner
+			$result = $db->numRows('SELECT user_id FROM up WHERE id=? AND user_id=0', $item_id);
+			if ($result === 1) {
+				$im_owner_block = <<<FMB
+				<div id="im_owner_block" class="hint">
+				Вы не являетесь владельцем этого файла, но вы можите добавить его к своим файлам.<br/>
+				<span class="as_js_link" onclick="UP.owner.makeMeOWner({$user['id']}, '$item_id', '$magic');" title="Стать владельцем файла">Добавить</span> или <span class="as_js_link" onclick="$('#im_owner_block').hide(400);">отменить</span>?
+				</div>
+FMB;
+			}
+		}
+	} catch (Exception $e) {
+		error($e->getMessage());
+	}
+
+
+
+	// DESCRIPTION SECTION
+	try {
+		$row = $db->getRow("SELECT description FROM description WHERE id=? LIMIT 1", $item_id);
+		$desc = isset($row['description']) ? htmlspecialchars_decode($row['description']) : '';
+		$desc_block = $desc_link = $desc_js_block = '';
+
+		if (mb_strlen($desc) > 0) {
+			$desc_block = <<<FMB
+			<div id="desc_block">
+				<div class="tt-wedge tt-wedge-up tt-wedge-desc"></div>
+				<div id="formBlock">
+				<h3>Описание</h3>
+		    	<div id="desc_text">$desc</div>
+			</div>
+			<br class="clear"/>
+FMB;
+			$desc_link = '<li><span class="as_js_link" rel="desc_block">описание</span></li>';
+		}
+	} catch (Exception $e) {
+		error($e->getMessage());
+	}
+
+
+
+	// ANTIVIR SECTION
+	switch ($antivir_check_result) {
+		case ANTIVIR_VIRUS:
+			$antivir_check = '<span class="red">файл заражен вирусом</span>';
+			break;
+
+		case ANTIVIR_ERROR:
+			$antivir_check = '<span class="red">ошибка при проверке</span>';
+			break;
+
+		case ANTIVIR_CLEAN:
+			$antivir_check = '<span class="green">вирусов&nbsp;нет</span>';
+			break;
+
+		case ANTIVIR_NOT_CHECKED:
+		default:
+			$antivir_check = 'не проверен';
+			break;
+	}
+
+
+	// DOWNLOAD ROW
+	if ($downloaded < 1) {
+		$file_last_downloaded_date = 'неизвестно';
+	} else {
+		$downloaded_text .= ', '.$file_last_downloaded_date;
+	}
+
+
+	// SPAM SECTION
+	$js_spam_warning_block = '';
+	if ($is_spam && !$hidden) {
+		if ($magic || $im_owner) {
+			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
+		} else {
+			$js_spam_warning_block = "UP.statusMsg.show('Внимание: возможно это СПАМ', UP.env.msgWarn, true);";
+		}
+	}
+
+
+	// ADULT SECTION
+	$js_adult_warning_block = '';
+	if ($is_adult && !$hidden) {
+		$js_spam_warning_block = '';
+		if ($magic || $im_owner) {
+			$js_adult_warning_block = "UP.statusMsg.show('Обнаружен контент «только для взрослых». Файл не будет показан в общем списке', UP.env.msgWarn, false);";
+		} else {
+			$js_adult_warning_block = "UP.statusMsg.show('Внимание: возможен контент «только для взрослых»', UP.env.msgWarn, true);";
+		}
+	}
+
+
+	// new magic links system
+	$cache = new Cache;
+	$dlmKey = 'dlm'.$item_id.ip2long($user_ip);
+	if (!$dlmValue = $cache->get($dlmKey)) {
+		$prefix = substr(md5($user_ip.'operaisSux'), 0, 4);
+		$dlmValue = uniqid($prefix);
+		$cache->set($dlmValue, $dlmKey, 36000);
+	}
+
+	// PASSWORD SECTION
+	$is_password = mb_strlen($row['password']) > 0;
+	$pass_input = $js_pass_block = '';
+	if ($is_password) {
+		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
+		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
+	}
+
+
+	// create download link
+	$dlink_raw = "/download/$item_id/$dlmValue/";
+	$dlink = '<input type="submit" value="Скачать файл"/>';
+
+	$owner_block = '';
+	if ($magic || $im_owner) {
+		$md5_link = '';
+		if (empty($md5)) {
+			$md5_link = <<<FMB
+			&nbsp;<span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span>
+FMB;
+		}
+
+		$owner_block = <<<FMB
+	<tr><td class="ab">управление</td>
+	<td class="bb" id="owner_links">
+		<span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span>
+		&nbsp;<span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span>
+		$md5_link
+	</td></tr>
+FMB;
+	}
+
+
+	// THUMBS SECTION
+	$thumbs_block = $js_thumbs_block = '';
+	$is_image = is_image_by_ext($filename);
+	if ($is_image && !$is_password) {
+		$thumbs_full_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_block = <<<FMB
+		<div class="thumbs"><a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a></div>
+FMB;
+
+		$js_thumbs_block = <<<FMB
+			$(".thumbs a").fancybox({'zoomSpeedIn': 300, 'zoomSpeedOut': 0, 'overlayShow': false, 'hideOnContentClick': true  });
+			var img = new Image;
+			$(img).attr("src", "$thumbs_preview_url");
+FMB;
+		$addScript[] .= 'jquery.fancybox-1.2.1.js';
+	}
+
+
+	// FLV VIDEO SECTION
+	$flv_block = $js_video_block = '';
+	if (is_flv($filename, $row['mime'])) {
+		$flv_block = <<<FMB
+		<tr><td class="ab">видео</td>
+		<td class="bb" id="videoBlock">
+			<a href="#flvBlock" class="as_js_link" id="fancyVideo">смотреть</span>
+		</td>
+		<div id="flvBlock superHidden"></div>
+FMB;
+
+		$js_video_block = <<<FMB
+			UP.media.flv('flvBlock', '$dlink_raw');
+
+			$("#fancyVideo").fancybox({
+				zoomSpeedIn: 300,
+				zoomSpeedOut: 0,
+				overlayShow: false,
+				hideOnContentClick: false,
+				frameWidth: 512,
+				frameHeight: 384,
+				padding: 1,
+			});
+FMB;
+
+		$addScript[] .= 'swfobject.js';
+		$addScript[] .= 'jquery.fancybox-1.2.1.js';
+	}
+
+
+	// MP# SECTION
+	$mp3_block = '';
+	if (is_mp3($filename, $row['mime'])) {
+		$mp3_block = <<<FMB
+		<tr><td class="ab">аудио</td>
+		<td class="bb" id="mp3Block">
+			<span onclick="UP.media.mp3('mp3Block', '$dlink_raw');" class="as_js_link">слушать</span>
+		</td>
+		</tr>
+FMB;
+	}
+
+
+	// SEARCH LIKE SECTION
+	try {
+		$search_like_block = $similar_num = '';
+		$search_filename = convert_filename_to_similar($filename);
+		$similar_num = get_similar_count($search_filename, $item_id);
+
+		if ($similar_num > 0 && $similar_num < 50) {
+			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb">'. $similar_num .' <a href="'.$base_url.'search/?s='.urlencode($search_filename).'&amp;doSubmit&amp;ft=1">показать</a></td></tr>';
+		}
+	} catch (Exception $e) {
+		error($e->getMessage());
+	}
+
+
+	// SELECT FORM METHOD
+	$is_password ? $form_method = 'post' : $form_method = 'get';
+
+
+	// LINKS SECTION
+	$links_bbcode_raw = '';
+	if ($is_image) {
+		$links_bbcode_raw = "[url={$base_url}{$item_id}/][img]{$thumbs_preview_small_url}[/img][/url]";
+		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
+	} else {
+		$links_bbcode_raw = "[url={$base_url}{$item_id}/]{$filename} — {$filesize_text_plain}[/url]";
+		$links_bbcode = '<input size="35" value="'.$links_bbcode_raw.'" readonly="readonly" type="text" id="bbcode" onclick="this.select()"/>';
+	}
+
 
 
 	$out = <<<ZZZ
@@ -462,10 +474,7 @@ FMB;
 	$desc_block
 	$commentsBlock
 	</td>
-	<td>
-		$thumbs_block
-
-	</td>
+	<td>$thumbs_block</td>
 	</tr>
 	</table>
 ZZZ;
