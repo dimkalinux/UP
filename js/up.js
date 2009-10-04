@@ -294,11 +294,11 @@ UP.media = {
 		var mp3obj = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"' +
 			'codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0">' +
 			'<param name="allowScriptAccess" value="sameDomain"/>' +
-			'<param name="movie" value="/player/fp.swf?file='+link+'&startplay=true"/>' +
+			'<param name="movie" value="/player/mp3.swf?file='+link+'&startplay=true"/>' +
 			'<param name="quality" value="high"/>' +
 			'<param name="startplay" value="true"/>' +
 			'<param name="bgcolor" value="#ffffff"/>' +
-			'<embed src="/player/fp.swf?file='+link+'&startplay=true"' +
+			'<embed src="/player/mp3.swf?file='+link+'&startplay=true"' +
 				'startplay="true" quality="high" bgcolor="#ffffff" width="96" height="20"' +
 				'name="own_flashplayer" align="middle" allowScriptAccess="sameDomain"' +
 				'type="application/x-shockwave-flash"' +
