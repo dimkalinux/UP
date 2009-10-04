@@ -67,7 +67,7 @@ class Comments {
 
 
 	public function getCommentList($lastCommentID=0) {
-		global $base_url;
+		global $base_url, $user;
 
 		$out = '';
 
@@ -83,13 +83,17 @@ class Comments {
 					$date = $rec['date'];
 					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
 					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=48&amp;hash='.md5($rec["username"]).'" height="48" width="48" alt="'.$rec["username"].'"/>';
+					$deleteLink = '';
+					if ($user['is_admin']) {
+						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
+					}
 
 					$out .= <<<FMB
 				<li id="comment_$id">
 					$identicon
 					$username<br/>
 					<small>
-						{$date}<br/><br/>
+						{$date}{$deleteLink}<br/><br/>
 					</small>
 					<p>$text</p>
 				</li>

@@ -125,25 +125,30 @@ FMB;
 		$commentsNum = $comments->commentsNum();
 		$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии (<span id="commentsNum">'.$commentsNum.'</span>)</span></li>';
 
-
+		$commentsForm = '<p>Для комментирования необходимо <a href="'.$base_url.'login/" class="mainMenuLogin">войти в систему</a></p>';
+		if (!$user['is_guest']) {
+			$commentsForm = <<<FMB
+				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
+					<input type="hidden" name="form_sent" value="1"/>
+					<input type="hidden" name="action" value="$commentActionAdd"/>
+					<input type="hidden" name="csrf_token" value="$commentAddFormActionCSRF"/>
+					<div class="formRow">
+						<label for="feedbackText">Ваш комментарий</label>
+						<textarea name="commentText" rows="5" minLength="5" maxLength="1024" required="1" tabindex="1"></textarea>
+					</div>
+					<div class="formRow buttons">
+						<input type="submit" name="do" value="Отправить" tabindex="2"/>
+					</div>
+				</form>
+FMB;
+		}
 
 		$commentsBlock = <<<FMB
 		<div id="commentsBlock" class="superHidden">
 			<h3>Комментарии</h3>
 				<ul class="commentList"></ul>
 				<div id="commentStatus">&nbsp;</div>
-				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
-				<input type="hidden" name="form_sent" value="1"/>
-				<input type="hidden" name="action" value="$commentActionAdd"/>
-				<input type="hidden" name="csrf_token" value="$commentAddFormActionCSRF"/>
-				<div class="formRow">
-					<label for="feedbackText">Ваш комментарий</label>
-					<textarea name="commentText" rows="5" minLength="5" maxLength="1024" required="1" tabindex="1"></textarea>
-				</div>
-				<div class="formRow buttons">
-					<input type="submit" name="do" value="Отправить" tabindex="2"/>
-				</div>
-			</form>
+				$commentsForm
 		</div>
 FMB;
 	} catch (Exception $e) {
@@ -496,7 +501,7 @@ ZZZ;
 
 	$jsBindActionList = '$(".itemNotWonerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
 	$jsGetCommentsList = <<<FMB
-	UP.utils.loadCommentsList($item_id);
+	UP.comments.loadCommentsList($item_id);
 	var form = $("form[name='comments']");
 	UP.formCheck.register(form);
 
@@ -543,7 +548,7 @@ ZZZ;
 			if (r) {
 				if (parseInt(r.error, 10) === 0) {
 					form.clearForm().resetForm();
-					UP.utils.loadCommentsList($item_id);
+					UP.comments.loadCommentsList($item_id);
 				} else {
 					$("#commentStatus").html('<span type="error">'+r.message+'</span>').show();
 				}

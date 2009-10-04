@@ -29,6 +29,7 @@ UP.env = UP.env || {
 	actionGetComments: 14,
 
 	actionAdminRemoveFeedbackMessage: 50,
+	actionAdminRemoveComment: 51,
 
 	debug: true,
 };
@@ -760,61 +761,7 @@ UP.fancyLogin = function () {
 
 //
 UP.utils = function () {
-	var lastCommentID = 0;
-
 	return {
-		loadCommentsList: function (item_id) {
-			$.ajax({
-				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
-				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id, t_last_id: lastCommentID },
-				dataType: 'json',
-				beforeSend: function () {
-					$(document).oneTime(250, 'commentAddWaitTimer', function () {
-						$("#commentStatus").html('<span type="waiting">Ожидайте, загружаются новые комментарии&hellip;</span>').show(200);
-					});
-				},
-				error: function () {
-					$(document).stopTime('commentAddWaitTimer');
-					$("#commentStatus").html('<span type="error">Невозможно загрузить комментарии</span>').show(200);
-				},
-				success: function (data) {
-					$(document).stopTime('commentAddWaitTimer');
-					$("#commentStatus").html('&nbsp;');
-					if (parseInt(data.result, 10) === 1) {
-						$(".commentList").append(data.message);
-						// mark new comments
-						if (lastCommentID != 0) {
-							$(".commentList li").each(function () {
-								var item = $(this),
-									item_id = parseInt(item.attr('id').split('comment_')[1], 10);
-
-									//UP.log.debug("Flash new : #"+item_id)
-
-								if (lastCommentID < item_id) {
-									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350)
-										.animate({backgroundColor: "#ffffff"}, 350)
-										.animate({backgroundColor: "#E4F2FD"}, 350)
-										.animate({backgroundColor: "#ffffff"}, 350);
-								}
-							});
-						}
-						// get last comment ID
-						if ($(".commentList li").size() > 0) {
-							lastCommentID = parseInt($(".commentList li:last").attr('id').split('comment_')[1], 10) || 0;
-						} else {
-							lastCommentID = 1;
-						}
-
-						// update coments counter
-						$("#commentsNum").text($(".commentList li").size());
-					} else {
-						$("#commentStatus").html('<span type="error">'+data.message+'</span>').show(200);
-					}
-				}
-			});
-		},
-
 		JSLinkListToggle: function (t) {
 			var itemShowID = t.attr("rel"),
 				list = t.parent().parent();
@@ -1039,6 +986,104 @@ UP.formCheck = {
 		form.find("input[type='submit']").attr("disabled", !!(all > minRequired));
 	}
 };
+
+
+UP.comments = function () {
+	var lastCommentID = 0;
+
+	function updateNumComments() {
+		$("#commentsNum").text($(".commentList li").size());
+	}
+
+	return {
+		remove: function (item_id) {
+			var id = parseInt(item_id, 10);
+
+			if (id < 0) {
+				alert('Отсутствует номер комментария');
+				return;
+			}
+
+			$.ajax({
+					type: 	'GET',
+					url: 	UP.env.ajaxAdminBackend,
+					data: 	{ t_action: UP.env.actionAdminRemoveComment, t_id: id },
+					dataType: 'json',
+					error: function() {
+						UP.wait.stop();
+						UP.statusMsg.show('Невозможно удалить комментарий', UP.env.msgError, false);
+					},
+					success: function(data) {
+						UP.wait.stop();
+						var comment = $("#comment_"+id);
+
+						if (parseInt(data.result, 10) === 1) {
+							comment.hide(350, function () {
+								$(this).remove();
+								updateNumComments();
+							});
+						} else {
+							comment.animate({backgroundColor: "#FA9CAC"}, 350)
+								.animate({backgroundColor: "#ffffff"}, 350);
+
+							UP.statusMsg.show(data.message, UP.env.msgError, false);
+						}
+					}
+				});
+
+		},
+
+		loadCommentsList: function (item_id) {
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxBackend,
+				data: 	{ t_action: UP.env.actionGetComments, t_id: item_id, t_last_id: lastCommentID },
+				dataType: 'json',
+				beforeSend: function () {
+					$(document).oneTime(250, 'commentAddWaitTimer', function () {
+						$("#commentStatus").html('<span type="waiting">Ожидайте, загружаются новые комментарии&hellip;</span>').show(200);
+					});
+				},
+				error: function () {
+					$(document).stopTime('commentAddWaitTimer');
+					$("#commentStatus").html('<span type="error">Невозможно загрузить комментарии</span>').show(200);
+				},
+				success: function (data) {
+					$(document).stopTime('commentAddWaitTimer');
+					$("#commentStatus").html('&nbsp;');
+					if (parseInt(data.result, 10) === 1) {
+						$(".commentList").append(data.message);
+						// mark new comments
+						if (lastCommentID != 0) {
+							$(".commentList li").each(function () {
+								var item = $(this),
+									item_id = parseInt(item.attr('id').split('comment_')[1], 10);
+
+									//UP.log.debug("Flash new : #"+item_id)
+
+								if (lastCommentID < item_id) {
+									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350)
+										.animate({backgroundColor: "#ffffff"}, 450);
+								}
+							});
+						}
+						// get last comment ID
+						if ($(".commentList li").size() > 0) {
+							lastCommentID = parseInt($(".commentList li:last").attr('id').split('comment_')[1], 10) || 0;
+						} else {
+							lastCommentID = 1;
+						}
+
+						// update coments counter
+						updateNumComments();
+					} else {
+						$("#commentStatus").html('<span type="error">'+data.message+'</span>').show(200);
+					}
+				}
+			});
+		}
+	};
+}();
 
 
 UP.log = function () {

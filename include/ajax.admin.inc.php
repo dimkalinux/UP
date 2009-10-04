@@ -17,6 +17,27 @@ class AJAX_ADMIN extends AJAX {
 		}
 	}
 
+	public function deleteComment() {
+		global $user, $out, $result;
+
+		$item_id = intval(get_get('t_id'), 10);
+
+		try {
+			$db = new DB;
+			$db->query("DELETE FROM comments WHERE id=? LIMIT 1", $item_id);
+
+			if ($db->affected() == 1) {
+				$out = '';
+				$result = 1;
+				return;
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно удалить комментарий: '.$e->getMessage());
+		}
+
+		$out = "Невозможно удалить комментарий";
+	}
+
 	public function deleteFeedbackMessage() {
 		global $user, $out, $result;
 

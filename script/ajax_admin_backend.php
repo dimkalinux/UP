@@ -24,6 +24,12 @@ switch ($action) {
 		$ajax->deleteFeedbackMessage();
 		break;
 
+	case ACTION_ADMIN_DELETE_COMMENT:
+		$ajax = new AJAX_ADMIN;
+		$ajax->deleteComment();
+		break;
+
+
 	/*case ACTION_ADMIN_DELETE_FILE:
 		action_admin_delete_file();
 		break;
