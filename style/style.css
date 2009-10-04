@@ -677,10 +677,10 @@ td#fancy_title_right {
 #myFilesTable { width: 90%; margin: .5em 0 1em; }
 #myFilesTable th { white-space: nowrap !important; vertical-align: top !important; color: #333 !important; font-weight: bold !important; text-transform: normal !important; }
 #myFilesTable th.checkbox { width: 10px !important; }
-#myFilesTable th.size, #search_files_table td.size { width: 7em !important; }
-#myFilesTable th.name, #search_files_table td.name { width: 100% !important; }
-#myFilesTable th.download, #search_files_table td.download { width: 7em !important; }
-#myFilesTable th.time { width: 10em !important; }
+#myFilesTable th.size, #search_files_table td.size, #top_files_table .size { width: 7em !important; text-align: right; }
+#myFilesTable th.name, #search_files_table td.name, #top_files_table .name { width: 100% !important; text-align: left; }
+#myFilesTable th.download, #search_files_table td.download, #top_files_table .download { width: 7em !important; text-align: center; }
+#myFilesTable th.time, #top_files_table .time { width: 7em !important; text-align: center; }
 
 #myFilesTable td, #myFilesTable td a { color: #666; }
 
@@ -696,6 +696,8 @@ a.oneLineLink { margin-top: .6em; display: block; }
 
 small { font-size: .9em; }
 ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   }
-.as_js_link_list li { display: inline; border-right: solid 1px #ddd; margin-right: .3em; padding-right: .8em; }
+.as_js_link_list li { display: inline;  margin-right: .6em;  }
+.as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .8em; }
 
 #commentsBlock { margin-top: 1.5em; }
+#top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}

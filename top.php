@@ -103,10 +103,10 @@ function top_get($type, $page, $link_base) {
 
 	$page_links = '<ul class="page_links" id="page_links">'.$back_page.'<span class="ctrl_links">&nbsp;'.$page.'/'.$num_pages.'</span>'.$next_page.'</ul>';
 
-	$th_size = '<th class="right"><a href="/top/size/">Размер</a></th>';
-	$th_name = '<th class="left"><a href="/top/name/">Имя файла</a></th>';
-	$th_downloads = '<th class="center"><a href="/top/popular/">Скачан</a></th>';
-	$th_date = '<th class="right"><a href="/top/new/">Время</a></th>';
+	$th_size = '<th class="size"><a href="/top/size/">Размер</a></th>';
+	$th_name = '<th class="name"><a href="/top/name/">Имя файла</a></th>';
+	$th_downloads = '<th class="download"><a href="/top/popular/">Скачан</a></th>';
+	$th_date = '<th class="time"><a href="/top/new/">Время</a></th>';
 
 	$td_date_class = $td_name_class = $td_size_class = $td_downloads_class = '';
 	$admin_th_row = $admin_td_row = $admin_actions_block = '';
@@ -117,7 +117,7 @@ function top_get($type, $page, $link_base) {
 		case 'new':
 			$cache_id = 'top_new';
 			$header = '<em>Список</em>&nbsp;свежих файлов';
-			$th_date = '<th class="right current">Время</th>';
+			$th_date = '<th class="time current">Время</th>';
 			$td_date_class = "current";
 			$order_by = 'uploaded_date';
 			break;
@@ -125,7 +125,7 @@ function top_get($type, $page, $link_base) {
 		case 'size':
 			$cache_id = 'top_size';
 			$header = '<em>Список</em>&nbsp;больших файлов';
-			$th_size = '<th class="right current">Размер</th>';
+			$th_size = '<th class="size current">Размер</th>';
 			$td_size_class = "current";
 			$order_by = 'size';
 			break;
@@ -133,7 +133,7 @@ function top_get($type, $page, $link_base) {
 		case 'name':
 			$cache_id = 'top_name';
 			$header = '<em>Сортировка:</em>&nbsp;имя';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'id';
 			break;
@@ -141,7 +141,7 @@ function top_get($type, $page, $link_base) {
 		case 'mp3':
 			$cache_id = 'top_mp3';
 			$header = 'MP3';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
 			$query = "SELECT * FROM up
@@ -157,7 +157,7 @@ function top_get($type, $page, $link_base) {
 		case 'video':
 			$cache_id = 'top_video';
 			$header = 'Видео';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
 			$query = "SELECT * FROM up
@@ -173,7 +173,7 @@ function top_get($type, $page, $link_base) {
 		case 'archive':
 			$cache_id = 'top_archive';
 			$header = 'Архивы';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
 			$query = "SELECT * FROM up
@@ -189,7 +189,7 @@ function top_get($type, $page, $link_base) {
 		case 'image':
 			$cache_id = 'top_image';
 			$header = 'Образы';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
 			$query = "SELECT * FROM up
@@ -205,7 +205,7 @@ function top_get($type, $page, $link_base) {
 		case 'pic':
 			$cache_id = 'top_pic';
 			$header = 'Картинки';
-			$th_name = '<th class="left current">Имя файла</th>';
+			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
 			$query = "SELECT * FROM up
@@ -223,7 +223,7 @@ function top_get($type, $page, $link_base) {
 		default:
 			$cache_id = 'top_top';
 			$header = '<em>Список</em>&nbsp;популярных файлов';
-			$th_downloads = '<th class="center current">Скачан</th>';
+			$th_downloads = '<th class="download current">Скачан</th>';
 			$td_downloads_class = "current";
 			$order_by = 'downloads';
 			break;
@@ -326,10 +326,10 @@ ZZZ;
 			$blocks .= <<<ZZZ
 		<tr id="row_item_{$rec['id']}">
 			$admin_td_row
-			<td class="right $td_size_class">$filesize</td>
-			<td id="cell_item_{$rec['id']}" class="left $td_name_class" $filenameTitle>$popularLabel <a href="/{$rec['id']}/">${filename}</a></td>
-			<td class="center $td_downloads_class">$downloaded</td>
-			<td class="right $td_date_class">$file_date</td>
+			<td class="size $td_size_class">$filesize</td>
+			<td id="cell_item_{$rec['id']}" class="name $td_name_class" $filenameTitle>$popularLabel <a href="/{$rec['id']}/">${filename}</a></td>
+			<td class="download $td_downloads_class">$downloaded</td>
+			<td class="time $td_date_class">$file_date</td>
 		</tr>
 ZZZ;
 		}
