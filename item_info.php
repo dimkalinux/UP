@@ -282,9 +282,11 @@ FMB;
 		$owner_block = <<<FMB
 	<tr><td class="ab">управление</td>
 	<td class="bb" id="owner_links">
-		<span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span>
-		&nbsp;<span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span>
-		$md5_link
+		<ul class="as_js_link_list">
+			<li><span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span></li>
+			<li><span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span></li>
+			$md5_link
+		</ul>
 	</td></tr>
 FMB;
 	}
@@ -404,7 +406,7 @@ FMB;
 			<tr>
 				<td class="ab"></td>
 				<td class="bb">
-				<ul class="as_js_link_list">
+				<ul class="as_js_link_list itemNotWonerActions">
 					<li><span class="as_js_link" rel="links_block">ссылки на файл</span></li>
 					{$commentsLink}
 					{$desc_link}
@@ -479,7 +481,7 @@ FMB;
 	</table>
 ZZZ;
 
-	$jsBindActionList = '$(".as_js_link_list li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
+	$jsBindActionList = '$(".itemNotWonerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
 	$jsGetCommentsList = "UP.utils.loadCommentsList($item_id)";
 
 	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;

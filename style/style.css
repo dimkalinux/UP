@@ -150,7 +150,7 @@ input[type=password] { min-width: 12.5em; }
 #links_block {  -webkit-border-radius: 7px; -moz-border-radius: 7px; /*margin-top: 1em;*/ background: #DFEBF7; /*padding: 1em;*/ float: left; }
 #links_block label { display: block; float: left; font-weight: normal; color: #000; font-size: .92em;  margin-right: 5px; }
 #links_block input[type="text"] { border: solid 1px #89BCEF; font-size: .85em; color: #484848; margin-bottom: .6em; padding: 1px 2px; width: 30em; display: block; }
-#download_link { margin: .7em 0 .7em; }
+#download_link { margin: 1.5em 0 .7em; }
 
 
 table { border-collapse: collapse; }
@@ -165,7 +165,7 @@ table#set_files_table { width: 90%; margin-top: 2em;}
 table.t1 a { font-weight: normal; }
 .t1 th { font-weight: normal; padding: .1em .4em .1em .5em; border-bottom: solid 2px #eee; font-size: .9em; text-transform: uppercase; color: #000;}
 table.t1 td { padding: .3em .5em .3em; font-size: .95em;  }
-#file_info_table td { padding: .1em .3em .2em;}
+#file_info_table td { padding: .1em .3em .2em; vertical-align:middle !important; }
 #top_files_table tbody tr:hover { background: #fafafa; }
 .t1 td.first, .t1 th.first { border-left: none !important; }
 .t1 td.last, .t1 th.last { border-right: none !important; }
@@ -696,8 +696,9 @@ a.oneLineLink { margin-top: .6em; display: block; }
 
 small { font-size: .9em; }
 ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   }
+#owner_links ul.as_js_link_list { margin: 0 !important; padding: 0 !important; }
 .as_js_link_list li { display: inline;  margin-right: .6em;  }
-.as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .8em; }
+.as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .7em; }
 
 #commentsBlock { margin-top: 1.5em; }
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
