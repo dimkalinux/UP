@@ -100,8 +100,7 @@ class Comments {
 				<li id="comment_$id" class="$ownerClass">
 					$identicon
 					$username<br/>
-					<small>
-						{$date}{$deleteLink}<br/><br/>
+					<small>{$date}{$deleteLink}<br/><br/>
 					</small>
 					<p>$text</p>
 				</li>

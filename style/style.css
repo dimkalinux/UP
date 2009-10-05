@@ -708,5 +708,5 @@ ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   
 
 /*#commentsBlock { margin-top: 1em; }*/
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
-li.itemOwner { background: #E4F2FD !important; }
+li.itemOwner { /*background: #E4F2FD !important;*/ }
 
