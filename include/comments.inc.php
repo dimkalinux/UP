@@ -35,16 +35,16 @@ class Comments {
 	}
 
 	public function addComment($text) {
-		global $user;
-
-		$text = mb_substr($text, 0, 1024);
-		$text = str_replace(array("\n\n"), array("\n"), $text);
-		if (mb_strlen($text) < 1) {
-			throw new Exception("Слишком короткий комментарий");
-		}
+		global $user, $maxCommentLength;
 
 		if ($user['is_guest']) {
 			throw new Exception("Анонимные комментарии запрещены");
+		}
+
+		$text = mb_substr($text, 0, $maxCommentLength);
+		$text = str_replace(array("\n\n"), array("\n"), $text);
+		if (mb_strlen($text) < 1) {
+			throw new Exception("Слишком короткий комментарий");
 		}
 
 		try {
@@ -118,25 +118,37 @@ FMB;
 	private function typografyComments($text) {
 		require UP_ROOT.'include/jevix/jevix.class.php';
 		$jevix = new Jevix();
+		//Конфигурация
 		// 1. Устанавливаем разрешённые теги. (Все не разрешенные теги считаются запрещенными.)
-		$jevix->cfgAllowTags(array('i', 'b', 'u', 'em', 'del', 'strong', 'nobr', 'br', 'code', 'pre', 'a'));
+		$jevix->cfgAllowTags(array('a', 'i', 'b', 'u', 'em', 'strong', 'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'pre', 'acronym', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'adabracut', 'br', 'code'));
 
 		// 2. Устанавливаем коротие теги. (не имеющие закрывающего тега)
 		$jevix->cfgSetTagShort(array('br'));
 
 		// 3. Устанавливаем преформатированные теги. (в них все будет заменятся на HTML сущности)
-		$jevix->cfgSetTagPreformatted(array('pre', 'code'));
+		$jevix->cfgSetTagPreformatted(array('pre'));
 
 		// 4. Устанавливаем теги, которые необходимо вырезать из текста вместе с контентом.
 		$jevix->cfgSetTagCutWithContent(array('script', 'object', 'iframe', 'style'));
 
 		// 5. Устанавливаем разрешённые параметры тегов. Также можно устанавливать допустимые значения этих параметров.
-		$jevix->cfgAllowTagParams('a', array('href', 'title'));
+		$jevix->cfgAllowTagParams('a', array('title', 'href'));
+		//$jevix->cfgAllowTagParams('img', array('src', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));
 
+
+		// 6. Устанавливаем параметры тегов являющиеся обязяательными. Без них вырезает тег оставляя содержимое.
+		//$jevix->cfgSetTagParamsRequired('img', 'src');
 		$jevix->cfgSetTagParamsRequired('a', 'href');
+
+		// 7. Устанавливаем теги которые может содержать тег контейнер
+		//    cfgSetTagChilds($tag, $childs, $isContainerOnly, $isChildOnly)
+		//       $isContainerOnly : тег является только контейнером для других тегов и не может содержать текст (по умолчанию false)
+		//       $isChildOnly : вложенные теги не могут присутствовать нигде кроме указанного тега (по умолчанию false)
+		$jevix->cfgSetTagChilds('ul', 'li', true, true);
 
 		// 8. Устанавливаем атрибуты тегов, которые будут добавлятся автоматически
 		$jevix->cfgSetTagParamsAutoAdd('a', array('rel' => 'nofollow'));
+		//$jevix->cfgSetTagParamsAutoAdd('img', array('width' => '300', 'height' => '300'));
 
 		// 9. Устанавливаем автозамену
 		$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(r)'), array('±', '©', '®'));
@@ -156,7 +168,6 @@ FMB;
 		$jevix_errors = null;
 		// Парсим
 		$message = $jevix->parse($text, $jevix_errors);
-
 
 		return $message;
 	}

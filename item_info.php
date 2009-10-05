@@ -139,6 +139,7 @@ FMB;
 					</div>
 					<div class="formRow buttons">
 						<input type="submit" name="do" value="Отправить" tabindex="2"/>
+						<input type="reset" name="doClean" value="Очистить" tabindex="3"/>
 					</div>
 				</form>
 FMB;
@@ -425,7 +426,7 @@ FMB;
 			<tr>
 				<td class="ab"></td>
 				<td class="bb">
-				<ul class="as_js_link_list itemNotWonerActions">
+				<ul class="as_js_link_list itemNotOwnerActions">
 					<li><span class="as_js_link" rel="links_block">ссылки на файл</span></li>
 					{$commentsLink}
 					{$desc_link}
@@ -500,7 +501,7 @@ FMB;
 	</table>
 ZZZ;
 
-	$jsBindActionList = '$(".itemNotWonerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
+	$jsBindActionList = '$(".itemNotOwnerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
 	$jsGetCommentsList = <<<FMB
 	UP.comments.loadCommentsList($item_id, $owner_id);
 	var form = $("form[name='comments']");

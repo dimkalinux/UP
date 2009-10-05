@@ -122,8 +122,13 @@ $non_downloaded_big_files_popular_interval = intval($non_downloaded_big_files_in
 $popular_num = 20;
 
 
+// COMMENT SECTION
+$maxCommentLength = 1024;
+
+
 
 // THUMBS SECTION
+// in px
 $thumbs_w = 250;
 $thumbs_h = 250;
 //

@@ -290,7 +290,7 @@ form[name=comments] textarea { width: 33em; }
 
 #footer { clear: both; color: #474747; }
 #footer ul { margin: 0.5em 24px .5em 0pt; list-style-type: none; list-style-image: none; list-style-position: outside; }
-#footer li { display: inline; padding-right: .5em; }
+#footer li { display: inline; padding-right: .4em; }
 #footer li a { color: #101010; text-decoration: none; font-weight: normal;  }
 #footer a:hover { text-decoration: underline !important; color: #0063DC !important; }
 #footer li + li { border-left: 1px solid #e5e5e5; padding-left: .5em; }
@@ -703,8 +703,8 @@ a.oneLineLink { margin-top: .6em; display: block; }
 small { font-size: .9em; }
 ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   }
 #owner_links ul.as_js_link_list { margin: 0 !important; padding: 0 !important; }
-.as_js_link_list li { display: inline;  margin-right: .6em;  }
-.as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .7em; }
+.as_js_link_list li { display: inline;  margin-right: .3em;  }
+.as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .5em; }
 
 /*#commentsBlock { margin-top: 1em; }*/
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
