@@ -331,48 +331,6 @@ function is_flv($file_name, $mime) {
 	return (get_file_ext($file_name) == 'flv' || get_file_ext($file_name) == 'mov');
 }
 
-
-function create_thumbs($file, $thumbs_full_filename, $thumbs_preview_full_filename=null) {
-	require_once UP_ROOT.'include/phpThumb/phpthumb.class.php';
-
-	$phpThumb = new phpThumb();
-	$phpThumb->setSourceFilename($file);
-	$phpThumb->w = $GLOBALS['thumbs_w'];
-	$phpThumb->h = $GLOBALS['thumbs_h'];
-	$phpThumb->config_output_format = 'jpeg';
-	$phpThumb->config_error_die_on_error = false;
-	$phpThumb->config_allow_src_above_docroot = true;
-
-	if ($phpThumb->GenerateThumbnail()) {
-		$phpThumb->RenderToFile($thumbs_full_filename);
-		unset ($phpThumb);
-
-		// create large
-		if ($thumbs_preview_full_filename) {
-			$phpThumb = new phpThumb();
-			$phpThumb->setSourceFilename($file);
-			$phpThumb->w = $GLOBALS['thumbs_preview_w'];
-			$phpThumb->h = $GLOBALS['thumbs_preview_h'];
-			$phpThumb->config_output_format = 'jpeg';
-			$phpThumb->config_error_die_on_error = false;
-			$phpThumb->config_allow_src_above_docroot = true;
-
-			if ($phpThumb->GenerateThumbnail()) {
-				$phpThumb->RenderToFile($thumbs_preview_full_filename);
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-
-function get_thumbs_filename($location_name) {
-	return 'thumbs/'.md5($location_name).'.png';
-}
-
-
 function get_client_ip() {
 	if (isset ($_SERVER['REMOTE_ADDR'])) {
 		return $_SERVER['REMOTE_ADDR'];

@@ -178,6 +178,51 @@ class Upload {
 			throw new Exception($e->getMessage());
 		}
 	}
+
+	public function generateThumbs($uploadfile, $up_file_name, $item_id) {
+		global $thumbs_w, $thumbs_h, $thumbs_preview_w, $thumbs_preview_h;
+
+		if (is_file($uploadfile) && is_image($up_file_name, $uploadfile)) {
+			$key_name = $this->getThumbsFilename($item_id);
+			$thumbs_filename = 'thumbs/'.$key_name.'.jpg';
+			$thumbs_preview_filename = 'thumbs/large/'.$key_name.'.jpg';
+
+			require_once UP_ROOT.'include/phpThumb/phpthumb.class.php';
+
+			$phpThumb = new phpThumb();
+			$phpThumb->setSourceFilename($uploadfile);
+			$phpThumb->w = $thumbs_w;
+			$phpThumb->h = $thumbs_h;
+			$phpThumb->config_output_format = 'jpeg';
+			$phpThumb->config_error_die_on_error = false;
+			$phpThumb->config_allow_src_above_docroot = true;
+
+			if ($phpThumb->GenerateThumbnail()) {
+				$phpThumb->RenderToFile($thumbs_filename);
+				unset($phpThumb);
+			}
+
+			// CREATE LARGE
+			if (!empty($thumbs_preview_filename)) {
+				$phpThumb = new phpThumb();
+				$phpThumb->setSourceFilename($uploadfile);
+				$phpThumb->w = $thumbs_preview_w;
+				$phpThumb->h = $thumbs_preview_h;
+				$phpThumb->config_output_format = 'jpeg';
+				$phpThumb->config_error_die_on_error = false;
+				$phpThumb->config_allow_src_above_docroot = true;
+
+				if ($phpThumb->GenerateThumbnail()) {
+					$phpThumb->RenderToFile($thumbs_preview_filename);
+				}
+			}
+		}
+	}
+
+
+	private static function getThumbsFilename($item_id) {
+		return 'thumbs/'.sha1($item_id).'.jpg';
+	}
 }
 
 ?>

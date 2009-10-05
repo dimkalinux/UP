@@ -163,18 +163,9 @@ do {
 		exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
 	}
 
-	if (is_file($uploadfile) && is_image($up_file_name, $uploadfile) && $password == '') {
-		$key_name = md5($md5.$item_id);
-		$thumbs_filename = 'thumbs/'.$key_name.'.jpg';
-		$thumbs_preview_filename = 'thumbs/large/'.$key_name.'.jpg';
-		$thumbs_original_filename = 'thumbs/original/'.$key_name.'.jpg';
-
-		if (!@create_thumbs($uploadfile, $thumbs_filename, $thumbs_preview_filename)) {
-			if (!$log) {
-				$log = new Logger;
-			}
-			$log->error("создание миниатюры для графического файла. ID: '$item_id'");
-		}
+	// CREATE THUMBS
+	if (empty($password)) {
+		$Upload->generateThumbs($uploadfile, $up_file_name, $item_id);
 	}
 
 	// clear stat cache
