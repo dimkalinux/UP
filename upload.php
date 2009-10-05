@@ -41,7 +41,7 @@ $a_err_msg = array(
 
 // real start here
 do {
-	// check all required file attrs
+	// CHECK ALL REQUIRED FILE ATTRS
 	$file_attrs = array('file_path', 'file_name', 'file_ip', 'file_storage_name', 'file_size');
 	foreach ($file_attrs as $fa) {
 		if (!isset($file[$fa])) {
@@ -50,7 +50,6 @@ do {
 			break 2;
 		}
 	}
-
 
 	// antiflood
 	$up_file_ip = $file['file_ip'];
@@ -63,80 +62,64 @@ do {
 	}
 
 
-	// check min filesize
+	// CHECK MIN FILESIZE
 	if ($file['file_size'] < 1) {
 		$error = UPLOAD_ERROR_EMPTY_FILE;
-
 		$add_error_message .= ' размер: '.$file['file_size'];
 		$add_error_message .= ' имя: '.$file['file_name'];
 		break;
 	}
 
-	// check max filesize
+	// CHECK MAX FILESIZE
 	if ($file['file_size'] > ($max_file_size*1048576)) {
 		$error = UPLOAD_ERROR_MAX_SIZE;
 		break;
 	}
 
-	// start process file
-	$Upload = new Upload;
-	$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
 
-
+	// START PROCESS FILE
 	try {
+		$Upload = new Upload;
+		$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
+
 		$storage = new Storage;
 		$subfolder = $storage->get_upload_subdir($file['file_storage_name']);
-	} catch (Exception $e) {
-		if (!$log) {
-			$log = new Logger;
+
+		$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
+		$owner_key = mt_rand();
+		$up_file_name = $file['file_name'];
+		$up_file_size = $file['file_size'];
+		$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
+		$is_spam = is_spam($file['file_name']);
+		$is_adult = is_adult($file['file_name']);
+		$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
+
+		// get filename for FUSE
+		if (!$user['is_guest']) {
+			$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
 		}
-		$log->error("Upload file: ".$e->getMessage());
-		$error = UPLOAD_ERROR_STORAGE;
-	}
+
+		// password
+		$password = '';
+		if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword']) > 0)) {
+			$t_hasher = new PasswordHash(8, FALSE);
+			$password = $t_hasher->HashPassword($_POST['uploadPassword']);
+		}
+
+		// mime
+		$up_file_mime = $file['file_content_type'];
+		if (empty($up_file_mime)) {
+			$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
+		}
+
+		// rename file (move) USE LINK
+		if (!link($filepath, $uploadfile)) {
+			$error = UPLOAD_ERROR_SAVE;
+			$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
+			break;
+		}
 
 
-	$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
-	$owner_key = mt_rand();
-	$up_file_name = $file['file_name'];
-	$up_file_size = $file['file_size'];
-	$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
-	$is_spam = is_spam($file['file_name']);
-	$is_adult = is_adult($file['file_name']);
-	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
-
-	// get filename for FUSE
-	if (!$user['is_guest']) {
-		$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
-	}
-
-	$desc = null;
-	if (isset($_POST['uploadDesc'])) {
-		$desc = check_plain(mb_substr($_POST['uploadDesc'], 0, 512));
-	}
-
-	// password
-	$password = '';
-	if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword']) > 0)) {
-		$t_hasher = new PasswordHash(8, FALSE);
-		$password = $t_hasher->HashPassword($_POST['uploadPassword']);
-	}
-
-	// mime
-	$up_file_mime = $file['file_content_type'];
-	if (mb_strlen($up_file_mime) == 0) {
-		$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
-	}
-
-	// rename file (move) USE LINK
-	if (!link($filepath, $uploadfile)) {
-		$error = UPLOAD_ERROR_SAVE;
-		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
-		break;
-	}
-
-
-	// add to DB
-	try {
 		$db = new DB;
 		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
 			$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
@@ -144,9 +127,11 @@ do {
 		// get ITEM_ID
 		$item_id = $db->lastID();
 
-		// insert DESC
-		if ($desc !== null) {
-			$db->query("INSERT INTO description VALUES('', ?, ?)", $item_id, $desc);
+
+		// COMMENT/DESCRIPTION
+		if (isset($_POST['uploadDesc']) && mb_strlen(trim($_POST['uploadDesc']) > 1)) {
+			$comments = new Comments($item_id, $user['id']);
+			$comments->addComment($_POST['uploadDesc']);
 		}
 
 		// dont add BAD files to DNOW

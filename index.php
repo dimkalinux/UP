@@ -27,7 +27,7 @@ if ($Upload->is_upload_flood()) {
 require UP_ROOT.'header.php';
 
 $geo = get_geo(get_client_ip());
-if ($geo != 'world') {
+if ($geo != 'world_'):
 ?>
 			<div id="status">&nbsp;</div>
 			<h2>Загрузите файл</h2>
@@ -62,12 +62,13 @@ if ($geo != 'world') {
 							</tr>
 							</table>
 						</div>
+<?php if (!$user['is_guest']): ?>
 						<div class="formRow">
 							<label for="uploadDesc">Описание</label>
 								<textarea name="uploadDesc" id="uploadDesc" maxLength="512"></textarea>
-								<div class="inputHelp">не&nbsp;более 512&nbsp;символов</div>
-
+								<div class="inputHelp">не&nbsp;более <?php echo $maxCommentLength; ?>&nbsp;символов</div>
 						</div>
+<?php endif; ?>
 					</div>
 				</div>
 				<br class="clear"/>
@@ -172,12 +173,13 @@ $onDOMReady = <<<ZZZ
 		$('#uploadFile').focus();
 	},100);
 ZZZ;
-} else {
+else:
 ?>
 	<div id="status">&nbsp;</div>
 	<h2>Привет</h2>
 	<p>Для гостей из «мира» загрузка файлов отключена.<br/>Но вы можете скачивать <a href="/top/">файлы</a> без каких-либо ограничений.</p>
-<?
-}
+<?php
+endif;
+
 include_once 'footer.php';
 ?>
