@@ -100,6 +100,11 @@ $feedback_email = 'dark@iteam.net.ua';
 $cache_timeout_rss = 300;
 
 
+// MAKE HASH TIMEOUT
+$makeHashTimeout = 120;
+$makeVirusesTimeout = 120;
+
+
 // TIMEOUT SECTION
 // in days
 $undelete_interval = 2;

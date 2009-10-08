@@ -219,6 +219,14 @@ class Upload {
 		}
 	}
 
+	public static function makeHash($file) {
+		if (!is_file($file)) {
+			throw new Exception("makeHash: file '$file' not exists");
+		}
+
+		return sha1_file($file);
+	}
+
 
 	private static function getThumbsFilename($item_id) {
 		return 'thumbs/'.sha1($item_id).'.jpg';
