@@ -48,6 +48,8 @@ class Comments {
 		}
 
 		try {
+			// typografy comments
+			$text = $this->typografyComments($text);
 			$db = new DB;
 			// check last poster
 			/*$row = $db->getRow("SELECT id,user_id,message FROM comments WHERE item_id=? ORDER BY id DESC LIMIT 1", $this->item_id);
@@ -82,7 +84,7 @@ class Comments {
 				$out = '';
 				foreach ($datas as $rec) {
 					$id = $rec['id'];
-					$text = $this->typografyComments(stripslashes($rec['message']));
+					$text = stripslashes($rec['message']);
 					$date = $rec['date'];
 					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
 					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=48&amp;hash='.md5($rec["username"]).'" height="48" width="48" alt="'.$rec["username"].'"/>';
@@ -117,10 +119,16 @@ FMB;
 
 	private function typografyComments($text) {
 		require UP_ROOT.'include/jevix/jevix.class.php';
+		require UP_ROOT.'include/markdown.php';
+
+		// 1 — Markdown
+		$text = Markdown($text);
+
+		// 2 — Jevix
 		$jevix = new Jevix();
 		//Конфигурация
 		// 1. Устанавливаем разрешённые теги. (Все не разрешенные теги считаются запрещенными.)
-		$jevix->cfgAllowTags(array('a', 'i', 'b', 'u', 'em', 'strong', 'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'pre', 'acronym', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'adabracut', 'br', 'code'));
+		$jevix->cfgAllowTags(array('a', 'i', 'b', 'u', 'em', 'strong', 'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'pre', 'acronym', 'h4', 'h5', 'h6', 'adabracut', 'br', 'code'));
 
 		// 2. Устанавливаем коротие теги. (не имеющие закрывающего тега)
 		$jevix->cfgSetTagShort(array('br'));
