@@ -869,6 +869,14 @@ UP.utils = function () {
 			return new Date().getTime();
 		},
 
+		fancyAnimate: function (el, startBG, finishBG) {
+			el.animate({backgroundColor: startBG}, 350,
+				function () {
+					el.animate({backgroundColor: finishBG}, 450);
+				}
+			);
+		},
+
 		getPE: function () {
 			$.ajax({
 	   			type: 	'GET',
@@ -1023,11 +1031,7 @@ UP.comments = function () {
 							updateNumComments();
 						});
 					} else {
-						comment.animate({backgroundColor: "#FA9CAC"}, 350,
-							function () {
-								comment.animate({backgroundColor: "#ffffff"}, 450);
-							}
-						);
+						UP.utils.fancyAnimate(comment, "#fa9cac", "#ffffff");
 						UP.statusMsg.show(data.message, UP.env.msgError, false);
 					}
 				}
@@ -1063,11 +1067,7 @@ UP.comments = function () {
 									//UP.log.debug("Flash new : #"+item_id)
 
 								if (lastCommentID < item_id) {
-									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350,
-										function () {
-											$("#comment_"+item_id).animate({backgroundColor: "#ffffff"}, 450);
-										}
-									);
+									UP.utils.fancyAnimate($("#comment_"+item_id), "#e4f2fd", "#ffffff");
 								}
 							});
 						}
