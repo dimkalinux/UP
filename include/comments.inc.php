@@ -28,7 +28,7 @@ class Comments {
 		try {
 			$db = new DB;
 			$row = $db->getRow("SELECT COUNT(*) AS N FROM comments WHERE item_id=?", $this->item_id);
-			return $row['N'];
+			return intval($row['N'], 10);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

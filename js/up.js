@@ -992,7 +992,7 @@ UP.comments = function () {
 	var lastCommentID = 0;
 
 	function updateNumComments() {
-		$("#commentsNum").text($(".commentList li").size());
+		$("#commentsNum").text($(".commentList").children("li").size());
 	}
 
 	return {
@@ -1054,7 +1054,7 @@ UP.comments = function () {
 						$(".commentList").append(data.message);
 						// mark new comments
 						if (lastCommentID != 0) {
-							$(".commentList li").each(function () {
+							$(".commentList").children("li").each(function () {
 								var item = $(this),
 									item_id = parseInt(item.attr('id').split('comment_')[1], 10);
 
@@ -1067,8 +1067,8 @@ UP.comments = function () {
 							});
 						}
 						// get last comment ID
-						if ($(".commentList li").size() > 0) {
-							lastCommentID = parseInt($(".commentList li:last").attr('id').split('comment_')[1], 10) || 0;
+						if ($(".commentList").children("li").size() > 0) {
+							lastCommentID = parseInt($(".commentList").children("li:last").attr('id').split('comment_')[1], 10) || 0;
 						} else {
 							lastCommentID = 1;
 						}
