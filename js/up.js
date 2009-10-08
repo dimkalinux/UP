@@ -1023,9 +1023,11 @@ UP.comments = function () {
 							updateNumComments();
 						});
 					} else {
-						comment.animate({backgroundColor: "#FA9CAC"}, 350)
-							.animate({backgroundColor: "#ffffff"}, 350);
-
+						comment.animate({backgroundColor: "#FA9CAC"}, 350,
+							function () {
+								comment.animate({backgroundColor: "#ffffff"}, 450);
+							}
+						);
 						UP.statusMsg.show(data.message, UP.env.msgError, false);
 					}
 				}
@@ -1061,8 +1063,11 @@ UP.comments = function () {
 									//UP.log.debug("Flash new : #"+item_id)
 
 								if (lastCommentID < item_id) {
-									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350)
-										.animate({backgroundColor: "#ffffff"}, 450);
+									$("#comment_"+item_id).animate({backgroundColor: "#E4F2FD"}, 350,
+										function () {
+											$("#comment_"+item_id).animate({backgroundColor: "#ffffff"}, 450);
+										}
+									);
 								}
 							});
 						}
