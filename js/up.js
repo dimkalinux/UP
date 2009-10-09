@@ -39,7 +39,7 @@ UP.env = UP.env || {
 	actionAdminMarkItemAsAdult: 28,
 	actionAdminUnMarkItemAsAdult: 29,
 
-	debug: true,
+	debug: true
 };
 
 
@@ -786,6 +786,7 @@ UP.utils = function () {
 			$("#"+itemShowID).toggle();
 			if ($("#"+itemShowID).is(":visible")) {
 				window.location.hash = itemShowID;
+				$("[required='1'][value='']:first").focus();
 			} else {
 				window.location.hash = '';
 			}

@@ -386,11 +386,7 @@ UP.admin = function () {
 				n = showNumCheckedCB();
 				$(':button').attr("disabled", (n < 1 ? 'disabled' : ''));
 
-				if (state) {
-					$("tr.row_item").addClass('selected');
-				} else {
-					$("tr.row_item").removeClass('selected');
-				}
+				$("tr.row_item").toggleClass('selected', state);
 			});
 
 			//
