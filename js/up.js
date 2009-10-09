@@ -733,11 +733,12 @@ UP.fancyLogin = function () {
 						if (r.error === 0) {
 							form.clearForm().resetForm();
 							$("#fancyLogin").fadeTo(300, 0.01, function() {
-								if (window.location.hash && window.location.hash.length > 1 && window.location.hash.charAt(0) == '#') {
-									location = location.toString().split("#")[0];
+								if (window.location.hash && window.location.hash.length > 2 && window.location.hash.charAt(0) == '#') {
+									location.reload();
 								} else {
 									location.reload();
 								}
+								$("[required='1'][value='']:first").focus();
 							});
 						} else {
 							UP.statusMsg.show(r.message, UP.env.msgError, true);
@@ -783,6 +784,11 @@ UP.utils = function () {
 			});
 
 			$("#"+itemShowID).toggle();
+			if ($("#"+itemShowID).is(":visible")) {
+				window.location.hash = itemShowID;
+			} else {
+				window.location.hash = '';
+			}
 		},
 
 		makePOSTRequest: function (url, options) {

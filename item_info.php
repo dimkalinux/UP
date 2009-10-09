@@ -566,6 +566,11 @@ ZZZ;
 	});
 
 	UP.statusMsg.defferedClear();
+
+	if (window.location.hash && window.location.hash.length > 2 && window.location.hash.charAt(0) == '#') {
+		$(window.location.hash).toggle();
+	}
+
 	$("[required='1'][value='']:first").focus();
 FMB;
 
