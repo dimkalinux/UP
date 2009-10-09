@@ -1,17 +1,7 @@
-
 // class for admin functions
 UP.admin = function () {
 	var waitTimeout = 400,
 		maxItems = 100,
-
-		// AJAX admin action
-		ACTION_ADMIN_DELETE_FILE = 25,
-		ACTION_ADMIN_UNDELETE_FILE = 24,
-		ACTION_ADMIN_MARK_AS_SPAM_FILE = 26,
-		ACTION_ADMIN_UNMARK_AS_SPAM_FILE = 27,
-		ACTION_ADMIN_MARK_AS_ADULT_FILE = 28,
-		ACTION_ADMIN_UNMARK_AS_ADULT_FILE = 29,
-
 
 		// type of value of cb
 		normal = 1,
@@ -74,9 +64,6 @@ UP.admin = function () {
 			max = 0,
 			id;
 
-		// flush page cache
-		UP.cache.flush();
-
 		for (i = 0, max = itemsOK.length; i <= max; i = i + 1) {
 			id = parseInt(itemsOK[i], 10);
 
@@ -120,12 +107,12 @@ UP.admin = function () {
 		//
 		deleteItem: function (undo) {
 			var items = getCheckedItemsID(),
-				actions = ACTION_ADMIN_DELETE_FILE,
+				actions = UP.env.actionAdminDeleteItem,
 				undoLink = '<span class="as_js_link" onclick="UP.admin.deleteItem(true);">Отменить</span>';
 
 			if (undo === true) {
 				items = getAffectedItemsID(deleted);
-				actions = ACTION_ADMIN_UNDELETE_FILE;
+				actions = UP.env.actionAdminUnDeleteItem;
 				undoLink = '';
 			}
 
@@ -137,7 +124,7 @@ UP.admin = function () {
 
 			$.ajax({
 				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
+				url: 	UP.env.ajaxAdminBackend,
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
@@ -150,7 +137,7 @@ UP.admin = function () {
 					onError();
 				},
 				success: function (data) {
-					if (data.result === '1') {
+					if (parseInt(data.result, 10) === 1) {
 						var ok_num = cbResultSuccess(data.message, undo, deleted);
 
 						if (undo === true) {

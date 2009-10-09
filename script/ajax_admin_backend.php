@@ -30,14 +30,16 @@ switch ($action) {
 		break;
 
 
-	/*case ACTION_ADMIN_DELETE_FILE:
-		action_admin_delete_file();
+	case ACTION_ADMIN_DELETE_ITEM:
+		$ajax = new AJAX_ADMIN;
+		$ajax->deleteItem();
 		break;
 
-	case ACTION_ADMIN_UNDELETE_FILE:
-		action_admin_undelete_file();
+	case ACTION_ADMIN_UNDELETE_ITEM:
+		$ajax = new AJAX_ADMIN;
+		$ajax->unDeleteItem();
 		break;
-
+/*
 	case ACTION_ADMIN_MARK_AS_SPAM_FILE:
 		action_admin_mark_as_spam_file();
 		break;

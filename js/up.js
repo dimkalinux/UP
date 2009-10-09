@@ -31,6 +31,14 @@ UP.env = UP.env || {
 	actionAdminRemoveFeedbackMessage: 50,
 	actionAdminRemoveComment: 51,
 
+	// AJAX admin action
+	actionAdminUnDeleteItem: 24,
+	actionAdminDeleteItem: 25,
+	actionAdminMarkItemAsSpam: 26,
+	actionAdminUnMarkItemAsSpam: 27,
+	actionAdminMarkItemAsAdult: 28,
+	actionAdminUnMarkItemAsAdult: 29,
+
 	debug: true,
 };
 
