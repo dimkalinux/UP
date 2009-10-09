@@ -64,16 +64,28 @@ UP.admin = function () {
 			max = 0,
 			id;
 
+		UP.log.debug('cbResultSuccess: '+itemsAsString);
+		UP.log.debug('cbResultSuccess type: '+type);
+
+		if (!undo) {
+			$(':checkbox[value='+type+']').each(function () {
+				var hiddenID = parseInt($(this).attr('id').split('item_cb_')[1], 10);
+				$('#row_item_'+hiddenID).remove();
+				UP.log.debug('RemoveHidden: '+hiddenID);
+			});
+		}
+
 		for (i = 0, max = itemsOK.length; i <= max; i = i + 1) {
 			id = parseInt(itemsOK[i], 10);
 
 			if (!isNaN(id) && id > 0) {
 				if (undo === true) {
-					$('#item_cb_' + id).attr('value', 1);
-					$('#row_item_' + id).addClass('canceled').show();
+					$('#item_cb_' + id).attr('value', 1).attr("checked", true);
+					$('#row_item_' + id).addClass('selected').show();
 				} else {
 					$('#item_cb_' + id).removeAttr('checked').attr('value', type);
-					$('#row_item_' + id).removeClass('canceled').hide();
+					$('#row_item_' + id).removeClass('selected').hide();
+					UP.log.debug('hide: '+id);
 				}
 				ok_num = ok_num + 1;
 			}
@@ -157,12 +169,12 @@ UP.admin = function () {
 		//
 		markItemSpam: function (undo) {
 			var items = getCheckedItemsID(),
-				actions = ACTION_ADMIN_MARK_AS_SPAM_FILE,
+				actions = UP.env.actionAdminMarkItemAsSpam,
 				undoLink = '<span class="as_js_link" onclick="UP.admin.markItemSpam(true);">Отменить</span>';
 
 			if (undo === true) {
 				items = getAffectedItemsID(spamed);
-				actions = ACTION_ADMIN_UNMARK_AS_SPAM_FILE;
+				actions = UP.env.actionAdminUnMarkItemAsSpam;
 				undoLink = '';
 			}
 
@@ -174,7 +186,7 @@ UP.admin = function () {
 
 			$.ajax({
 				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
+				url: 	UP.env.ajaxAdminBackend,
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
@@ -187,7 +199,7 @@ UP.admin = function () {
 					onError();
 				},
 				success: function (data) {
-					if (data.result === '1') {
+					if (parseInt(data.result, 10) === 1) {
 						var ok_num = cbResultSuccess(data.message, undo, spamed);
 
 						if (undo === true) {
@@ -208,12 +220,12 @@ UP.admin = function () {
 		//
 		unmarkItemSpam: function (undo) {
 			var items = getCheckedItemsID(),
-				actions = ACTION_ADMIN_UNMARK_AS_SPAM_FILE,
+				actions = UP.env.actionAdminUnMarkItemAsSpam,
 				undoLink = '<span class="as_js_link" onclick="UP.admin.unmarkItemSpam(true);">Отменить</span>';
 
 			if (undo === true) {
 				items = getAffectedItemsID(spamed);
-				actions = ACTION_ADMIN_MARK_AS_SPAM_FILE;
+				actions = UP.env.actionAdminMarkItemAsSpam;
 				undoLink = '';
 			}
 
@@ -225,7 +237,7 @@ UP.admin = function () {
 
 			$.ajax({
 				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
+				url: 	UP.env.ajaxAdminBackend,
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
@@ -238,7 +250,7 @@ UP.admin = function () {
 					onError();
 				},
 				success: function (data) {
-					if (data.result === '1') {
+					if (parseInt(data.result, 10) === 1) {
 						var ok_num = cbResultSuccess(data.message, undo, spamed);
 
 						if (undo === true) {
@@ -259,12 +271,12 @@ UP.admin = function () {
 //
 		markItemAdult: function (undo) {
 			var items = getCheckedItemsID(),
-				actions = ACTION_ADMIN_MARK_AS_ADULT_FILE,
+				actions = UP.env.actionAdminMarkItemAsAdult,
 				undoLink = '<span class="as_js_link" onclick="UP.admin.markItemAdult(true);">Отменить</span>';
 
 			if (undo === true) {
 				items = getAffectedItemsID(adulted);
-				actions = ACTION_ADMIN_UNMARK_AS_ADULT_FILE;
+				actions = UP.env.actionAdminUnMarkItemAsAdult;
 				undoLink = '';
 			}
 
@@ -276,7 +288,7 @@ UP.admin = function () {
 
 			$.ajax({
 				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
+				url: 	UP.env.ajaxAdminBackend,
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
@@ -289,7 +301,7 @@ UP.admin = function () {
 					onError();
 				},
 				success: function (data) {
-					if (data.result === '1') {
+					if (parseInt(data.result, 10) === 1) {
 						var ok_num = cbResultSuccess(data.message, undo, adulted);
 
 						if (undo === true) {
@@ -310,12 +322,12 @@ UP.admin = function () {
 		//
 		unmarkItemAdult: function (undo) {
 			var items = getCheckedItemsID(),
-				actions = ACTION_ADMIN_UNMARK_AS_ADULT_FILE,
+				actions = UP.env.actionAdminUnMarkItemAsAdult,
 				undoLink = '<span class="as_js_link" onclick="UP.admin.unmarkItemAdult(true);">Отменить</span>';
 
 			if (undo === true) {
 				items = getAffectedItemsID(adulted);
-				actions = ACTION_ADMIN_MARK_AS_ADULT_FILE;
+				actions = UP.env.actionAdminMarkItemAsAdult;
 				undoLink = '';
 			}
 
@@ -327,7 +339,7 @@ UP.admin = function () {
 
 			$.ajax({
 				type: 	'POST',
-				url: 	UP.env.ajaxBackend,
+				url: 	UP.env.ajaxAdminBackend,
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
@@ -340,7 +352,7 @@ UP.admin = function () {
 					onError();
 				},
 				success: function (data) {
-					if (data.result === '1') {
+					if (parseInt(data.result, 10) === 1) {
 						var ok_num = cbResultSuccess(data.message, undo, adulted);
 
 						if (undo === true) {
@@ -371,20 +383,21 @@ UP.admin = function () {
 				state = $(this).attr('checked');
 				$(":checkbox[value='1']:visible").attr('checked', state);
 
-				/*if (state == true) {
-					$('#row_item_').addClass('selected');
-				} else {
-					$('#row_item_').removeClass('selected').removeClass('canceled');
-				}*/
-
 				n = showNumCheckedCB();
 				$(':button').attr("disabled", (n < 1 ? 'disabled' : ''));
+
+				if (state) {
+					$("tr.row_item").addClass('selected');
+				} else {
+					$("tr.row_item").removeClass('selected');
+				}
 			});
 
 			//
 			$(":checkbox[value='1']:visible").bind('change', function () {
 				m = showNumCheckedCB();
 				$(':button').attr("disabled", (m < 1 ? 'disabled' : ''));
+
 
 				// select
 				box = $(this);
@@ -394,7 +407,7 @@ UP.admin = function () {
 					if (box.attr('checked')) {
 						$('#row_item_' + id).addClass('selected');
 					} else {
-						$('#row_item_' + id).removeClass('selected').removeClass('canceled');
+						$('#row_item_' + id).removeClass('selected');
 					}
 				}
 			});

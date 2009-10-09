@@ -39,22 +39,26 @@ switch ($action) {
 		$ajax = new AJAX_ADMIN;
 		$ajax->unDeleteItem();
 		break;
-/*
+
 	case ACTION_ADMIN_MARK_AS_SPAM_FILE:
-		action_admin_mark_as_spam_file();
+		$ajax = new AJAX_ADMIN;
+		$ajax->markSpamItem();
 		break;
 
 	case ACTION_ADMIN_UNMARK_AS_SPAM_FILE:
-		action_admin_unmark_as_spam_file();
+		$ajax = new AJAX_ADMIN;
+		$ajax->unMarkSpamItem();
 		break;
 
 	case ACTION_ADMIN_MARK_AS_ADULT_FILE:
-		action_admin_mark_as_adult_file();
+		$ajax = new AJAX_ADMIN;
+		$ajax->markAdultItem();
 		break;
 
 	case ACTION_ADMIN_UNMARK_AS_ADULT_FILE:
-		action_admin_unmark_as_adult_file();
-		break;*/
+		$ajax = new AJAX_ADMIN;
+		$ajax->unMarkAdultItem();
+		break;
 
 	default:
 		$out = 'Неизвестная команда';

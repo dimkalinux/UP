@@ -40,7 +40,7 @@ if ($datas) {
 		<tbody>
 FMB;
 
-	array_walk($datas, 'print_files_list_callback', $out);
+	array_walk($datas, 'print_files_list_callback', &$out);
 
 	$out .= '</tbody></table>';
 	$onDOMReady = 'UP.admin.cbStuffStart();';
@@ -54,7 +54,7 @@ require UP_ROOT.'footer.php';
 exit();
 
 
-function print_files_list_callback($item, $key, &$out) {
+function print_files_list_callback($item, $key, $out) {
 	global $user;
 
 	$item_id = intval($item['id'], 10);
@@ -71,7 +71,7 @@ function print_files_list_callback($item, $key, &$out) {
 
 
 	$out .= <<<FMB
-		<tr id="row_item_$item_id">
+		<tr id="row_item_$item_id" class="row_item">
 			$admin_td_row
 			<td class="right">$filesize_text</td>
 			<td class="left"><a href="/$item_id/">$filename</a></td>

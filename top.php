@@ -324,7 +324,7 @@ ZZZ;
 			}
 
 			$blocks .= <<<ZZZ
-		<tr id="row_item_{$rec['id']}">
+		<tr id="row_item_{$rec['id']}" class="row_item">
 			$admin_td_row
 			<td class="size $td_size_class">$filesize</td>
 			<td id="cell_item_{$rec['id']}" class="name $td_name_class" $filenameTitle>$popularLabel <a href="/{$rec['id']}/">${filename}</a></td>

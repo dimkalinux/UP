@@ -85,7 +85,7 @@ class AJAX_ADMIN extends AJAX {
 				if ($db->affected() == count($chunkItems)) {
 					$itemsOK = array_merge($itemsOK, $chunkItems);
 				} else {
-					throw new Exception('Admin deleteItem: DB affected != items count');
+					throw new Exception('DB affected != items count');
 				}
 			}
 		} catch (Exception $e) {
@@ -129,7 +129,7 @@ class AJAX_ADMIN extends AJAX {
 				if ($db->affected() == count($chunkItems)) {
 					$itemsOK = array_merge($itemsOK, $chunkItems);
 				} else {
-					throw new Exception('Admin deleteItem: DB affected != items count');
+					throw new Exception('DB affected != items count');
 				}
 			}
 		} catch (Exception $e) {
@@ -146,75 +146,43 @@ class AJAX_ADMIN extends AJAX {
 		return;
 	}
 
-/*
 
+	public function markSpamItem() {
+		global $out, $result;
 
-	public function action_admin_mark_as_spam_file() {
 		$items = get_post('t_ids');
-		$items = explode(':', $items, 100);
-		$num = 0;
+		$items = explode(':', get_post('t_ids'), 101);
 		$itemsOK = array();
-		$db = new DB;
 
-		foreach ($items as $id) {
-			if (is_numeric($id) && intval($id) > 0) {
-				if (!$db->query("UPDATE up SET spam='1' WHERE id=? LIMIT 1", $id)) {
-					$out = "невозможно установить метку спама";
-					return;
-				}
-
-				$itemsOK[] = $id;
-				$num++;
-			}
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
 		}
 
-		$out = implode(":", $itemsOK);
-		$result = 1;
-		return;
-	}
-
-	public function action_admin_unmark_as_spam_file() {
-		$items = get_post('t_ids');
-		$items = explode(':', $items, 100);
-		$num = 0;
-		$itemsOK = array();
-		$db = new DB;
-
-		foreach ($items as $id) {
-			if (is_numeric($id) && intval($id) > 0) {
-				if (!$db->query("UPDATE up SET spam='0' WHERE id=? LIMIT 1", $id)) {
-					$out = "невозможно снять метку спама";
-					return;
-				}
-
-				$itemsOK[] = $id;
-				$num++;
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
 			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET spam='1' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно установить метку спама: '.$e->getMessage());
 		}
 
-		$out = implode(":", $itemsOK);
-		$result = 1;
-		return;
-	}
-
-
-	public function action_admin_mark_as_adult_file() {
-		$items = get_post('t_ids');
-		$items = explode(':', $items, 100);
-		$num = 0;
-		$itemsOK = array();
-		$db = new DB;
-
-		foreach ($items as $id) {
-			if (is_numeric($id) && intval($id) > 0) {
-				if (!$db->query("UPDATE up SET adult='1' WHERE id=? LIMIT 1", $id)) {
-					$out = "невозможно установить метку XXX";
-					return;
-				}
-
-				$itemsOK[] = $id;
-				$num++;
-			}
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
 		}
 
 		$out = implode(":", $itemsOK);
@@ -223,31 +191,138 @@ class AJAX_ADMIN extends AJAX {
 	}
 
 
-	public function action_admin_unmark_as_adult_file() {
+	public function unMarkSpamItem() {
+		global $out, $result;
+
 		$items = get_post('t_ids');
-		$items = explode(':', $items, 100);
-		$num = 0;
+		$items = explode(':', get_post('t_ids'), 101);
 		$itemsOK = array();
-		$db = new DB;
 
-		foreach ($items as $id) {
-			if (is_numeric($id) && intval($id) > 0) {
-				if (!$db->query("UPDATE up SET adult='0' WHERE id=? LIMIT 1", $id)) {
-					$out = "невозможно снять метку XXX";
-					return;
-				}
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
 
-				$itemsOK[] = $id;
-				$num++;
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
 			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET spam='0' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно снять метку спама: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
 		}
 
 		$out = implode(":", $itemsOK);
 		$result = 1;
 		return;
-	}*/
+	}
 
-	public function onlyDigit($var) {
+
+	public function markAdultItem() {
+		global $out, $result;
+
+		$items = get_post('t_ids');
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET adult='1' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно установить метку +16: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+
+	public function unMarkAdultItem() {
+		global $out, $result;
+
+		$items = get_post('t_ids');
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET adult='0' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно снять метку +16: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+	private function onlyDigit($var) {
 		return (is_numeric($var) && (intval($var, 10) > 0));
 	}
 
