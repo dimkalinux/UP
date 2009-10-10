@@ -109,7 +109,7 @@ h3 { color: #000; font-weight: normal; font-size:118%; margin-bottom: .4em;  }
 h4 { color: #000; font-weight: bold; font-size: 11px; line-height: 11px; text-transform: uppercase;  }
 h5 { color: #000; font-weight: normal; font-size: 11px; line-height: 11px; margin-bottom: 3px;  }
 
-h2 em { color: #2b2b2b !important; font-style: normal !important; }
+h2 em { color: #999 !important; font-style: normal !important; font-size: .75em !important; }
 h3 em { color: #2b2b2b !important; font-style: normal !important; }
 h2 + p, h2 + div.message, h2 + h3, h2 + form, h2 + #serviceTable, h2 + #mapTable  { margin-top: 1em; }
 h2 + ol { margin-top: 1em !important; }
