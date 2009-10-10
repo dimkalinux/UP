@@ -82,8 +82,8 @@ FMB;
 			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
 			<a href="{$base_url}map/">Карта сайта</a>
 			<a href="{$base_url}agree/" class="item_line">Пользовательское соглашение</a>
-			<a href="{$base_url}service/uploaders.php">Дополнительные программы</a>
-			<a href="{$base_url}ftp_access.php">Доступ по фтп</a>
+			<a href="{$base_url}help/uploaders.php" class="item_line">Дополнительные программы</a>
+			<a href="{$base_url}help/ftp_access.php">Доступ по фтп</a>
         </div>
 	</li>
 FMB;
