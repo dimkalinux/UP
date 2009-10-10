@@ -57,11 +57,10 @@ try {
 }
 
 
-//print_r($user);
 // is admin rights?
 if (defined('ADMIN_PAGE')) {
-	if ($user['is_admin'] !== True) {
-		show_error_message('Доступ защищён зарослями фиалок и лютиков.');
+	if ($user['is_admin'] !== TRUE) {
+		show_error_message('Доступ защищён зарослями фиалок и&nbsp;лютиков.');
 		exit();
 	}
 }
@@ -98,91 +97,75 @@ function get_get($str) {
 }
 
 
-
-
 function format_filesize_plain($bytes) {
-	// bytes
-	if ($bytes < 1024)
+	if ($bytes < 1024) {
 		return "${bytes}&nbsp;б";
-	// kb
-	else if ($bytes < 1048576)
+	} else if ($bytes < 1048576) {
 		return round(($bytes/1024), 1).'&nbsp;КБ';
-	// megabytes
-	else if ($bytes < 1073741824)
+	} else if ($bytes < 1073741824) {
 		return round(($bytes/1048576), 1).'&nbsp;МБ';
-	// gigabytes
-	else if ($bytes < 1099511627776)
+	} else if ($bytes < 1099511627776) {
 		return round(($bytes/1073741824), 1).'&nbsp;ГБ';
-	// terabytes
-	else
+	} else {
 		return round(($bytes/1099511627776), 2).'&nbsp;ТБ';
+	}
 }
 
-function format_filesize($bytes, $quoted=false) {
-	if ($quoted === true) {
-		$span_start = '<span class=\"filesize\">';
-	} else {
-		$span_start = '<span class="filesize">';
-	}
 
-	// bytes
-	if ($bytes < 1024)
+function format_filesize($bytes, $quoted=FALSE) {
+	$span_start = ($quoted === TRUE) ? '<span class=\"filesize\">' : '<span class="filesize">';
+
+	if ($bytes < 1024) {
 		return "${bytes}&nbsp;".$span_start.'б</span>';
-	// kb
-	else if ($bytes < 1048576)
+	} else if ($bytes < 1048576) {
 		return round(($bytes/1024), 1).'&nbsp;'.$span_start.'КБ</span>';
-	// megabytes
-	else if ($bytes < 1073741824)
+	} else if ($bytes < 1073741824) {
 		return round(($bytes/1048576), 1).'&nbsp;'.$span_start.'МБ</span>';
-	// gigabytes
-	else if ($bytes < 1099511627776)
+	} else if ($bytes < 1099511627776) {
 		return round(($bytes/1073741824), 1).'&nbsp;'.$span_start.'ГБ</span>';
-	// terabytes
-	else
+	} else {
 		return round(($bytes/1099511627776), 2).'&nbsp;'.$span_start.'ТБ</span>';
+	}
 }
 
 
-function format_speed($bytes, $raw=false) {
-	if ($raw) {
-		$space = ' ';
-	} else {
-		$space = '&nbsp;';
-	}
+function format_speed($bytes, $raw=FALSE) {
+	$space = ($raw === TRUE) ? ' ' : '&nbsp;';
 	$bytes *= 8;
 
 	// bytes
-	if ($bytes < 1000)
+	if ($bytes < 1000) {
 		return "${bytes}{$space}б/с";
-	// kb
-	else if ($bytes < 1000000)
+	} else if ($bytes < 1000000) {
 		return round(($bytes/1000), 1)."{$space}кб/с";
-	// megabytes
-	else if ($bytes < 1000000000)
+	} else if ($bytes < 1000000000) {
 		return round(($bytes/1000000), 1)."{$space}Мб/с";
-	// gigabytes
-	else if ($bytes < 1000000000000)
+	} else if ($bytes < 1000000000000) {
 		return round(($bytes/1000000000), 1)."{$space}Гб/с";
-	// terabytes
-	else
+	} else {
 		return round(($bytes/1000000000000), 1)."{$space}Тб/с";
+	}
 }
 
 
 function time_to_string($value, $str1, $str2, $str5) {
-	if (!$value)
+	if (!$value) {
 		return 0;
+	}
 
 	$mod = $value % 10;
 
-	if (($value % 100) >= 10 && ($value % 100) <= 19)
+	if (($value % 100) >= 10 && ($value % 100) <= 19) {
 		return $str5;
+	}
 
-	if ($mod == 1)
+	if ($mod == 1) {
 		return $str1;
+	}
 
-	if ($mod >= 2 && $mod <= 4)
+	if ($mod >= 2 && $mod <= 4) {
 		return $str2;
+	}
 
 	return $str5;
 }
@@ -394,7 +377,7 @@ function get_time_of_die($size, $downloads, $ndi, $spam) {
 
 function is_spam($str) {
 	if (!$str) {
-		return false;
+		return FALSE;
 	}
 
 	$a_patterns = array(
@@ -409,13 +392,13 @@ function is_spam($str) {
 	'[пp][рpr][оo][сcs]ь*[бb][аa]',
 	'[пp][оo]ж[аa][лl][уyu]й*[сcs]*[тt]*[аa]*');
 
-	$is_spam = false;
+	$is_spam = FALSE;
 
 	foreach ($a_patterns as $pattern) {
 		$pattern = '/'.$pattern.'/ui';
 
 		if (preg_match($pattern, $str)) {
-			$is_spam = true;
+			$is_spam = TRUE;
 			break;
 		}
 	}
@@ -426,7 +409,7 @@ function is_spam($str) {
 
 function is_adult($str) {
 	if (!$str || !is_can_be_adult($str)) {
-		return false;
+		return FALSE;
 	}
 
 	$a_patterns = array(
@@ -450,13 +433,13 @@ function is_adult($str) {
 	'fuck'
 	);
 
-	$is_adult = false;
+	$is_adult = FALSE;
 
 	foreach ($a_patterns as $pattern) {
 		$pattern = '/'.$pattern.'/ui';
 
 		if (preg_match($pattern, $str)) {
-			$is_adult = true;
+			$is_adult = TRUE;
 			break;
 		}
 	}
@@ -466,7 +449,7 @@ function is_adult($str) {
 
 
 function prettyDate($mysqlDate) {
-	date_default_timezone_set ("Europe/Zaporozhye");
+	date_default_timezone_set("Europe/Zaporozhye");
 	setlocale(LC_TIME, 'ru_RU', 'ru_RU.utf8', 'ru');
 
 	$diff = date_format(date_create('now'), 'U') - date_format(date_create($mysqlDate), 'U');
@@ -483,14 +466,12 @@ function prettyDate($mysqlDate) {
             elseif($diff < 3600) 	return format_minutes(floor($diff/60));
             elseif($diff < 7200) 	return 'час назад';*/
             elseif($diff < 86400) 	return 'сегодня';//return floor($diff/3600) . ' часов';*/
-    }
-	elseif ($dayDiff == 1) {
+    } elseif ($dayDiff == 1) {
 		return 'вчера';
 	} else {
 		return $defaultDateFormat;
 	}
 }
-
 
 
 function makeSearch($req, $fooltext=false) {
