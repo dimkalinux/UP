@@ -32,7 +32,7 @@ $loginForm = <<<FMB
 			</div>
 		</form>
 		<div class="formRow buttons">
-			<a href="/forget_password.php">Напомните&nbsp;мне&nbsp;пароль</a>
+			<a href="{$base_url}forget_password.php">Напомните&nbsp;мне&nbsp;пароль</a>
 		</div>
 	</div>
 </div>
@@ -40,14 +40,14 @@ $loginForm = <<<FMB
 FMB;
 
 
-$logDiv = getWelcomeMessage().'&nbsp;&nbsp;Можно <span class="relative"><a href="/login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="/register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
+$logDiv = getWelcomeMessage().'&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
 $user_login = '';
 
 try {
 	if (!$user['is_guest']) {
 		$user_login	= $user['login'];
 		$logDiv = <<<FMB
-	Вы зашли как&nbsp;&nbsp;<a href="/profile/" title="Зайти к себе в профиль">$user_login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/files/" id="mainMenuMyFiles" title="Перейти к вашим файлам">Мои файлы</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/logout/" title="Выйти из системы">Выйти</a></div>
+	Вы зашли как&nbsp;&nbsp;<a href="{$base_url}profile/" title="Зайти к себе в профиль">$user_login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}files/" id="mainMenuMyFiles" title="Перейти к вашим файлам">Мои файлы</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}logout/" title="Выйти из системы">Выйти</a></div>
 FMB;
 	}
 } catch(Exception $e) {
@@ -56,77 +56,73 @@ FMB;
 
 //
 function print_menu() {
-	global $user;
+	global $user, $base_url;
 
 	$menuArrow = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAMAAADeWG8gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF2trawMDA////FCoqwwAAACdJREFUeNpiYMIADFiEGKivihECUFTBRZDMgokgm8VIC3dhCgEEGAAduAIBgj6YfQAAAABJRU5ErkJggg==';
 	$cpage = $_SERVER['PHP_SELF'];
 	$class = "z";
 
 
-	$cpage == '/index.php' ? $class = "current" : $class = "z";
-	$main_url = <<<ZZZ
-		<li class="$class niceMenuFirst" style="padding-right: 6px;"><a href="/" title="Вернуться на главную страницу">Главная</a></li>
-ZZZ;
+	$main_url = <<<FMB
+		<li class="niceMenuFirst" style="padding-right: 6px;"><a href="{$base_url}" title="Вернуться на главную страницу">Главная</a></li>
+FMB;
 
-	$cpage == '/search/' ? $class = "current" : $class = "z";
-	$search_url = <<<ZZZ
-		<li class="$class niceMenuLast" style="padding-left: 6px;"><a href="/search/">Поиск</a></li>
-ZZZ;
+	$search_url = <<<FMB
+		<li class="niceMenuLast" style="padding-left: 6px;"><a href="{$base_url}search/">Поиск</a></li>
+FMB;
 
-	stripos($cpage, 'about') !== false ? $class = "current" : $class = "z";
-	$project_url = <<<ZZZ
-	<li class="$class">
+	$project_url = <<<FMB
+	<li>
 		<span class="head_menu">
-			<a href="/about/">О&nbsp;проекте</a>
+			<a href="{$base_url}about/">О&nbsp;проекте</a>
 			<img src="$menuArrow" width="18" height="15" class="arrow" />
 		</span>
  		<div class="sub_menu">
-	        <a href="/rules/">История</a>
-			<a href="/stat/">Статистика</a>
-			<a href="/compability.php">Совместимость</a>
-			<a href="/feedback/" class="item_line">Обратная связь</a>
-			<a href="/map/">Карта сайта</a>
-			<a href="/agree/" class="item_line">Пользовательское соглашение</a>
-			<a href="/service/uploaders.php">Дополнительные программы</a>
-			<a href="/ftp_access.php">Доступ по фтп</a>
+	        <a href="{$base_url}rules/">История</a>
+			<a href="{$base_url}stat/">Статистика</a>
+			<a href="{$base_url}compability.php">Совместимость</a>
+			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
+			<a href="{$base_url}map/">Карта сайта</a>
+			<a href="{$base_url}agree/" class="item_line">Пользовательское соглашение</a>
+			<a href="{$base_url}service/uploaders.php">Дополнительные программы</a>
+			<a href="{$base_url}ftp_access.php">Доступ по фтп</a>
         </div>
 	</li>
-ZZZ;
+FMB;
 
 
 	$myFilesMenuEntry = '';
 	if (!$user['is_guest']) {
 		$myFilesMenuEntry = '<a href="/files/" class="item_line">Мои файлы</a>';
 	}
-	stripos($cpage, '/top/') !== false ? $class = "current" : $class = "z";
-	$filelist_url = <<<ZZZ
-	<li class="$class">
+
+	$filelist_url = <<<FMB
+	<li>
 		<span class="head_menu">
-			<a href="/top/new/">Список файлов</a>
+			<a href="{$base_url}top/new/">Список файлов</a>
 			<img src="$menuArrow" width="18" height="15" class="arrow" />
 		</span>
  		<div class="sub_menu">
-	       	<a href="/top/new/">Cвежие</a>
-			<a href="/top/size/">Большие</a>
-			<a href="/top/popular/">Популярные</a>
-			<a href="/top/mp3/" class="item_line">Музыка</a>
-			<a href="/top/video/">Видео</a>
-			<a href="/top/archive/">Архивы</a>
-			<a href="/top/photo/">Картинки</a>
-			<a href="/top/image/">Образы дисков</a>
-			<a href="/on-air/" class="item_line">Прямой эфир</a>
-			<a href="/spam/" class="item_line">Спам</a>
+	       	<a href="{$base_url}top/new/">Cвежие</a>
+			<a href="{$base_url}top/size/">Большие</a>
+			<a href="{$base_url}top/popular/">Популярные</a>
+			<a href="{$base_url}top/mp3/" class="item_line">Музыка</a>
+			<a href="{$base_url}top/video/">Видео</a>
+			<a href="{$base_url}top/archive/">Архивы</a>
+			<a href="{$base_url}top/photo/">Картинки</a>
+			<a href="{$base_url}top/image/">Образы дисков</a>
+			<a href="{$base_url}on-air/" class="item_line">Прямой эфир</a>
+			<a href="{$base_url}spam/" class="item_line">Спам</a>
 			$myFilesMenuEntry
       	</div>
 	</li>
-ZZZ;
+FMB;
 
 
-	$cpage == '/explore.php' ? $class = "current" : $class = "z";
-	$service_url = <<<ZZZ
-	<li class="$class">
+	$service_url = <<<FMB
+	<li>
 		<span class="head_menu">
-			<a href="/explore/">Сервисы</a>
+			<a href="{$base_url}explore/">Сервисы</a>
 			<img src="$menuArrow" width="18" height="15" class="arrow" />
 		</span>
  		<div class="sub_menu">
@@ -140,20 +136,20 @@ ZZZ;
 			<a href="http://forum.iteam.net.ua/labs/" class="item_line">Labs</a>
 		</div>
 	</li>
-ZZZ;
+FMB;
 
 	$adminMenu = <<<FMB
 	<li>
 		<span class="head_menu">
-			<a href="/admin/">Управление</a>
+			<a href="{$base_url}admin/">Управление</a>
 			<img src="$menuArrow" width="18" height="15" class="arrow"/>
 		</span>
  		<div class="sub_menu">
-			<a href="/adult.php" class="item_admin">adult</a>
-			<a href="/hidden.php" class="item_admin">скрытые</a>
-			<a href="/admin/logs.php" class="item_admin item_line">Журнал событий</a>
-			<a href="/admin/storage.php" class="item_admin">Хранилища</a>
-			<a href="/admin/feedback.php" class="item_admin">Сообщения</a>
+			<a href="{$base_url}admin/adult.php" class="item_admin">adult</a>
+			<a href="{$base_url}admin/hidden.php" class="item_admin">скрытые</a>
+			<a href="{$base_url}admin/logs.php" class="item_admin item_line">Журнал событий</a>
+			<a href="{$base_url}admin/storage.php" class="item_admin">Хранилища</a>
+			<a href="{$base_url}admin/feedback.php" class="item_admin">Сообщения</a>
 		</div>
 	</li>
 FMB;
@@ -163,7 +159,7 @@ FMB;
 		$adminMenu = '';
 	}
 
-	$menu = <<<ZZZ
+	$menu = <<<FMB
 		<div id="nicemenu">
 			<ul>
 				$main_url
@@ -174,7 +170,7 @@ FMB;
 				$search_url
 			</ul>
 		</div>
-ZZZ;
+FMB;
 
 	return $menu;
 }
