@@ -60,6 +60,16 @@ switch ($action) {
 		$ajax->unMarkAdultItem();
 		break;
 
+	case ACTION_ADMIN_HIDE_ITEM:
+		$ajax = new AJAX_ADMIN;
+		$ajax->hideItem();
+		break;
+
+	case ACTION_ADMIN_UNHIDE_ITEM:
+		$ajax = new AJAX_ADMIN;
+		$ajax->unHideItem();
+		break;
+
 	default:
 		$out = 'Неизвестная команда';
 		break;

@@ -239,6 +239,7 @@ function top_get($type, $page, $link_base) {
 			<div class="controlButtonsBlock">
 				<input type="button" value="спам" onmousedown="UP.admin.markItemSpam();" disabled="disabled"/>
 				<input type="button" value="+16" onmousedown="UP.admin.markItemAdult();" disabled="disabled"/>
+				<input type="button" value="cкрыть" onmousedown="UP.admin.hideItem();" disabled="disabled"/>&nbsp;
 				<input type="button" value="удалить" onmousedown="UP.admin.deleteItem();" disabled="disabled"/>
 			</div>';
 	}

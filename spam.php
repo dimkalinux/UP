@@ -4,12 +4,17 @@ if (!defined('UP_ROOT')) {
 }
 require UP_ROOT.'functions.inc.php';
 
-// admin js function
+
 $addScript = $admin_th_row = $admin_td_row = $admin_actions_block = '';
+$colspanPreAdmin = 1;
+$colspan = 2;
+
+// admin js function
 if ($user['is_admin']) {
-	$admin_th_row = '<th class="first center"><input id="allCB" type="checkbox"/></th>';
-	$admin_actions_block = '<input type="button" value="not SPAM" onmousedown="UP.admin.unmarkItemSpam(false);" disabled="disabled" />';
+	$admin_th_row = '<th class="center"><input id="allCB" type="checkbox"/></th>';
+	$admin_actions_block = '<div class="controlButtonsBlock"><input type="button" value="не спам" onmousedown="UP.admin.unmarkItemSpam(false);" disabled="disabled"/></div>';
 	$addScript[] = 'up.admin.js';
+	$colspanPreAdmin = 2;
 }
 
 
@@ -25,16 +30,19 @@ if ($datas) {
 	$out = <<<FMB
 		<div id="status">&nbsp;</div>
 		<h2>Спам</h2>
-		$admin_actions_block
 		<table class="t1" id="search_files_table">
 		<thead>
 		<tr>
+			<th class="noborder" colspan="$colspanPreAdmin"></th>
+			<th class="left noborder">$admin_actions_block</th>
+			<th class="right noborder" id="pageLinks" colspan="$colspan"></th>
+		</tr>
+		<tr>
 			$admin_th_row
-			<th class="first right">Размер</th>
-			<th class="left">Имя</th>
-			<th class="center">ip</th>
-			<th class="center">Скачан</th>
-			<th class="last right">Время</th>
+			<th class="size">Размер</th>
+			<th class="name">Имя</th>
+			<th class="download">Скачан</th>
+			<th class="time">Время</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -55,12 +63,16 @@ exit();
 
 
 function print_files_list_callback($item, $key, $out) {
-	global $user;
+	global $user, $base_url;
 
 	$item_id = intval($item['id'], 10);
-	$filename = get_cool_and_short_filename($item['filename'], 40);
+	$fullFilename = htmlspecialchars_decode(stripslashes($item['filename']));
+	$filename = get_cool_and_short_filename($fullFilename, 55);
+	$filenameTitle = '';
+	if (5 < (mb_strlen($fullFilename) - mb_strlen($filename))) {
+		$filenameTitle = 'title="Полное имя: '.$fullFilename.'"';
+	}
 	$filesize_text = format_filesize($item['size']);
-	$ip = $item['ip'];
 	$downloaded = $item['downloads'];
 	$file_date = prettyDate($item['uploaded_date']);
 
@@ -73,11 +85,10 @@ function print_files_list_callback($item, $key, $out) {
 	$out .= <<<FMB
 		<tr id="row_item_$item_id" class="row_item">
 			$admin_td_row
-			<td class="right">$filesize_text</td>
-			<td class="left"><a href="/$item_id/">$filename</a></td>
-			<td class="center">$ip</td>
-			<td class="center">$downloaded</td>
-			<td class="right">$file_date</td>
+			<td class="size">$filesize_text</td>
+			<td class="name"><a href="{$base_url}$item_id/">$filename</a></td>
+			<td class="download">$downloaded</td>
+			<td class="time">$file_date</td>
 		</tr>
 FMB;
 }

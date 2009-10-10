@@ -7,7 +7,8 @@ UP.admin = function () {
 		normal = 1,
 		deleted = 2,
 		spamed = 3,
-		adulted = 4;
+		adulted = 4,
+		hidden = 5;
 
 
 	function getCheckedItemsID() {
@@ -359,6 +360,108 @@ UP.admin = function () {
 							UP.statusMsg.clear();
 						} else {
 							var msgOK = ['Снята метка «XXX» c ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файлов', ' файла'), undoLink].join('');
+							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
+						}
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, true);
+					}
+				}
+			});
+
+			return false;
+		},
+
+
+		hideItem: function (undo) {
+			var items = getCheckedItemsID(),
+				actions = UP.env.actionAdminHideItem,
+				undoLink = '<span class="as_js_link" onclick="UP.admin.hideItem(true);">Отменить</span>';
+
+			if (undo === true) {
+				items = getAffectedItemsID(hidden);
+				actions = UP.env.actionAdminUnHideItem;
+				undoLink = '';
+			}
+
+			if (!items) {
+				return false;
+			}
+
+			wait('hiddenTimer', waitTimeout);
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxAdminBackend,
+				data: 	{ t_action: actions, t_ids: items },
+				dataType: 'json',
+				beforeSend: function () {
+					$(':checkbox, :button').attr('disabled', 'disabled'); // disable all input
+				},
+				complete: function () {
+					onComplete('hiddenTimer');
+				},
+				error: 	function () {
+					onError();
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						var ok_num = cbResultSuccess(data.message, undo, hidden);
+
+						if (undo === true) {
+							UP.statusMsg.clear();
+						} else {
+							var msgOK = ['Скрыты ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файла', ' файл'), undoLink].join('');
+							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
+						}
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, true);
+					}
+				}
+			});
+
+			return false;
+		},
+
+		//
+		unHideItem: function (undo) {
+			var items = getCheckedItemsID(),
+				actions = UP.env.actionAdminUnHideItem,
+				undoLink = '<span class="as_js_link" onclick="UP.admin.unHideItem(true);">Отменить</span>';
+
+			if (undo === true) {
+				items = getAffectedItemsID(hidden);
+				actions = UP.env.actionAdminHideItem;
+				undoLink = '';
+			}
+
+			if (!items) {
+				return false;
+			}
+
+			wait('unHiddenTimer', waitTimeout);
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxAdminBackend,
+				data: 	{ t_action: actions, t_ids: items },
+				dataType: 'json',
+				beforeSend: function () {
+					$(':checkbox, :button').attr('disabled', 'disabled');
+				},
+				complete: function () {
+					onComplete('unHiddenTimer');
+				},
+				error: 	function () {
+					onError();
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						var ok_num = cbResultSuccess(data.message, undo, hidden);
+
+						if (undo === true) {
+							UP.statusMsg.clear();
+						} else {
+							var msgOK = ['Показаны ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файлов', ' файла'), undoLink].join('');
 							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
 						}
 					} else {

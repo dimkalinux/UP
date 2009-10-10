@@ -156,10 +156,11 @@ input[type=password] { min-width: 12.5em; }
 table { border-collapse: collapse; }
 td { vertical-align: top; }
 #top_files_table, #search_files_table, #myFilesTable { width: 90%; margin-top: 1em;}
-#top_files_table tbody td, #search_files_table tbody td { border-bottom: solid 1px #eee !important;  }
+#top_files_table tbody td, #search_files_table tbody td { border-bottom: solid 1px #eee;  }
 #file_info_table .header td { padding-bottom: .7em;  }
 #top_files_table tbody a,  #search_files_table tbody a { font-weight: normal; color: #101010 !important; }
 #top_files_table tbody a:visited,  #search_files_table tbody a:visited { color: #777 !important; }
+#top_files_table td, #top_files_table th { vertical-align: middle !important; }
 
 table#set_files_table { width: 90%; margin-top: 2em;}
 table.t1 a { font-weight: normal; }
@@ -171,7 +172,7 @@ table.t1 td { padding: .3em .5em .3em; font-size: .95em;  }
 .t1 td.last, .t1 th.last { border-right: none !important; }
 
 /* file info */
-.t1 td { border: none !important;  }
+/*.t1 td { border: none !important;  }*/
 td.ab { font-weight: normal; text-align: right; color: #555; }
 td.bb { color: #000; }
 
@@ -180,7 +181,7 @@ td.bb { color: #000; }
 
 .t1 tfoot td { padding-top: .3em;}
 .filesize { color: #999; }
-tr.canceled td, tr.selected td { background: #ffffcc !important; }
+tr.canceled td, tr.selected td { background: #F4F8FF !important; border-bottom: solid 1px #CFE0FF !important; color: #333 !important;  }
 
 .asDiv td { vertical-align: top; padding-right: 2em; }
 
@@ -710,3 +711,5 @@ ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
 li.itemOwner { /*background: #E4F2FD !important;*/ }
 
+div.controlButtonsBlock { background: #F1F8FF !important; border: solid 1px #E1E9F7 !important; padding: .3em .25em .25em; float: left; -webkit-border-radius: 3px; -moz-border-radius: 3px; }
+div.controlButtonsBlock input { font-family: Consolas,Monaco,Liberation Mono,Lucida Console,Monospace !important; font-size: .9em; }

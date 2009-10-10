@@ -38,7 +38,8 @@ UP.env = UP.env || {
 	actionAdminUnMarkItemAsSpam: 27,
 	actionAdminMarkItemAsAdult: 28,
 	actionAdminUnMarkItemAsAdult: 29,
-
+	actionAdminHideItem: 30,
+	actionAdminUnHideItem: 31,
 	debug: true
 };
 
@@ -93,7 +94,7 @@ UP.uploadForm = function () {
 					upload.percents = 100;
 					$('#upload_progress').hide();
 					$('#upload_status').html('Ожидайте, файл обрабатывается&hellip;');
-				} else if (upload.state == 'uploading') {
+				} else if (upload.state === 'uploading') {
 					timeGone = UP.utils.gct() - startTime;
 
 
@@ -111,7 +112,6 @@ UP.uploadForm = function () {
 					}
 
 					speedTime = upload.received / (timeGone / 1000); // bytes/s
-					//timeRemain = UP.utils.formatTime(Math.round((upload.size-upload.received) / speedTime));
 					speed = (upload.received * 8) / (timeGone / 1000);
 
 					// average speed
@@ -461,7 +461,7 @@ UP.owner = function () {
 					onError();
 				},
 				success: function(data)	{
-					if (data.result == 1) {
+					if (parseInt(data.result, 10) === 1) {
 						$('#primary').fadeOut(350, function() {
 							$('#primary').html('<div id="status">&nbsp;</div><div id="r1"><h2>Файл удалён</h2>' +
 								'<p>Примечание: удалён владельцем файла</p></div>' +
@@ -493,7 +493,7 @@ UP.owner = function () {
 					onError();
 				},
 				success: function(data) {
-					if (data.result == 1) {
+					if (parseInt(data.result, 10) === 1) {
 						$('#primary').fadeOut(200, function() {
 							$('#primary').html(primary);
 							primary = '';
@@ -730,14 +730,10 @@ UP.fancyLogin = function () {
 							$(this).removeClass('bad').addClass('good');
 						});
 
-						if (r.error === 0) {
+						if (parseInt(r.error, 10) === 0) {
 							form.clearForm().resetForm();
 							$("#fancyLogin").fadeTo(300, 0.01, function() {
-								if (window.location.hash && window.location.hash.length > 2 && window.location.hash.charAt(0) == '#') {
-									location.reload();
-								} else {
-									location.reload();
-								}
+								location.reload();
 								$("[required='1'][value='']:first").focus();
 							});
 						} else {
@@ -784,6 +780,7 @@ UP.utils = function () {
 			});
 
 			$("#"+itemShowID).toggle();
+
 			if ($("#"+itemShowID).is(":visible")) {
 				window.location.hash = itemShowID;
 				$("[required='1'][value='']:first").focus();
@@ -875,7 +872,7 @@ UP.utils = function () {
 				return gen_sg;
 			}
 
-			if (value == 1) {
+			if (value === 1) {
 				return nom_sg;
 			}
 		},
@@ -900,7 +897,7 @@ UP.utils = function () {
 				dataType: 'json',
 				error: function() { UP.statusMsg.show('<strong>Ошибка: </strong>AJAX запроса', UP.env.msgError, true); },
 	   			success: function(r) {
-					if (r.result === 1) {
+					if (parseInt(r.result, 10) === 1) {
 						var chash = $.sha1(r.message),
 							hash = $('#wrap').data('hash');
 

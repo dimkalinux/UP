@@ -322,6 +322,95 @@ class AJAX_ADMIN extends AJAX {
 		return;
 	}
 
+
+	public function hideItem() {
+		global $out, $result;
+
+		$items = get_post('t_ids');
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET hidden='1' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно скрыть файл: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+
+	public function unHideItem() {
+		global $out, $result;
+
+		$items = get_post('t_ids');
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET hidden='0' WHERE id IN $IN");
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно показать файл: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+
 	private function onlyDigit($var) {
 		return (is_numeric($var) && (intval($var, 10) > 0));
 	}
