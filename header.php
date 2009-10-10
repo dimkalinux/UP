@@ -60,8 +60,6 @@ function print_menu() {
 
 	$menuArrow = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAMAAADeWG8gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF2trawMDA////FCoqwwAAACdJREFUeNpiYMIADFiEGKivihECUFTBRZDMgokgm8VIC3dhCgEEGAAduAIBgj6YfQAAAABJRU5ErkJggg==';
 	$cpage = $_SERVER['PHP_SELF'];
-	$class = "z";
-
 
 	$main_url = <<<FMB
 		<li class="niceMenuFirst" style="padding-right: 6px;"><a href="{$base_url}" title="Вернуться на главную страницу">Главная</a></li>
@@ -145,11 +143,12 @@ FMB;
 			<img src="$menuArrow" width="18" height="15" class="arrow"/>
 		</span>
  		<div class="sub_menu">
-			<a href="{$base_url}admin/adult.php" class="item_admin">adult</a>
-			<a href="{$base_url}admin/hidden.php" class="item_admin">скрытые</a>
-			<a href="{$base_url}admin/logs.php" class="item_admin item_line">Журнал событий</a>
-			<a href="{$base_url}admin/storage.php" class="item_admin">Хранилища</a>
-			<a href="{$base_url}admin/feedback.php" class="item_admin">Сообщения</a>
+			<a href="{$base_url}admin/adult.php">+16</a>
+			<a href="{$base_url}spam.php">Спам</a>
+			<a href="{$base_url}admin/hidden.php">Скрытые</a>
+			<a href="{$base_url}admin/logs.php" class="item_line">Журнал событий</a>
+			<a href="{$base_url}admin/feedback.php">Журнал сообщений</a>
+			<a href="{$base_url}admin/storage.php" class="item_line">Хранилища</a>
 		</div>
 	</li>
 FMB;
