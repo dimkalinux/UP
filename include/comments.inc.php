@@ -87,7 +87,7 @@ class Comments {
 					$text = stripslashes($rec['message']);
 					$date = $rec['date'];
 					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=48&amp;hash='.md5($rec["username"]).'" height="48" width="48" alt="'.$rec["username"].'"/>';
+					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=40&amp;hash='.md5($rec["username"]).'" height="40" width="40" alt="'.$rec["username"].'"/>';
 					$deleteLink = '';
 					if ($user['is_admin']) {
 						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
@@ -100,11 +100,12 @@ class Comments {
 
 					$out .= <<<FMB
 				<li id="comment_$id" class="$ownerClass">
-					$identicon
-					$username<br/>
-					<small>{$date}{$deleteLink}<br/><br/>
-					</small>
-					<p>$text</p>
+					<div class="commentID">$identicon</div>
+					<div class="commentBody">
+						<span class="commentAuthor">$username</span><small>{$date}{$deleteLink}</small><br/>
+						$text
+					</div>
+					<br class="clear"/>
 				</li>
 FMB;
 				}

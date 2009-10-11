@@ -126,7 +126,7 @@ FMB;
 		$commentsNum = $comments->commentsNum();
 		$commentsLink = '<li><span class="as_js_link" rel="commentsBlock">комментарии&nbsp;(<span id="commentsNum">'.$commentsNum.'</span>)</span></li>';
 
-		$commentsForm = '<p>Для комментирования необходимо <a href="'.$base_url.'login/" class="mainMenuLogin">войти в систему</a></p>';
+		$commentsForm = '<br class="clear"/><p>Для комментирования необходимо <a href="'.$base_url.'login/" class="mainMenuLogin">войти в систему</a></p>';
 		if (!$user['is_guest']) {
 			$commentsForm = <<<FMB
 				<form method="post" action="$commentAddFormAction" name="comments" enctype="multipart/form-data" accept-charset="utf-8">
