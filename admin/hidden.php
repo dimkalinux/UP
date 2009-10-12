@@ -24,7 +24,9 @@ if ($datas) {
 		<thead>
 		<tr>
 			<th class="noborder" colspan="2"></th>
-			<th class="left noborder"><div class="controlButtonsBlock"><input type="button" value="открыть" onmousedown="UP.admin.unHideItem(false);" disabled="disabled"/></div></th>
+			<th class="left noborder">
+			<div class="controlButtonsBlock">
+			<button type="button" class="btn" disabled="disabled" onmousedown="UP.admin.unHideItem(false);"><span><span>открыть</span></span></button></div></th>
 			<th class="right noborder" id="pageLinks" colspan="2"></th>
 		</tr>
 		<tr>

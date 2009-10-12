@@ -116,7 +116,7 @@ function top_get($type, $page, $link_base) {
 	switch ($type) {
 		case 'new':
 			$cache_id = 'top_new';
-			$header = '<em>Список</em>&nbsp;свежих файлов';
+			$header = 'Список&nbsp;свежих файлов';
 			$th_date = '<th class="time current">Время</th>';
 			$td_date_class = "current";
 			$order_by = 'uploaded_date';
@@ -124,7 +124,7 @@ function top_get($type, $page, $link_base) {
 
 		case 'size':
 			$cache_id = 'top_size';
-			$header = '<em>Список</em>&nbsp;больших файлов';
+			$header = 'Список&nbsp;больших файлов';
 			$th_size = '<th class="size current">Размер</th>';
 			$td_size_class = "current";
 			$order_by = 'size';
@@ -132,7 +132,7 @@ function top_get($type, $page, $link_base) {
 
 		case 'name':
 			$cache_id = 'top_name';
-			$header = '<em>Сортировка:</em>&nbsp;имя';
+			$header = 'Сортировка:&nbsp;имя';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'id';
@@ -237,10 +237,11 @@ function top_get($type, $page, $link_base) {
 		$admin_th_row = '<th class="center"><input type="checkbox" id="allCB"/></th>';
 		$admin_actions_block = '
 			<div class="controlButtonsBlock">
-				<input type="button" value="спам" onmousedown="UP.admin.markItemSpam();" disabled="disabled"/>
-				<input type="button" value="+16" onmousedown="UP.admin.markItemAdult();" disabled="disabled"/>
-				<input type="button" value="cкрыть" onmousedown="UP.admin.hideItem();" disabled="disabled"/>&nbsp;
-				<input type="button" value="удалить" onmousedown="UP.admin.deleteItem();" disabled="disabled"/>
+				<button type="button" class="btn pill-l" disabled="disabled" onmousedown="UP.admin.markItemSpam();"><span><span>спам</span></span></button>
+				<button type="button" class="btn pill-c" disabled="disabled" onmousedown="UP.admin.markItemAdult();"><span><span>+16</span></span></button>
+				<button type="button" class="btn pill-r" disabled="disabled" onmousedown="UP.admin.hideItem();"><span><span>cкрыть</span></span></button>
+				&nbsp;
+				<button type="button" class="btn" disabled="disabled" onmousedown="UP.admin.deleteItem();"><span><span>удалить</span></span></button>
 			</div>';
 	}
 

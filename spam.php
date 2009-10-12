@@ -12,7 +12,7 @@ $colspan = 2;
 // admin js function
 if ($user['is_admin']) {
 	$admin_th_row = '<th class="center"><input id="allCB" type="checkbox"/></th>';
-	$admin_actions_block = '<div class="controlButtonsBlock"><input type="button" value="не спам" onmousedown="UP.admin.unmarkItemSpam(false);" disabled="disabled"/></div>';
+	$admin_actions_block = '<div class="controlButtonsBlock"><button type="button" class="btn" disabled="disabled" onmousedown="UP.admin.unmarkItemSpam(false);"><span><span>не спам</span></span></button></div>';
 	$addScript[] = 'up.admin.js';
 	$colspanPreAdmin = 2;
 }

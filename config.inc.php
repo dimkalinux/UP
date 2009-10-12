@@ -30,6 +30,8 @@ define('ACTION_SEARCH', 10);
 define('ACTION_GET_PE', 11);
 define('ACTION_GET_UPLOAD_URL', 13);
 define('ACTION_GET_COMMENTS', 14);
+define('ACTION_OWNER_DELETE_ITEM', 15);
+define('ACTION_OWNER_UNDELETE_ITEM', 16);
 
 //
 define('ANTIVIR_NOT_CHECKED', 7);

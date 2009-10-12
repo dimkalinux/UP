@@ -9,6 +9,92 @@ require_once UP_ROOT.'include/ajax.inc.php';
 
 class AJAX_OWNER extends AJAX {
 
+	public function deleteItems() {
+		global $user, $out, $result;
+
+		$reason = 'удалён владельцем файла';
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET deleted='1', deleted_reason=?, deleted_date=NOW() WHERE id IN $IN AND user_id=?", $reason, $user['id']);
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно удалить файл: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+	public function unDeleteItems() {
+		global $user, $out, $result;
+
+		$items = explode(':', get_post('t_ids'), 101);
+		$itemsOK = array();
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			if (!is_array($items) || count($items) < 1) {
+				throw new Exception('Empty items');
+			}
+
+			$db = new DB;
+
+			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
+
+			foreach ($superItems as $chunkItems) {
+				$IN = '('.implode(",", $chunkItems).')';
+				$db->query("UPDATE up SET deleted='0', deleted_reason='' WHERE id IN $IN AND user_id=?", $user['id']);
+				if ($db->affected() == count($chunkItems)) {
+					$itemsOK = array_merge($itemsOK, $chunkItems);
+				} else {
+					throw new Exception('DB affected != items count');
+				}
+			}
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно восстановить файл: '.$e->getMessage());
+		}
+
+		// clear stat cache
+		if (count($itemsOK) > 0) {
+			clear_stat_cache();
+		}
+
+		$out = implode(":", $itemsOK);
+		$result = 1;
+		return;
+	}
+
+
 	public function deleteItem() {
 		global $user, $out, $result;
 

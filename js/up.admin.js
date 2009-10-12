@@ -35,7 +35,7 @@ UP.admin = function () {
 		var items = [],
 			i = 0;
 
-		$(['input[type=checkbox][value=', type, ']'].join(''))
+		$([':checkbox[value=', type, ']'].join(''))
 			.each(function () {
 				if (i >= maxItems) {
 					return false;
@@ -92,6 +92,8 @@ UP.admin = function () {
 			}
 		}
 
+		checkButtonsDisabled();
+
 		//
 		return ok_num;
 	}
@@ -111,6 +113,11 @@ UP.admin = function () {
 
 	function onError() {
 		UP.statusMsg.show('<strong>Ошибка: </strong>AJAX запроса', UP.env.msgError, true);
+	}
+
+	function checkButtonsDisabled() {
+		var m = showNumCheckedCB();
+		$(':button').attr("disabled", (m < 1 ? 'disabled' : ''));
 	}
 
 
@@ -476,7 +483,6 @@ UP.admin = function () {
 		cbStuffStart: function () {
 			var state,
 				n = 0,
-				m = 0,
 				box,
 				id;
 			$(':checkbox').attr('checked', false); 	// make all unchecked
@@ -494,9 +500,7 @@ UP.admin = function () {
 
 			//
 			$(":checkbox[value='1']:visible").bind('change', function () {
-				m = showNumCheckedCB();
-				$(':button').attr("disabled", (m < 1 ? 'disabled' : ''));
-
+				checkButtonsDisabled();
 
 				// select
 				box = $(this);

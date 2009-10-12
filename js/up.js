@@ -27,6 +27,8 @@ UP.env = UP.env || {
 	actionGetPage: 12,
 	actionGetUploadUrl: 13,
 	actionGetComments: 14,
+	actionOwnerDeleteItem: 15,
+	actionOwnerUnDeleteItem: 16,
 
 	actionAdminRemoveFeedbackMessage: 50,
 	actionAdminRemoveComment: 51,
@@ -40,7 +42,10 @@ UP.env = UP.env || {
 	actionAdminUnMarkItemAsAdult: 29,
 	actionAdminHideItem: 30,
 	actionAdminUnHideItem: 31,
-	debug: true
+	debug: true,
+
+	// cookie
+	itemInfoStatusCookie: 'up_itemInfoStatusCookie'
 };
 
 
@@ -782,10 +787,10 @@ UP.utils = function () {
 			$("#"+itemShowID).toggle();
 
 			if ($("#"+itemShowID).is(":visible")) {
-				window.location.hash = itemShowID;
+				$.cookie(UP.env.itemInfoStatusCookie, itemShowID, { expires: 24, path: '/' });
 				$("[required='1'][value='']:first").focus();
 			} else {
-				window.location.hash = '';
+				$.cookie(UP.env.itemInfoStatusCookie, '', { expires: 24, path: '/' });
 			}
 		},
 
@@ -1109,6 +1114,322 @@ UP.log = function () {
         		window.console.log('[АП] ' + Array.prototype.join.call(arguments,''));
 			}
 		}
+	};
+}();
+
+
+// class for admin functions
+UP.userFiles = function () {
+	var waitTimeout = 400,
+		maxItems = 100,
+
+		// type of value of cb
+		normal = 1,
+		deleted = 2,
+		hidden = 3;
+
+
+	function getCheckedItemsID() {
+		var items = [],
+			i = 0;
+
+		$(':checkbox:checked').each(function () {
+				if (i >= maxItems) {
+					return false;
+				}
+				var id = parseInt($(this).attr('id').split('item_cb_')[1], 10);
+
+				if (! isNaN(id)) {
+					items.push(id);
+					i = i + 1;
+				}
+			}
+		);
+
+		return items.join(':');
+	}
+
+	function getAffectedItemsID(type) {
+		var items = [],
+			i = 0;
+
+		$([':checkbox[value=', type, ']'].join(''))
+			.each(function () {
+				if (i >= maxItems) {
+					return false;
+				}
+				var id = parseInt($(this).attr('id').split('item_cb_')[1], 10);
+
+				if (! isNaN(id)) {
+					items.push(id);
+					i = i + 1;
+				}
+			}
+		);
+
+		return items.join(':');
+	}
+
+
+	function showNumCheckedCB() {
+		return $(":checkbox:checked[value='1']:visible").size();
+	}
+
+
+	function cbResultSuccess(itemsAsString, undo, type) {
+		var itemsOK = itemsAsString.split(':'),
+			ok_num = 0,
+			i = 0,
+			max = 0,
+			id;
+
+		if (!undo) {
+			$(':checkbox[value='+type+']').each(function () {
+				var hiddenID = parseInt($(this).attr('id').split('item_cb_')[1], 10);
+				$('#row_item_'+hiddenID).remove();
+				UP.log.debug('RemoveHidden: '+hiddenID);
+			});
+		}
+
+		for (i = 0, max = itemsOK.length; i <= max; i = i + 1) {
+			id = parseInt(itemsOK[i], 10);
+
+			if (!isNaN(id) && id > 0) {
+				if (undo === true) {
+					$('#item_cb_' + id).attr('value', 1).attr("checked", true);
+					$('#row_item_' + id).addClass('selected').show();
+				} else {
+					$('#item_cb_' + id).removeAttr('checked').attr('value', type);
+					$('#row_item_' + id).removeClass('selected').hide();
+					UP.log.debug('hide: '+id);
+				}
+				ok_num = ok_num + 1;
+			}
+		}
+
+		checkButtonsDisabled();
+
+		//
+		return ok_num;
+	}
+
+
+	function wait(label, timeout) {
+		$('#wrap').stopTime(label).oneTime(timeout, label, function () {
+			UP.statusMsg.show('Ожидайте&hellip;', UP.env.msgWait, false);
+		});
+	}
+
+	function onComplete(timerLabel) {
+		$('#wrap').stopTime(timerLabel);
+		$(':checkbox').removeAttr('disabled');
+		$('#allCB').removeAttr('checked');
+		checkButtonsDisabled();
+	}
+
+	function onError() {
+		UP.statusMsg.show('<strong>Ошибка: </strong>AJAX запроса', UP.env.msgError, true);
+	}
+
+	function checkButtonsDisabled() {
+		var m = showNumCheckedCB();
+		$(':button').attr("disabled", (m < 1 ? 'disabled' : ''));
+	}
+
+
+	// public
+	return {
+
+		//
+		deleteItem: function (undo) {
+			var items = getCheckedItemsID(),
+				actions = UP.env.actionOwnerDeleteItem,
+				undoLink = '<span class="as_js_link" onclick="UP.userFiles.deleteItem(true);" title="Отменить удаление">Отменить</span>';
+
+			if (undo === true) {
+				items = getAffectedItemsID(deleted);
+				actions = UP.env.actionOwnerUnDeleteItem;
+				undoLink = '';
+			}
+
+			if (!items) {
+				return;
+			}
+
+			wait('deleteTimer', waitTimeout);
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxBackend,
+				data: 	{ t_action: actions, t_ids: items },
+				dataType: 'json',
+				beforeSend: function () {
+					$(':checkbox, :button').attr('disabled', 'disabled'); // disable all input
+				},
+				complete: function () {
+					onComplete('deleteTimer');
+				},
+				error: 	function () {
+					onError();
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						var ok_num = cbResultSuccess(data.message, undo, deleted);
+
+						if (undo === true) {
+							UP.statusMsg.clear();
+						} else {
+							var msgDelete = UP.utils.getCase((ok_num), 'Удалено ', 'Удалены ', 'Удалён '),
+								msgOK = [msgDelete, ok_num, UP.utils.getCase((ok_num), ' файлов', ' файла', ' файл'), undoLink].join('');
+							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
+						}
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, true);
+					}
+				}
+			});
+		},
+
+
+		hideItem: function (undo) {
+			var items = getCheckedItemsID(),
+				actions = UP.env.actionAdminHideItem,
+				undoLink = '<span class="as_js_link" onclick="UP.admin.hideItem(true);">Отменить</span>';
+
+			if (undo === true) {
+				items = getAffectedItemsID(hidden);
+				actions = UP.env.actionAdminUnHideItem;
+				undoLink = '';
+			}
+
+			if (!items) {
+				return false;
+			}
+
+			wait('hiddenTimer', waitTimeout);
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxAdminBackend,
+				data: 	{ t_action: actions, t_ids: items },
+				dataType: 'json',
+				beforeSend: function () {
+					$(':checkbox, :button').attr('disabled', 'disabled'); // disable all input
+				},
+				complete: function () {
+					onComplete('hiddenTimer');
+				},
+				error: 	function () {
+					onError();
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						var ok_num = cbResultSuccess(data.message, undo, hidden);
+
+						if (undo === true) {
+							UP.statusMsg.clear();
+						} else {
+							var msgOK = ['Скрыты ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файла', ' файл'), undoLink].join('');
+							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
+						}
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, true);
+					}
+				}
+			});
+
+			return false;
+		},
+
+		//
+		unHideItem: function (undo) {
+			var items = getCheckedItemsID(),
+				actions = UP.env.actionAdminUnHideItem,
+				undoLink = '<span class="as_js_link" onclick="UP.admin.unHideItem(true);">Отменить</span>';
+
+			if (undo === true) {
+				items = getAffectedItemsID(hidden);
+				actions = UP.env.actionAdminHideItem;
+				undoLink = '';
+			}
+
+			if (!items) {
+				return false;
+			}
+
+			wait('unHiddenTimer', waitTimeout);
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxAdminBackend,
+				data: 	{ t_action: actions, t_ids: items },
+				dataType: 'json',
+				beforeSend: function () {
+					$(':checkbox, :button').attr('disabled', 'disabled');
+				},
+				complete: function () {
+					onComplete('unHiddenTimer');
+				},
+				error: 	function () {
+					onError();
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						var ok_num = cbResultSuccess(data.message, undo, hidden);
+
+						if (undo === true) {
+							UP.statusMsg.clear();
+						} else {
+							var msgOK = ['Показаны ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файлов', ' файла'), undoLink].join('');
+							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
+						}
+					} else {
+						UP.statusMsg.show(data.message, UP.env.msgError, true);
+					}
+				}
+			});
+
+			return false;
+		},
+
+		cbStuffStart: function () {
+			var state,
+				n = 0,
+				m = 0,
+				box,
+				id;
+			$(':checkbox').attr('checked', false); 	// make all unchecked
+
+			//
+			$('#allCB').bind('change', function () {
+				state = $(this).attr('checked');
+				$(":checkbox[value='1']:visible").attr('checked', state);
+
+				n = showNumCheckedCB();
+				$(':button').attr("disabled", (n < 1 ? 'disabled' : ''));
+
+				$("tr.row_item").toggleClass('selected', state);
+			});
+
+			//
+			$(":checkbox[value='1']:visible").bind('change', function () {
+				m = showNumCheckedCB();
+				$(':button').attr("disabled", (m < 1 ? 'disabled' : ''));
+
+				// select
+				box = $(this);
+				id = parseInt(box.attr('id').split('item_cb_')[1], 10);
+
+				if (!isNaN(id)) {
+					if (box.attr('checked')) {
+						$('#row_item_' + id).addClass('selected');
+					} else {
+						$('#row_item_' + id).removeClass('selected');
+					}
+				}
+			});
+		}
+
 	};
 }();
 

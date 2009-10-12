@@ -19,6 +19,16 @@ if (!isset($_REQUEST['t_action'])) {
 
 switch ($action) {
 
+	case ACTION_OWNER_DELETE_ITEM:
+		$ajax = new AJAX_OWNER;
+		$ajax->deleteItems();
+		break;
+
+	case ACTION_OWNER_UNDELETE_ITEM:
+		$ajax = new AJAX_OWNER;
+		$ajax->unDeleteItems();
+		break;
+
 	case ACTION_GET_COMMENTS:
 		$ajax = new AJAX;
 		$ajax->getComments();

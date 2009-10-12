@@ -36,7 +36,7 @@ caption, th, td { text-align: left; font-weight: normal; }
 blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
-html { 	min-height: 101%; margin-bottom: 1px !important;}
+html { 	min-height: 100%; margin-bottom: 1px !important; }
 iframe#target_upload { width: 0; height: 0; border: none;}
 * html .clear, * html .section { height: 1%; }
 .clear, .section { display: block; clear: both; }
@@ -719,5 +719,25 @@ ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   
 #top_files_table td.name a { /*color: #1086A4 !important;*/ /*font-weight: bold; font-size: .9em; */}
 li.itemOwner { /*background: #E4F2FD !important;*/ }
 
-div.controlButtonsBlock { background: #F1F8FF !important; border: solid 1px #E1E9F7 !important; padding: .3em .25em .25em; float: left; -webkit-border-radius: 3px; -moz-border-radius: 3px; }
+div.controlButtonsBlock { background: #F1F8FF !important; border: solid 1px #E1E9F7 !important; padding: .3em .5em .25em; float: left; -webkit-border-radius: 3px; -moz-border-radius: 3px; }
 div.controlButtonsBlock input { font-family: Consolas,Monaco,Liberation Mono,Lucida Console,Monospace !important; font-size: .9em; }
+
+
+.btn { text-transform: none !important; border-width: 0; margin: 0; padding: 3px 0; background: transparent none repeat scroll 0% 0%; overflow: visible; display: inline-block; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous; font-family: Arial,Sans-serif; font-style: normal; font-variant: normal; font-weight: normal; font-size: 105%; line-height: 1.2; text-decoration: none; color: rgb(51, 51, 51); }
+* html button.btn { padding-bottom: 1px; }
+html:not([lang*=""]) button.btn { margin: 0pt -4.8px; }
+.btn span { border-left: 1px solid rgb(187, 187, 187); border-right: 1px solid rgb(170, 170, 170); margin: 0pt; padding: 3px 0pt; background: rgb(221, 221, 221) url('/img/bg-button.gif') repeat-x scroll 0pt 0pt;  }
+* html .btn span { padding-top: 0pt; }
+.btn span span { border-width: 1px 0pt; border-top: 1px solid rgb(187, 187, 187); border-bottom: 1px solid rgb(170, 170, 170); padding: 3px 0.4em; position: relative; }
+button.pill-l span { border-right-width: 0pt; }
+button.pill-l span span { border-right: 1px solid rgb(187, 187, 187); }
+button.pill-c span { border-right-style: none; border-left-color: rgb(255, 255, 255); }
+button.pill-c span span { border-right: 1px solid rgb(187, 187, 187); }
+button.pill-r span { border-left-color: rgb(255, 255, 255); }
+.btn:hover span, .btn:hover span span, .btn:focus span, .btn:focus span span { border-color: rgb(153, 204, 255) ! important; cursor: pointer; color: rgb(0, 0, 0); }
+.btn:active span { background-position: 0pt -400px;  }
+ .btn[disabled]:active span { background-position: 0 0 !important; }
+.btn:focus, .btn:active { outline: 0; }
+.primary { font-weight: bold; color: rgb(0, 0, 0); }
+button[disabled], .btn[disabled]:hover span, .btn[disabled]:focus span { color: #999 !important; }
+.btn:hover span, .btn:hover span span, .btn:focus span, .btn:focus span span { border-color: rgb(153, 204, 255) ! important; cursor: pointer; color: rgb(0, 0, 0); }

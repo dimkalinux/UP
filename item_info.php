@@ -137,7 +137,7 @@ FMB;
 						<label for="feedbackText">Ваш комментарий</label>
 						<textarea name="commentText" rows="5" minLength="5" maxLength="1024" required="1" tabindex="1"></textarea>
 					</div>
-					<div class="formRow buttons">
+					<div class="formRow">
 						<input type="submit" name="do" value="Отправить" tabindex="2"/>
 						<input type="reset" name="doClean" value="Очистить" tabindex="3"/>
 					</div>
@@ -567,8 +567,8 @@ ZZZ;
 
 	UP.statusMsg.defferedClear();
 
-	if (window.location.hash && window.location.hash.length > 2 && window.location.hash.charAt(0) == '#') {
-		$(window.location.hash).toggle();
+	if ($.cookie(UP.env.itemInfoStatusCookie)) {
+		$('#'+$.cookie(UP.env.itemInfoStatusCookie)).toggle();
 	}
 
 	$("[required='1'][value='']:first").focus();

@@ -49,6 +49,11 @@ require_once UP_ROOT.'include/gravatar.inc.php';
 require_once UP_ROOT.'include/user.inc.php';
 
 
+// remove status cookie
+if ('item_info.php' !== strtolower(substr(strrchr($_SERVER['SCRIPT_FILENAME'], "/"), 1))) {
+	setcookie("up_itemInfoStatusCookie", '', time() - 36000);
+}
+
 // get user info
 try {
 	$user = User::getCurrentUser();

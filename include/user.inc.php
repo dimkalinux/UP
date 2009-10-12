@@ -69,6 +69,8 @@ class User {
 	}
 
 	public static function getUserFiles($user_id) {
+		global $base_url;
+
 		$out = '';
 		if (!$user_id) {
 			return $out;
@@ -83,14 +85,26 @@ class User {
 
 		if ($datas) {
 			$out = <<<FMB
-				<table class="t1" id="myFilesTable">
+				<table class="t1" id="top_files_table">
 					<thead>
 					<tr>
+						<th colspan="2" class="noborder"></th>
+						<th class="noborder">
+							<div class="controlButtonsBlock">
+								<button type="button" class="btn pill-l" disabled="disabled" onmousedown="UP.userFiles.hideItem();"><span><span>скрыть</span></span></button>
+								<button type="button" class="btn pill-r" disabled="disabled" onmousedown="UP.userFiles.unHideItem();"><span><span>открыть</span></span></button>
+								&nbsp;
+								<button type="button" class="btn" disabled="disabled" onmousedown="UP.userFiles.deleteItem();"><span><span>удалить</span></span></button>
+							</div>
+						</th>
+					</tr>
+					<th colspan="2" class="noborder"></th>
+					<tr>
 						<th class="center checkbox"><input type="checkbox" id="allCB"/></th>
-						<th class="left size">Размер</th>
-						<th class="left name">Имя файла</th>
-						<th class="center download">Скачан</th>
-						<th class="center time">Срок</th>
+						<th class="size">Размер</th>
+						<th class="name">Имя файла</th>
+						<th class="download">Скачан</th>
+						<th class="time">Срок</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -104,19 +118,19 @@ FMB;
 				$item_pass = $item['delete_num'];
 				$wakkamakka = get_time_of_die ($item['size'], $item['downloads'], $item['NDI'], (bool)$item['spam']);
 				if ($wakkamakka < 1) {
-					$wakkamakka_text = 'сегодня будет удалён';
+					$wakkamakka_text = '0';
 				} else {
 					$wakkamakka_text = format_days($wakkamakka);
 				}
 
 
 				$out .= <<<FMB
-					<tr>
-						<td class="center"><input type="checkbox" value="1" id="item_cb_'.$item_id.'"/></td>
-						<td class="left">$filesize_text</td>
-						<td class="left"><a rel="nofollow" href="/$item_id/$item_pass/">$filename</a></td>
-						<td class="center">$downloaded</td>
-						<td class="center">$wakkamakka_text</td>
+					<tr id="row_item_{$item_id}" class="row_item">
+						<td class="center"><input type="checkbox" value="1" id="item_cb_{$item_id}"/></td>
+						<td class="size">$filesize_text</td>
+						<td class="name"><a rel="nofollow" href="{$base_url}{$item_id}/{$item_pass}/">$filename</a></td>
+						<td class="download">$downloaded</td>
+						<td class="time">$wakkamakka_text</td>
 					</tr>
 FMB;
 				}

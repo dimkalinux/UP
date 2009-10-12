@@ -11,17 +11,12 @@ $err = 0;
 $errMsg = "&nbsp;";
 $statusType = 'default';
 $myFiles = '';
+$onDOMReady = 'UP.userFiles.cbStuffStart();';
 
 
 $out = <<<ZZZ
 	<div id="status"><span type="$statusType">$errMsg</span></div>
 	<h2>Мои файлы</h2>
-	<ul class="inlineList userPanel">
-		<!--<li>Выбранные файлы:</li>-->
-		<li><span class="as_js_link" onlick="UP.admin.markItemSpam();">удалить</span></li>
-		<li><span class="as_js_link" onlick="UP.admin.markItemSpam();">скрыть</span></li>
-		<li><span class="as_js_link" onlick="UP.admin.markItemSpam();">продлить</span></li>
-	</ul>
 ZZZ;
 
 if ($user['is_guest']) {
