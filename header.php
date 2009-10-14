@@ -32,7 +32,7 @@ $loginForm = <<<FMB
 			</div>
 		</form>
 		<div class="formRow buttons">
-			<a href="{$base_url}forget_password.php">Напомните&nbsp;мне&nbsp;пароль</a>
+			<a href="{$base_url}forget_password/">Напомните&nbsp;мне&nbsp;пароль</a>
 		</div>
 	</div>
 </div>
@@ -78,12 +78,12 @@ FMB;
  		<div class="sub_menu">
 	        <a href="{$base_url}rules/">История</a>
 			<a href="{$base_url}stat/">Статистика</a>
-			<a href="{$base_url}compability.php">Совместимость</a>
+			<a href="{$base_url}help/compability/">Совместимость</a>
 			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
 			<a href="{$base_url}map/">Карта сайта</a>
 			<a href="{$base_url}agree/" class="item_line">Пользовательское соглашение</a>
-			<a href="{$base_url}help/uploaders.php" class="item_line">Дополнительные программы</a>
-			<a href="{$base_url}help/ftp_access.php">Доступ по фтп</a>
+			<a href="{$base_url}help/uploaders/" class="item_line">Дополнительные программы</a>
+			<a href="{$base_url}help/ftp/">Доступ по фтп</a>
         </div>
 	</li>
 FMB;
@@ -143,12 +143,12 @@ FMB;
 			<img src="$menuArrow" width="18" height="15" class="arrow"/>
 		</span>
  		<div class="sub_menu">
-			<a href="{$base_url}admin/adult.php">+16</a>
-			<a href="{$base_url}spam.php">Спам</a>
-			<a href="{$base_url}admin/hidden.php">Скрытые</a>
-			<a href="{$base_url}admin/logs.php" class="item_line">Журнал событий</a>
-			<a href="{$base_url}admin/feedback.php">Журнал сообщений</a>
-			<a href="{$base_url}admin/storage.php" class="item_line">Хранилища</a>
+			<a href="{$base_url}admin/adult/">+16</a>
+			<a href="{$base_url}spam/">Спам</a>
+			<a href="{$base_url}admin/hidden/">Скрытые</a>
+			<a href="{$base_url}admin/logs/" class="item_line">Журнал событий</a>
+			<a href="{$base_url}admin/feedback/">Журнал сообщений</a>
+			<a href="{$base_url}admin/storage/" class="item_line">Хранилища</a>
 		</div>
 	</li>
 FMB;
