@@ -91,9 +91,6 @@ class User {
 						<th colspan="2" class="noborder"></th>
 						<th class="noborder">
 							<div class="controlButtonsBlock">
-								<button type="button" class="btn pill-l" disabled="disabled" onmousedown="UP.userFiles.hideItem();"><span><span>скрыть</span></span></button>
-								<button type="button" class="btn pill-r" disabled="disabled" onmousedown="UP.userFiles.unHideItem();"><span><span>открыть</span></span></button>
-								&nbsp;
 								<button type="button" class="btn" disabled="disabled" onmousedown="UP.userFiles.deleteItem();"><span><span>удалить</span></span></button>
 							</div>
 						</th>

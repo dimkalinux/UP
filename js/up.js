@@ -45,6 +45,8 @@ UP.env = UP.env || {
 	actionGetComments: 14,
 	actionOwnerDeleteItem: 15,
 	actionOwnerUnDeleteItem: 16,
+	actionOwnerHideItem: 17,
+	actionOwnerUnHideItem: 18,
 
 	actionAdminRemoveFeedbackMessage: 50,
 	actionAdminRemoveComment: 51,
@@ -1298,108 +1300,6 @@ UP.userFiles = function () {
 					}
 				}
 			});
-		},
-
-
-		hideItem: function (undo) {
-			var items = getCheckedItemsID(),
-				actions = UP.env.actionAdminHideItem,
-				undoLink = '<span class="as_js_link" onclick="UP.admin.hideItem(true);">Отменить</span>';
-
-			if (undo === true) {
-				items = getAffectedItemsID(hidden);
-				actions = UP.env.actionAdminUnHideItem;
-				undoLink = '';
-			}
-
-			if (!items) {
-				return false;
-			}
-
-			wait('hiddenTimer', waitTimeout);
-
-			$.ajax({
-				type: 	'POST',
-				url: 	UP.env.ajaxAdminBackend,
-				data: 	{ t_action: actions, t_ids: items },
-				dataType: 'json',
-				beforeSend: function () {
-					$(':checkbox, :button').attr('disabled', 'disabled'); // disable all input
-				},
-				complete: function () {
-					onComplete('hiddenTimer');
-				},
-				error: 	function () {
-					onError();
-				},
-				success: function (data) {
-					if (parseInt(data.result, 10) === 1) {
-						var ok_num = cbResultSuccess(data.message, undo, hidden);
-
-						if (undo === true) {
-							UP.statusMsg.clear();
-						} else {
-							var msgOK = ['Скрыты ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файла', ' файл'), undoLink].join('');
-							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
-						}
-					} else {
-						UP.statusMsg.show(data.message, UP.env.msgError, true);
-					}
-				}
-			});
-
-			return false;
-		},
-
-		//
-		unHideItem: function (undo) {
-			var items = getCheckedItemsID(),
-				actions = UP.env.actionAdminUnHideItem,
-				undoLink = '<span class="as_js_link" onclick="UP.admin.unHideItem(true);">Отменить</span>';
-
-			if (undo === true) {
-				items = getAffectedItemsID(hidden);
-				actions = UP.env.actionAdminHideItem;
-				undoLink = '';
-			}
-
-			if (!items) {
-				return false;
-			}
-
-			wait('unHiddenTimer', waitTimeout);
-
-			$.ajax({
-				type: 	'POST',
-				url: 	UP.env.ajaxAdminBackend,
-				data: 	{ t_action: actions, t_ids: items },
-				dataType: 'json',
-				beforeSend: function () {
-					$(':checkbox, :button').attr('disabled', 'disabled');
-				},
-				complete: function () {
-					onComplete('unHiddenTimer');
-				},
-				error: 	function () {
-					onError();
-				},
-				success: function (data) {
-					if (parseInt(data.result, 10) === 1) {
-						var ok_num = cbResultSuccess(data.message, undo, hidden);
-
-						if (undo === true) {
-							UP.statusMsg.clear();
-						} else {
-							var msgOK = ['Показаны ', ok_num, UP.utils.getCase((ok_num), ' файлов', ' файлов', ' файла'), undoLink].join('');
-							UP.statusMsg.show(msgOK, UP.env.msgInfo, false);
-						}
-					} else {
-						UP.statusMsg.show(data.message, UP.env.msgError, true);
-					}
-				}
-			});
-
-			return false;
 		},
 
 		cbStuffStart: function () {
