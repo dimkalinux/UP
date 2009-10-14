@@ -18,7 +18,7 @@ define('UPLOAD_ERROR_NO_FILE', 6);
 define('UPLOAD_ERROR_STORAGE', 7);
 
 
-
+// DEFAULT ERROR
 $error = UPLOAD_ERROR_SERVER_FAIL;
 $item_id = -1;
 $owner_id = 0;
@@ -26,7 +26,7 @@ $log = $owner_key = $message = $add_error_message = null;
 $file = $_POST;
 $is_web = isset($_POST['progress_id']);
 
-// errors text message
+// ERRORS TEXT MESSAGE
 $a_err_msg = array(
 	'получен пустой файл',											// 0
 	'файл заражён вирусом',											// 1
@@ -39,19 +39,18 @@ $a_err_msg = array(
 	);
 
 
-// real start here
-do {
+try {
 	// CHECK ALL REQUIRED FILE ATTRS
 	$file_attrs = array('file_path', 'file_name', 'file_ip', 'file_storage_name', 'file_size');
 	foreach ($file_attrs as $fa) {
 		if (!isset($file[$fa])) {
-			$error = UPLOAD_ERROR_SERVER_FAIL;
 			$add_error_message = "'$fa' is empty";
-			break 2;
+			throw new Exception(UPLOAD_ERROR_SERVER_FAIL);
 		}
 	}
 
-	// antiflood
+
+	// ANTIFLOOD
 	$up_file_ip = $file['file_ip'];
 	if ($up_file_ip && $is_web) {
 		$cache = new Cache;
@@ -64,103 +63,79 @@ do {
 
 	// CHECK MIN FILESIZE
 	if ($file['file_size'] < 1) {
-		$error = UPLOAD_ERROR_EMPTY_FILE;
-		$add_error_message .= ' размер: '.$file['file_size'];
-		$add_error_message .= ' имя: '.$file['file_name'];
-		break;
+		$add_error_message .= 'размер: '.$file['file_size'].' имя: '.$file['file_name'];
+		throw new Exception(UPLOAD_ERROR_EMPTY_FILE);
 	}
 
 	// CHECK MAX FILESIZE
 	if ($file['file_size'] > ($max_file_size*1048576)) {
-		$error = UPLOAD_ERROR_MAX_SIZE;
-		break;
+		throw new Exception(UPLOAD_ERROR_MAX_SIZE);
 	}
 
 
-	// START PROCESS FILE
-	try {
-		$Upload = new Upload;
-		$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
+	$Upload = new Upload;
+	$uploadfilename = $Upload->generateFilename($upload_dir, 10, $file['file_size']);
 
-		$storage = new Storage;
-		$subfolder = $storage->get_upload_subdir($file['file_storage_name']);
+	$storage = new Storage;
+	$subfolder = $storage->get_upload_subdir($file['file_storage_name']);
 
-		$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
-		$owner_key = mt_rand();
-		$up_file_name = $file['file_name'];
-		$up_file_size = $file['file_size'];
-		$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
-		$is_spam = is_spam($file['file_name']);
-		$is_adult = is_adult($file['file_name']);
-		$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
+	$uploadfile = $upload_dir.$subfolder.'/'.basename($uploadfilename);
+	$owner_key = mt_rand();
+	$up_file_name = $file['file_name'];
+	$up_file_size = $file['file_size'];
+	$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
+	$is_spam = is_spam($file['file_name']);
+	$is_adult = is_adult($file['file_name']);
+	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
 
-		// get filename for FUSE
-		if (!$user['is_guest']) {
-			$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
-		}
+	// get filename for FUSE
+	if (!$user['is_guest']) {
+		$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
+	}
 
-		// password
-		$password = '';
-		if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword']) > 0)) {
-			$t_hasher = new PasswordHash(8, FALSE);
-			$password = $t_hasher->HashPassword($_POST['uploadPassword']);
-		}
+	// PASSWORD
+	$password = '';
+	if (isset($_POST['uploadPassword']) && (mb_strlen($_POST['uploadPassword']) > 0)) {
+		$t_hasher = new PasswordHash(8, FALSE);
+		$password = $t_hasher->HashPassword($_POST['uploadPassword']);
+	}
 
-		// mime
-		$up_file_mime = $file['file_content_type'];
-		if (empty($up_file_mime)) {
-			$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
-		}
+	// mime
+	$up_file_mime = $file['file_content_type'];
+	if (empty($up_file_mime)) {
+		$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
+	}
 
-		// rename file (move) USE LINK
-		if (!link($filepath, $uploadfile)) {
-			$error = UPLOAD_ERROR_SAVE;
-			$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
-			break;
-		}
+	// rename file (move) USE LINK
+	if (!link($filepath, $uploadfile)) {
+		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
+		throw new Exception(UPLOAD_ERROR_SAVE);
+	}
 
 
-		$db = new DB;
-		$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
-			$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+	$db = new DB;
+	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
+		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
 
-		// get ITEM_ID
-		$item_id = $db->lastID();
+	// get ITEM_ID
+	$item_id = $db->lastID();
 
 
-		// COMMENT/DESCRIPTION
-		if (isset($_POST['uploadDesc']) && mb_strlen(trim($_POST['uploadDesc']) > 1)) {
-			$comments = new Comments($item_id, $user['id']);
-			$comments->addComment($_POST['uploadDesc']);
-		}
+	// COMMENT/DESCRIPTION
+	if (isset($_POST['uploadDesc']) && mb_strlen(trim($_POST['uploadDesc']) > 1)) {
+		$comments = new Comments($item_id, $user['id']);
+		$comments->addComment($_POST['uploadDesc']);
+	}
 
-		// dont add BAD files to DNOW
-		if (!$is_adult && !$is_spam && !$hidden) {
-			$db->query("DELETE DELAYED FROM dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
-			$db->query("INSERT DELAYED INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
-		}
+	// dont add BAD files to DNOW
+	if (!$is_adult && !$is_spam && !$hidden) {
+		$db->query("DELETE DELAYED FROM dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
+		$db->query("INSERT DELAYED INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
+	}
 
-		// update counters
-		if (!$user['is_guest']) {
-			User::updateUploadsCounters($user['id'], 1, $up_file_size);
-		}
-	} catch (Exception $e) {
-		$error = UPLOAD_ERROR_SERVER_FAIL;
-		$add_error_message = $e->getMessage();
-		$add_error_message .= ' размер: '.$file['file_size'];
-		$add_error_message .= ' имя: '.$file['file_name'];
-
-		if (isset($uploadfile) && is_file($uploadfile)) {
-			unlink($uploadfile);
-		}
-
-		if (isset($file['file_path']) && is_file($file['file_path'])) {
-			unlink($file['file_path']);
-		}
-
-		$message = $a_err_msg[$error];
-		$message .= ' '.$add_error_message;
-		exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
+	// update counters
+	if (!$user['is_guest']) {
+		User::updateUploadsCounters($user['id'], 1, $up_file_size);
 	}
 
 	// CREATE THUMBS
@@ -170,11 +145,13 @@ do {
 
 	// clear stat cache
 	clear_stat_cache ();
-	$error = 0;
-} while (0);
+} catch (Exception $e) {
+	if (is_numeric($e->getMessage())) {
+		$error = $e->getMessage();
+	} else {
+		$add_error_message = $e->getMessage();
+	}
 
-// error
-if ($error != 0) {
 	if (isset($uploadfile) && is_file($uploadfile)) {
 		unlink($uploadfile);
 	}
@@ -183,17 +160,19 @@ if ($error != 0) {
 		unlink($file['file_path']);
 	}
 
-	$message = $a_err_msg[$error];
+	if (isset($a_err_msg[$error])) {
+		$message = $a_err_msg[$error];
+	}
 	$message .= ' '.$add_error_message;
 
-	if (!$log) {
-		$log = new Logger;
-	}
-	$log->error("загрузкa файла. '$message'");
-} else {
-	$message = "OK";
+	// LOG ERROR
+	$log = new Logger;
+	$log->error("Сбой загрузки. '$message'");
+
+	exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
 }
 
 exit(json_encode(array('error'=>$error, 'id'=>$item_id, 'pass'=>$owner_key, 'message'=>$message)));
+
 ?>
 
