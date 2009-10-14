@@ -75,6 +75,8 @@ FMB;
 	$is_adult = (bool) $row['adult'];
 	$owner_id = intval($row['user_id'], 10);
 	$md5 = $row['md5'];
+	$password = $row['password'];
+	$mime = $row['mime'];
 
 	$ndi = $row['NDI'];
 	$wakkamakka = get_time_of_die($filesize, $downloaded, $ndi, $is_spam);
@@ -276,25 +278,31 @@ FMB;
 		$cache->set($dlmValue, $dlmKey, 36000);
 	}
 
+
+
 	// PASSWORD SECTION
-	$is_password = mb_strlen($row['password']) > 0;
+	$is_password = mb_strlen($password) > 0;
 	$pass_input = $js_pass_block = '';
-	if ($is_password) {
+	if ($is_password && !($magic || $im_owner)) {
 		$pass_input = '<tr><td class="ab">Пароль:</td><td><input type="password" name="password" minLength="1" maxLength="128"/></td></tr>';
 		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
 	}
 
 
 	// CREATE DOWNLOAD LINK
-	$dlink_raw = "/download/$item_id/$dlmValue/";
+	$dlink_raw = "{$base_url}download/{$item_id}/{$dlmValue}/";
 	$dlink = '<input type="submit" value="Скачать файл"/>';
 
 	$owner_block = '';
 	if ($magic || $im_owner) {
-		$md5_link = '';
-		if (empty($md5)) {
-			$md5_link = <<<FMB
-			<li><span id="owner_md5_link" status="on" class="as_js_link" title="Вычислить контрольную сумму файла" onclick="UP.owner.md5('$item_id', '$magic')">md5</span></li>
+		$ownerPasswordAction = '';
+		if ($is_password) {
+			$ownerPasswordAction = <<<FMB
+			<li><span id="owner_password_link" status="on" class="as_js_link" title="Сменить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '1', '$magic')">изменить&nbsp;пароль</span></li>
+FMB;
+		} else {
+			$ownerPasswordAction = <<<FMB
+			<li><span id="owner_password_link" status="on" class="as_js_link" title="Установить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '0', '$magic')">установить&nbsp;пароль</span></li>
 FMB;
 		}
 
@@ -304,7 +312,7 @@ FMB;
 		<ul class="as_js_link_list">
 			<li><span id="owner_delete_link" status="on" class="as_js_link" title="Удалить файл" onclick="UP.owner.remove('$item_id', '$magic')">удалить</span></li>
 			<li><span id="owner_rename_link" status="on" title="Переименовать файл" class="as_js_link" onclick="UP.owner.rename('$item_id', '$magic')">переименовать</span></li>
-			$md5_link
+			$ownerPasswordAction
 		</ul>
 	</td></tr>
 FMB;
@@ -315,9 +323,9 @@ FMB;
 	$thumbs_block = $js_thumbs_block = '';
 	$is_image = is_image_by_ext($filename);
 	if ($is_image && !$is_password) {
-		$thumbs_full_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($row['md5'].$item_id).'.jpg';
-		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($row['md5'].$item_id).'.jpg';
+		$thumbs_full_url = $base_url.'thumbs/'.md5($md5.$item_id).'.jpg';
+		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($md5.$item_id).'.jpg';
+		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($md5.$item_id).'.jpg';
 		$thumbs_block = <<<FMB
 		<div class="thumbs"><a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a></div>
 FMB;
@@ -363,7 +371,7 @@ FMB;
 
 	// MP3 SECTION
 	$mp3_block = '';
-	if (is_mp3($filename, $row['mime'])) {
+	if (is_mp3($filename, $mime)) {
 		$mp3_block = <<<FMB
 		<tr><td class="ab">аудио</td>
 		<td class="bb" id="mp3Block">

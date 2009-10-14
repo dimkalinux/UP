@@ -36,8 +36,8 @@ UP.env = UP.env || {
 	actionOwnerRemove: 1,
 	actionOwnerUnRemove: 2,
 	actionOwnerRename: 3,
+	actionOwnerPassword: 4,
 	actionOwnerIm: 5,
-	actionOwnerMD5: 4,
 	actionSearch: 10,
 	actionLive: 11,
 	actionGetPage: 12,
@@ -430,17 +430,26 @@ UP.owner = function () {
 		},
 
 
-		md5: function(id, magic) {
-			if ($("#owner_md5_link").attr("status") === 'off') {
+		changePassword: function(id, isChangeCurrent, magic) {
+			if ($("#owner_password_link").attr("status") === 'off') {
 				return false;
 			}
+
+			UP.statusMsg.clear();
+
+			if (parseInt(isChangeCurrent, 10) === 1) {
+				newPassword = prompt("Введите новый пароль для файла");
+			} else {
+				newPassword = prompt("Введите пароль для файла");
+			}
+
 
 			startWait();
 
 			$.ajax({
 				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
-				data: 	{ t_action: UP.env.actionOwnerMD5, t_id: id, t_magic: magic },
+				data: 	{ t_action: UP.env.actionOwnerPassword, t_id: id, t_magic: magic, t_password: newPassword },
 				dataType: 'json',
 				complete: function () {
 					stopWait();
@@ -450,9 +459,8 @@ UP.owner = function () {
 				},
 				success: function(data) {
 					if (parseInt(data.result, 10) === 1) {
-						$('#item_info_filename').fadeOut(350, function() {
-							$(this).text(data.message);
-						}).fadeIn(250);
+						var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно изменён' : 'Пароль успешно установлен';
+						UP.statusMsg.show(okMsg, UP.env.msgInfo, true);
 					} else {
 						onError(data.message);
 					}
@@ -561,7 +569,7 @@ UP.owner = function () {
 UP.statusMsg = function () {
 	// Remove message if mouse is moved or key is pressed
 	function bindEvents() {
-		jQuery(window).mousemove(this.clear).click(this.clear).keypress(this.clear);
+		jQuery(window).mousemove(UP.statusMsg.clear).click(UP.statusMsg.clear).keypress(UP.statusMsg.clear);
 	}
 
 
@@ -629,7 +637,7 @@ UP.statusMsg = function () {
 				.html(['<span type="', msgClass, '">', msg, '</span>'].join(''))
 				.css({opacity: "1.0"});
 
-			if ((clearAfter === undefined) || (clearAfter === true)) {
+			if ((clearAfter === 'undefined') || (clearAfter === true)) {
 				this.defferedClear();
 			}
 		},
@@ -637,7 +645,7 @@ UP.statusMsg = function () {
 
 		defferedClear: function() {
 			// set mouse and keyboard
-			$(document).stopTime('t1').oneTime(2000, 't1', function () { bindEvents(); });
+			$(document).stopTime('t1').oneTime(1500, 't1', function () { bindEvents(); });
 
 			// set just timeout gone
 			var that = this;

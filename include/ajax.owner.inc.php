@@ -256,14 +256,22 @@ ZZZ;
 		$out = "невозможно переименовать файл";
 	}
 
-	public function md5() {
-		global $user, $out, $result, $upload_dir;
+	public function changePassword() {
+		global $user, $out, $result;
 
 		$item_id = intval(get_post('t_id'), 10);
 		$owner_key = intval(get_post('t_magic'), 10);
-		$md5 = '';
+
+		if (!isset($_POST['t_password']) || mb_strlen($_POST['t_password']) < 1) {
+			$out = "невозможно сменить пароль";
+			return;
+		}
 
 		try {
+			require UP_ROOT.'include/PasswordHash.php';
+			$t_hasher = new PasswordHash(8, FALSE);
+			$cryptPassword = $t_hasher->HashPassword($_POST['t_password']);
+
 			$db = new DB;
 
 			// check for magic
@@ -274,48 +282,21 @@ ZZZ;
 					return;
 				}
 
-				// get file
-				$row = $db->getRow("SELECT sub_location, location WHERE id=? AND user_id=? LIMIT 1", $item_id, $user['id']);
-				if (!$row) {
-					$out = 'невозможно вычислить контрольную сумму';
-					return;
-				}
-
-				$file = $upload_dir.$row['sub_location'].'/'.$row['location'];
-				if (!file_exists($file)) {
-					$out = 'невозможно вычислить контрольную сумму';
-					return;
-				}
-
-				$md5 = md5_file($file);
-				$db->query("UPDATE up SET md5=? WHERE id=? AND user_id=? LIMIT 1", $md5, $item_id, $user['id']);
+				$db->query("UPDATE up SET password=? WHERE id=? AND user_id=? LIMIT 1", $cryptPassword, $item_id, $user['id']);
 			} else {
-				$db->query("SELECT sub_location, location WHERE id=? AND delete_num=? LIMIT 1", $item_id, $owner_key);
-				if (!$row) {
-					$out = 'невозможно вычислить контрольную сумму';
-					return;
-				}
-
-				$file = $upload_dir.$row['sub_location'].'/'.$row['location'];
-				if (!file_exists($file)) {
-					$out = 'невозможно вычислить контрольную сумму';
-					return;
-				}
-
-				$md5 = md5_file($file);
-				$db->query("UPDATE up SET md5=? WHERE id=? AND delete_num=? LIMIT 1", $md5, $item_id, $owner_key);
+				$db->query("UPDATE up SET password=? WHERE id=? AND delete_num=? LIMIT 1", $cryptPassword, $item_id, $owner_key);
 			}
 
 			if ($db->affected() == 1) {
-				$out = $md5;
+				$out = ':-)';
 				$result = 1;
 				return;
 			}
 		} catch (Exception $e) {
-			parent::exitWithError('невозможно вычислить контрольную сумму');
+			parent::exitWithError('невозможно сменить пароль');
 		}
 
-		$out = "невозможно вычислить контрольную сумму";
+		$out = "невозможно сменить пароль";
 	}
 }
 

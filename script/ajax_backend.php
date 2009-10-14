@@ -70,9 +70,9 @@ switch ($action) {
 		$ajax_owner->renameItem();
 		break;
 
-	case ACTION_GET_MD5:
+	case ACTION_CHANGE_PASSWORD:
 		$ajax_owner = new AJAX_OWNER;
-		$ajax_owner->md5();
+		$ajax_owner->changePassword();
 		break;
 
 	default:

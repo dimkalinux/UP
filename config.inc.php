@@ -24,7 +24,7 @@ define('SORT_BY_NAME', 4);
 define('ACTION_DELETE_FILE', 1);
 define('ACTION_UNDELETE_FILE', 2);
 define('ACTION_RENAME_FILE', 3);
-define('ACTION_GET_MD5', 4);
+define('ACTION_CHANGE_PASSWORD', 4);
 define('ACTION_MAKE_ME_OWNER', 5);
 define('ACTION_SEARCH', 10);
 define('ACTION_GET_PE', 11);
