@@ -70,7 +70,6 @@ FMB;
 	$downloaded = $row['downloads'];
 	$downloaded_text = format_raz($downloaded);
 	$antivir_check_result = $row['antivir_checked'];
-	$user_ip = get_client_ip();
 	$hidden = (bool) $row['spam'];
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
@@ -268,11 +267,11 @@ FMB;
 	}
 
 
-	// new magic links system
+	// NEW MAGIC LINKS SYSTEM
 	$cache = new Cache;
-	$dlmKey = 'dlm'.$item_id.ip2long($user_ip);
+	$dlmKey = 'dlm'.$item_id.ip2long($user['ip']);
 	if (!$dlmValue = $cache->get($dlmKey)) {
-		$prefix = substr(md5($user_ip.'operaisSux'), 0, 4);
+		$prefix = substr(md5($user['ip'].'operaisSux'), 0, 4);
 		$dlmValue = uniqid($prefix);
 		$cache->set($dlmValue, $dlmKey, 36000);
 	}
@@ -286,7 +285,7 @@ FMB;
 	}
 
 
-	// create download link
+	// CREATE DOWNLOAD LINK
 	$dlink_raw = "/download/$item_id/$dlmValue/";
 	$dlink = '<input type="submit" value="Скачать файл"/>';
 
@@ -362,7 +361,7 @@ FMB;
 	}
 
 
-	// MP# SECTION
+	// MP3 SECTION
 	$mp3_block = '';
 	if (is_mp3($filename, $row['mime'])) {
 		$mp3_block = <<<FMB
