@@ -30,7 +30,7 @@ try {
 	}
 
 	if (($geo === 'lds') || ($geo === 'iteam')) {
-		$db->query("UPDATE DELAYED up SET last_downloaded_date=NOW(), downloads=downloads+1 WHERE id=? LIMIT 1", $item_id);
+		$db->query("UPDATE up SET last_downloaded_date=NOW(), downloads=downloads+1 WHERE id=? LIMIT 1", $item_id);
 	}
 
 	if (!$is_adult && !$is_hidden) {
@@ -39,7 +39,7 @@ try {
 	}
 
 	// Update downloads table
-	$db->query("INSERT DELAYED INTO downloads VALUES(?, NOW())", $item_id);
+	$db->query("INSERT INTO downloads VALUES(?, NOW())", $item_id);
 
 } catch(Exception $e) {
 	$log = new Logger;

@@ -129,8 +129,8 @@ try {
 
 	// dont add BAD files to DNOW
 	if (!$is_adult && !$is_spam && !$hidden) {
-		$db->query("DELETE DELAYED FROM dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
-		$db->query("INSERT DELAYED INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
+		$db->query("DELETE FROM dnow WHERE ld < (NOW() - INTERVAL 24 HOUR)");
+		$db->query("INSERT INTO dnow VALUES (?, NOW(), 1, 'up') ON DUPLICATE KEY UPDATE n=n+1", $item_id);
 	}
 
 	// update counters
