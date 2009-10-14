@@ -31,7 +31,7 @@ if ($geo != 'world_'):
 ?>
 			<div id="status">&nbsp;</div>
 			<h2>Загрузите файл</h2>
-			<form id="uploadForm" method="post" enctype="multipart/form-data" action="/upload" target="target_upload" autocomplete="off">
+			<form id="uploadForm" method="post" enctype="multipart/form-data" action="<?php echo $base_url; ?>upload" target="target_upload" accept-charset="utf-8" autocomplete="off">
 				<iframe id="target_upload" name="target_upload" src="about:blank"></iframe>
 				<div class="formRow">
 					<input value="<?php echo $unuiq; ?>" name="progress_id" type="hidden" id="progress_id"/>
@@ -65,7 +65,7 @@ if ($geo != 'world_'):
 <?php if (!$user['is_guest']): ?>
 						<div class="formRow">
 							<label for="uploadDesc">Описание</label>
-								<textarea name="uploadDesc" id="uploadDesc" maxLength="512"></textarea>
+								<textarea name="uploadDesc" id="uploadDesc" maxLength="<?php echo $maxCommentLength; ?>"></textarea>
 								<div class="inputHelp">не&nbsp;более <?php echo $maxCommentLength; ?>&nbsp;символов</div>
 						</div>
 <?php endif; ?>
@@ -131,7 +131,7 @@ $onDOMReady = <<<ZZZ
 
 			$('#wrap').oneTime(400, 'selectUploadServer', function () {
 				$('#upload_status')
-				.html('Ожидайте, выбирается сервер для загрузки&hellip; <a href="/" id="link_abort_upload">отменить</a>')
+				.html('Ожидайте, выбирается сервер для загрузки&hellip; <a href="$base_url" id="link_abort_upload">отменить</a>')
 				.fadeIn(250);
 			});
 
@@ -177,7 +177,7 @@ else:
 ?>
 	<div id="status">&nbsp;</div>
 	<h2>Привет</h2>
-	<p>Для гостей из «мира» загрузка файлов отключена.<br/>Но вы можете скачивать <a href="/top/">файлы</a> без каких-либо ограничений.</p>
+	<p>Для гостей из «мира» загрузка файлов отключена.<br/>Но вы можете скачивать <a href="<?php echo $base_url; ?>top/">файлы</a> без каких-либо ограничений.</p>
 <?php
 endif;
 
