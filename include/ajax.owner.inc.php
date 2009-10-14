@@ -9,6 +9,14 @@ require_once UP_ROOT.'include/ajax.inc.php';
 
 class AJAX_OWNER extends AJAX {
 
+	public function __construct() {
+		global $user;
+
+		if (!$user['is_guest'] && !isset($_POST['t_magic'])) {
+			parent::exitWithError('Недостаточно прав для выполнения операции');
+		}
+	}
+
 	public function deleteItems() {
 		global $user, $out, $result;
 
@@ -98,8 +106,8 @@ class AJAX_OWNER extends AJAX {
 	public function deleteItem() {
 		global $user, $out, $result;
 
-		$item_id = intval(get_get('t_id'), 10);
-		$owner_key = intval(get_get('t_magic'), 10);
+		$item_id = intval(get_post('t_id'), 10);
+		$owner_key = intval(get_post('t_magic'), 10);
 		$reason = 'удалён владельцем файла';
 
 		try {
@@ -143,8 +151,8 @@ ZZZ;
 	public function unDeleteItem() {
 		global $user, $out, $result;
 
-		$item_id = intval(get_get('t_id'), 10);
-		$owner_key = intval(get_get('t_magic'), 10);
+		$item_id = intval(get_post('t_id'), 10);
+		$owner_key = intval(get_post('t_magic'), 10);
 
 		try {
 			$db = new DB;
@@ -181,9 +189,9 @@ ZZZ;
 	public function makeMeOwner() {
 		global $user, $out, $result;
 
-		$item_id = intval(get_get ('t_id'), 10);
-		$owner_key = intval(get_get ('t_magic'), 10);
-		$owner_id = intval(get_get ('t_uid'), 10);
+		$item_id = intval(get_post('t_id'), 10);
+		$owner_key = intval(get_post('t_magic'), 10);
+		$owner_id = intval(get_post('t_uid'), 10);
 
 		// check logged
 		if (($user['is_guest']) || ($owner_id !== $user['id'])) {

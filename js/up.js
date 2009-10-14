@@ -478,7 +478,7 @@ UP.owner = function () {
 			startWait();
 
 			$.ajax({
-				type: 	'GET',
+				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
 				data: 	{ t_action: UP.env.actionOwnerRemove, t_id: id, t_magic: magic },
 				dataType: 'json',
@@ -513,7 +513,7 @@ UP.owner = function () {
 			startWait();
 
 			$.ajax({
-				type: 	'GET',
+				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
 				data: 	{ t_action: UP.env.actionOwnerUnRemove, t_id: id, t_magic: magic },
 				dataType: 'json',
@@ -540,7 +540,7 @@ UP.owner = function () {
 			startWait();
 
 			$.ajax({
-				type: 	'GET',
+				type: 	'POST',
 				url: 	UP.env.ajaxBackend,
 				data: 	{ t_action: UP.env.actionOwnerIm, t_id: item_id, t_magic: magic, t_uid: user_id },
 				dataType: 'json',
