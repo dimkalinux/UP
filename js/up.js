@@ -1,3 +1,19 @@
+jQuery.fn.extend({
+	fancyAnimate: function(startBG, finishBG, interval) {
+		if (interval === 'undefined') {
+			interval = 450;
+		}
+
+		return this.each(function() {
+			$(this).animate({backgroundColor: startBG}, interval, function () {
+				$(this).animate({backgroundColor: finishBG}, interval);
+			});
+		});
+	},
+});
+
+
+
 if (typeof UP === "undefined" || !UP) {
 	var UP = {};
 }
@@ -886,14 +902,6 @@ UP.utils = function () {
 			return new Date().getTime();
 		},
 
-		fancyAnimate: function (el, startBG, finishBG) {
-			el.animate({backgroundColor: startBG}, 350,
-				function () {
-					el.animate({backgroundColor: finishBG}, 450);
-				}
-			);
-		},
-
 		getPE: function () {
 			$.ajax({
 	   			type: 	'GET',
@@ -1048,7 +1056,8 @@ UP.comments = function () {
 							updateNumComments();
 						});
 					} else {
-						UP.utils.fancyAnimate(comment, "#fa9cac", "#ffffff");
+						//UP.utils.fancyAnimate(comment, "#fa9cac", "#ffffff");
+						comment.fancyAnimate("#fa9cac", "#ffffff");
 						UP.statusMsg.show(data.message, UP.env.msgError, false);
 					}
 				}
@@ -1084,7 +1093,8 @@ UP.comments = function () {
 									//UP.log.debug("Flash new : #"+item_id)
 
 								if (lastCommentID < item_id) {
-									UP.utils.fancyAnimate($("#comment_"+item_id), "#e4f2fd", "#ffffff");
+									//UP.utils.fancyAnimate($("#comment_"+item_id), "#e4f2fd", "#ffffff");
+									$("#comment_"+item_id).fancyAnimate("#e4f2fd", "#ffffff");
 								}
 							});
 						}
