@@ -1,4 +1,4 @@
-<?
+<?php
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
 }
@@ -19,6 +19,6 @@ require UP_ROOT.'header.php';
 <p>Также можно закачивать файлы <a href="/ftp_access.php">с помощью фтп-клиентов</a>.</p>
 
 
-<?
+<?php
 require UP_ROOT.'footer.php';
 ?>
