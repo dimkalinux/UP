@@ -256,6 +256,7 @@ function top_get($type, $page, $link_base) {
 					AND hidden='0'
 					AND adult='0'
 					AND size>1048576
+					AND password=''
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page");
 		}
