@@ -223,10 +223,7 @@ FMB;
 
 function clear_stat_cache() {
 	$cache = new Cache();
-	$cache->unlink('up_stats');
-	$cache->unlink('rss_lenta');
-	$cache->unlink('api_new');
-	$cache->unlink('up_storage');
+	$cache->clearStat();
 }
 
 

@@ -59,9 +59,19 @@ class Cache {
 		return memcache_replace($this->link, $key, serialize($object));
 	}
 
+
 	public function flush() {
 		return memcache_flush($this->link);
 	}
+
+
+	public function clearStat() {
+		$this->unlink('up_stats');
+		$this->unlink('rss_lenta');
+		$this->unlink('api_new');
+		$this->unlink('up_storage');
+	}
+
 
 	private function connect() {
 		if (MEMCACHE_PERSISTENT_CONNECT) {

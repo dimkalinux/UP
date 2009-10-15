@@ -144,7 +144,7 @@ try {
 	}
 
 	// clear stat cache
-	clear_stat_cache ();
+	clear_stat_cache();
 } catch (Exception $e) {
 	if (is_numeric($e->getMessage())) {
 		$error = $e->getMessage();
