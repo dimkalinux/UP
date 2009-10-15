@@ -440,7 +440,7 @@ UP.owner = function () {
 			var isChangeCurrent = parseInt($("#owner_password_link").attr("rel"), 10);
 
 			if (isChangeCurrent === 1) {
-				newPassword = prompt("Введите новый пароль для файла");
+				newPassword = prompt("Введите новый пароль для файла.\nПустая строка отключает пароль.");
 			} else {
 				newPassword = prompt("Введите пароль для файла");
 			}

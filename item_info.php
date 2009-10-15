@@ -1,4 +1,4 @@
-<?
+<?php
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -52,8 +52,8 @@ do {
 		$out = <<<FMB
 		<div id="status">&nbsp;</div>
 		<h2>Файл удалён</h2>
-		<p>Примечание: $deleted_reason</p>
-		<p>Дата удаление: $deleted_date</p>
+		<p>Примечание: $deleted_reason
+		<br/>Дата удаления: $deleted_date</p>
 FMB;
 		break;
 	}
@@ -420,7 +420,7 @@ FMB;
 	<div id="status">&nbsp;</div>
 	$im_owner_block
 	<h2>{$passwordLabel}<span id="item_info_filename" title="$fullFilename">$filename</span></h2>
-	<form method="$form_method" action="/download/$item_id/$dlmValue/" autocomplete="off">
+	<form method="$form_method" action="$dlink_raw" autocomplete="off">
 	<table class="asDiv">
 	<tr><td>
 		<table class="t1" id="file_info_table">

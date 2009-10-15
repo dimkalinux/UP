@@ -703,7 +703,7 @@ ul.commentList { max-width: 65em !important; }
 .commentList img.avatar { border: solid 4px #eee; margin-top: .3em;}
 
 small { font-size: .9em; }
-ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em;   }
+ul.as_js_link_list { list-style-type: none !important; padding-bottom: 1.5em; min-width: 35em;  }
 #owner_links ul.as_js_link_list { margin: 0 !important; padding: 0 !important; }
 .as_js_link_list li { display: inline;  margin-right: .3em;  }
 .as_js_link_list li + li { border-left: solid 1px #ddd; padding-left: .5em; }
