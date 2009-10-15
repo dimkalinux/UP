@@ -465,12 +465,12 @@ UP.owner = function () {
 				success: function(data) {
 					if (parseInt(data.result, 10) === 1) {
 						if (parseInt(data.message, 10) === 0) {
-							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно сброшен' : 'Пароль не установлен';
+							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль отключен' : 'Пароль не установлен';
 							$('#passwordLabel').fadeTo(350, 0.0);
 							$("#owner_password_link").attr("rel", 0);
 							$("#owner_password_link").html("установить&nbsp;пароль").attr("title", 'Установить пароль на файл');
 						} else {
-							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно изменён' : 'Пароль успешно установлен';
+							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль изменён' : 'Пароль установлен';
 							$('#passwordLabel').fadeTo(350, 1.0);
 							$("#owner_password_link").attr("rel", 1);
 							$("#owner_password_link").html("изменить&nbsp;пароль").attr("title", 'Сменить пароль на файл');
