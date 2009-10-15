@@ -395,8 +395,8 @@ UP.owner = function () {
 			var currentName = $('#item_info_filename').text(),
 				newName = prompt("Введите новое имя для файла", currentName);
 
-			if (!newName || newName.length < 1) {
-				return false;
+			if (newName === null) {
+				return;
 			}
 
 			// same name
@@ -430,19 +430,24 @@ UP.owner = function () {
 		},
 
 
-		changePassword: function(id, isChangeCurrent, magic) {
+		changePassword: function(id, magic) {
 			if ($("#owner_password_link").attr("status") === 'off') {
 				return false;
 			}
 
 			UP.statusMsg.clear();
 
-			if (parseInt(isChangeCurrent, 10) === 1) {
+			var isChangeCurrent = parseInt($("#owner_password_link").attr("rel"), 10);
+
+			if (isChangeCurrent === 1) {
 				newPassword = prompt("Введите новый пароль для файла");
 			} else {
 				newPassword = prompt("Введите пароль для файла");
 			}
 
+			if (newPassword === null) {
+				return;
+			}
 
 			startWait();
 
@@ -459,7 +464,17 @@ UP.owner = function () {
 				},
 				success: function(data) {
 					if (parseInt(data.result, 10) === 1) {
-						var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно изменён' : 'Пароль успешно установлен';
+						if (parseInt(data.message, 10) === 0) {
+							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно сброшен' : 'Пароль не установлен';
+							$('#passwordLabel').fadeTo(350, 0.0);
+							$("#owner_password_link").attr("rel", 0);
+							$("#owner_password_link").html("установить&nbsp;пароль").attr("title", 'Установить пароль на файл');
+						} else {
+							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль успешно изменён' : 'Пароль успешно установлен';
+							$('#passwordLabel').fadeTo(350, 1.0);
+							$("#owner_password_link").attr("rel", 1);
+							$("#owner_password_link").html("изменить&nbsp;пароль").attr("title", 'Сменить пароль на файл');
+						}
 						UP.statusMsg.show(okMsg, UP.env.msgInfo, true);
 					} else {
 						onError(data.message);

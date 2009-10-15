@@ -270,15 +270,19 @@ ZZZ;
 		$item_id = intval(get_post('t_id'), 10);
 		$owner_key = intval(get_post('t_magic'), 10);
 
-		if (!isset($_POST['t_password']) || mb_strlen($_POST['t_password']) < 1) {
+		if (!isset($_POST['t_password'])) {
 			$out = "невозможно сменить пароль";
 			return;
 		}
 
 		try {
-			require UP_ROOT.'include/PasswordHash.php';
-			$t_hasher = new PasswordHash(8, FALSE);
-			$cryptPassword = $t_hasher->HashPassword($_POST['t_password']);
+			if (mb_strlen($_POST['t_password']) < 1) {
+				$cryptPassword = '';
+			} else {
+				require UP_ROOT.'include/PasswordHash.php';
+				$t_hasher = new PasswordHash(8, FALSE);
+				$cryptPassword = $t_hasher->HashPassword($_POST['t_password']);
+			}
 
 			$db = new DB;
 
@@ -295,11 +299,9 @@ ZZZ;
 				$db->query("UPDATE up SET password=? WHERE id=? AND delete_num=? LIMIT 1", $cryptPassword, $item_id, $owner_key);
 			}
 
-			if ($db->affected() == 1) {
-				$out = ':-)';
-				$result = 1;
-				return;
-			}
+			$out = mb_strlen($_POST['t_password']);
+			$result = 1;
+			return;
 		} catch (Exception $e) {
 			parent::exitWithError('невозможно сменить пароль');
 		}

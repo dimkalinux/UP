@@ -288,6 +288,10 @@ FMB;
 		$js_pass_block = "$('input[name=password]').change(UP.formCheck.search).keyup(UP.formCheck.search).focus(); UP.formCheck.search();";
 	}
 
+	// PASSWORD LABEL
+	$passwordLabelOpacity = ($is_password) ? "1.0" : "0.0";
+	$passwordLabel = '<span class="passwordLabel" style="opacity: '.$passwordLabelOpacity.';" title="Файл защищён паролем" id="passwordLabel">&beta;</span>';
+
 
 	// CREATE DOWNLOAD LINK
 	$dlink_raw = "{$base_url}download/{$item_id}/{$dlmValue}/";
@@ -298,11 +302,11 @@ FMB;
 		$ownerPasswordAction = '';
 		if ($is_password) {
 			$ownerPasswordAction = <<<FMB
-			<li><span id="owner_password_link" status="on" class="as_js_link" title="Сменить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '1', '$magic')">изменить&nbsp;пароль</span></li>
+			<li><span id="owner_password_link" status="on" class="as_js_link" title="Сменить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '$magic')" rel="1">изменить&nbsp;пароль</span></li>
 FMB;
 		} else {
 			$ownerPasswordAction = <<<FMB
-			<li><span id="owner_password_link" status="on" class="as_js_link" title="Установить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '0', '$magic')">установить&nbsp;пароль</span></li>
+			<li><span id="owner_password_link" status="on" class="as_js_link" title="Установить пароль на&nbsp;файл" onclick="UP.owner.changePassword('$item_id', '$magic')" rel="0">установить&nbsp;пароль</span></li>
 FMB;
 		}
 
@@ -415,7 +419,7 @@ FMB;
 	$out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	$im_owner_block
-	<h2 id="item_info_filename" title="$fullFilename">$filename</h2>
+	<h2>{$passwordLabel}<span id="item_info_filename" title="$fullFilename">$filename</span></h2>
 	<form method="$form_method" action="/download/$item_id/$dlmValue/" autocomplete="off">
 	<table class="asDiv">
 	<tr><td>
