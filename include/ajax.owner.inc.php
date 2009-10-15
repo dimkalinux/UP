@@ -253,7 +253,7 @@ ZZZ;
 			}
 
 			if ($db->affected() == 1) {
-				$out = check_plain($newName);
+				$out = get_cool_and_short_filename(htmlspecialchars_decode(stripslashes($newName)), 45);
 				$result = 1;
 				return;
 			}
