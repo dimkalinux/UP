@@ -120,12 +120,17 @@ FMB;
 					$wakkamakka_text = format_days($wakkamakka);
 				}
 
+				$passwordLabel = '';
+				if (!empty($item['password'])) {
+					$passwordLabel = '<span class="passwordLabel" title="Файл защищён паролем">&beta;</span>';
+				}
+
 
 				$out .= <<<FMB
 					<tr id="row_item_{$item_id}" class="row_item">
 						<td class="center"><input type="checkbox" value="1" id="item_cb_{$item_id}"/></td>
 						<td class="size">$filesize_text</td>
-						<td class="name"><a rel="nofollow" href="{$base_url}{$item_id}/{$item_pass}/">$filename</a></td>
+						<td class="name">{$passwordLabel}<a rel="nofollow" href="{$base_url}{$item_id}/{$item_pass}/">$filename</a></td>
 						<td class="download">$downloaded</td>
 						<td class="time">$wakkamakka_text</td>
 					</tr>

@@ -135,7 +135,8 @@ $popular_num = 20;
 // COMMENT SECTION
 $maxCommentLength = 1024;
 
-
+// FILE LIST SECTION
+$minFileSizeForTOP = 1048576;
 
 // THUMBS SECTION
 // in px

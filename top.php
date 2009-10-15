@@ -65,7 +65,7 @@ exit ();
 
 
 function top_get($type, $page, $link_base) {
-	global $user;
+	global $user, $minFileSizeForTOP;
 
 	if ($page > 15 && !$user['is_admin']) {
 		return '<div id="status">&nbsp;</div><h2>Внимание</h2><p>Для просмотра более старых файлов воспользуйтесь <a href="/search/">поиском</a>.</p>';
@@ -255,7 +255,7 @@ function top_get($type, $page, $link_base) {
 					AND deleted='0'
 					AND hidden='0'
 					AND adult='0'
-					AND size>1048576
+					AND size>$minFileSizeForTOP
 					AND password=''
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page");

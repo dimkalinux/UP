@@ -688,6 +688,7 @@ td#fancy_title_right {
 a.oneLineLink { margin-top: .6em; display: block; }
 
 .popularLabel { font-weight: bold; color: #fff; background: #1086A4; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
+.passwordLabel { font-weight: bold; color: #fff; background: #EF6430; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
 
 .feedbackList, .commentList { list-style-type: none !important; }
 .feedbackList + li, .commentList + li { color: #333; padding: .8em 1em 1em 1em; margin-bottom: 1.5em; font-size: .95em; }
