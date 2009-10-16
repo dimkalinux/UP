@@ -8,8 +8,8 @@ require UP_ROOT.'functions.inc.php';
 
 
 
-$form_action = $base_url.'register/';
-$csrf = generate_form_token($form_action);
+$register_form_action = $base_url.'register/';
+$csrf = generate_form_token($register_form_action);
 $err = 0;
 $errMsg = "&nbsp;";
 $statusType = 'default';
@@ -39,8 +39,6 @@ ZZZ;
 
 if (isset($_POST['form_sent'])) {
 	do {
-		// part 1
-
 		// 1. check csrf
 		if (!check_form_token($csrf)) {
 			$err = 1;
@@ -100,14 +98,14 @@ if (isset($_POST['form_sent'])) {
 				break;
 			}
 
-			require UP_ROOT.'include/PasswordHash.php';
+			include UP_ROOT.'include/PasswordHash.php';
 			$t_hasher = new PasswordHash(8, FALSE);
 			$cryptPassword = $t_hasher->HashPassword($password);
 
 			$db->query("INSERT INTO users VALUES('', ?, ?, ?, NOW(), 0, 0, 0)", $username, $cryptPassword, $email);
 		} catch (Exception $e) {
 			// is async request
-			if (isset($_GET['json'])) {
+			if (isset($_POST['json'])) {
 				exit(json_encode(array('error'=> 1, 'message' => 'Внутренняя ошибка сервиса. Попробуйте позже.')));
 			} else {
 				error($e->getMessage());
@@ -124,14 +122,14 @@ if (isset($_POST['form_sent'])) {
 
 
 // is async request
-if (isset($_GET['json'])) {
+if (isset($_POST['json'])) {
 	exit(json_encode(array('error'=> $err, 'message' => $errMsg, 'fields' => implode(' ', $errFields))));
 }
 
 
 
 $regForm = <<<ZZZ
-<form method="POST" action="$form_action" name="register" accept-charset="utf-8" autocomplete="off">
+<form method="POST" action="$register_form_action" name="register" accept-charset="utf-8" autocomplete="off">
 <input type="hidden" name="form_sent" value="1"/>
 <input type="hidden" name="csrf_token" value="$csrf"/>
 <table class="form">
@@ -184,7 +182,7 @@ $out = <<<ZZZ
 	<p class="pageDescription">Эти данные мы разместим на всех сайтах знакомств и продадим спамерам.</p>
 	$regForm
 ZZZ;
-echo($out);
+echo $out;
 
 
 $onDOMReady = <<<ZZZ
@@ -201,7 +199,7 @@ $onDOMReady = <<<ZZZ
 
 	// form
 	var options = {
-		url:	'/register/',
+		url: '$register_form_action',
 		dataType: 'json',
 		resetForm: false,
 		cleanForm: false,

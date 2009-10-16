@@ -24,10 +24,10 @@ if (!$user['is_guest']) {
 	$user_email = User::getUserEmail($user['id']);
 }
 
-$form_action = $base_url.'feedback/';
-$csrf = generate_form_token($form_action);
+$form_action_feedback = $base_url.'feedback/';
+$csrf = generate_form_token($form_action_feedback);
 $form = <<<ZZZ
-	<form method="post" action="$form_action" name="feedback" enctype="multipart/form-data" accept-charset="utf-8">
+	<form method="post" action="$form_action_feedback" name="feedback" enctype="multipart/form-data" accept-charset="utf-8">
 		<input type="hidden" name="form_sent" value="1" />
 		<input type="hidden" name="csrf_token" value="$csrf" />
 	<div class="formRow">
@@ -55,7 +55,7 @@ $wasError = 1;
 $errMsg = "&nbsp;";
 
 
-if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
+if (isset ($_POST['form_sent']) || isset($_POST['json'])) {
 	do {
 		// 1. check csrf
 		if (!check_form_token($csrf)) {
@@ -103,7 +103,7 @@ if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
 		} catch (Exception $e) {
 			$errMsg = 'Ошибка на сервере. Попробуйте позже';
 
-			if (isset($_GET['json'])) {
+			if (isset($_POST['json'])) {
 				exit(json_encode(array('error'=> 1, 'message' => $errMsg)));
 			} else {
 				show_error_message($errMsg);
@@ -126,7 +126,7 @@ if (isset ($_POST['form_sent']) || isset($_GET['json'])) {
 }
 
 // is async request
-if (isset($_GET['json'])) {
+if (isset($_POST['json'])) {
 	exit(json_encode(array('error'=> $wasError, 'message' => $errMsg)));
 }
 
@@ -155,11 +155,11 @@ $onDOMReady = <<<ZZZ
 
 	// form
 	var options = {
-		url:	'/feedback?json',
+		url:	'$form_action_feedback',
 		dataType: 'json',
 		resetForm: false,
 		cleanForm: false,
-
+		data: { json: 1 },
 		beforeSubmit: function (formArray, jqForm) {
 			UP.wait.start();
 			$('#wrap').stopTime('checkFeedbackFormTimer');

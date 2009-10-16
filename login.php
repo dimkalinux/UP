@@ -6,8 +6,8 @@ if (!defined('UP_ROOT')) {
 
 require UP_ROOT.'functions.inc.php';
 
-$form_action = $base_url.'login/';
-$csrf = generate_form_token($form_action);
+$form_action_login = $base_url.'login/';
+$csrf = generate_form_token($form_action_login);
 $err = 0;
 $errMsg = "&nbsp;";
 $statusType = 'default';
@@ -71,7 +71,7 @@ if (isset($_POST['form_sent'])) {
 			$is_admin = $row['admin'];
 
 			// check password
-			require UP_ROOT.'include/PasswordHash.php';
+			include UP_ROOT.'include/PasswordHash.php';
 			$t_hasher = new PasswordHash(8, FALSE);
 			if (!$t_hasher->CheckPassword($form_password, $user_password_hash)) {
 				$err = 1;
@@ -82,7 +82,7 @@ if (isset($_POST['form_sent'])) {
 
 		} catch (Exception $e) {
 			// is async request
-			if (isset($_GET['json'])) {
+			if (isset($_POST['json'])) {
 				$result = array('error'=> 1, 'message' => 'Внутренняя ошибка сервиса. Попробуйте позже.');
 				exit(json_encode($result));
 			} else {
@@ -104,7 +104,7 @@ if (isset($_POST['form_sent'])) {
 
 
 // is async request
-if (isset($_GET['json'])) {
+if (isset($_POST['json'])) {
 	$result = array('error'=> $err, 'message' => $errMsg, 'fields' => implode(' ', $errFields));
 	exit(json_encode($result));
 }
@@ -113,7 +113,7 @@ if (isset($_GET['json'])) {
 $out = <<<ZZZ
 	<div id="status"><span type="$statusType">$errMsg</span></div>
 	<h2>Вход на сайт</h2>
-	<form method="POST" action="$form_action" name="login" accept-charset="utf-8">
+	<form method="POST" action="$form_action_login" name="login" accept-charset="utf-8">
 		<input type="hidden" name="form_sent" value="1"/>
 		<input type="hidden" name="csrf_token" value="$csrf"/>
 		<div class="formRow">
@@ -147,10 +147,11 @@ $onDOMReady = <<<ZZZ
 
 	// form
 	var options = {
-		url:	'/login/?json',
+		url:	'$form_action_login',
 		dataType: 'json',
 		resetForm: false,
 		cleanForm: false,
+		data: { json: 1 },
 
 		beforeSubmit: function (formArray, jqForm) {
 			UP.wait.start();

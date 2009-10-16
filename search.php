@@ -1,12 +1,9 @@
-<?
+<?php
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
 
 require UP_ROOT.'functions.inc.php';
-require UP_ROOT.'header.php';
-
-define('UP_SHOW_ADS', 1);
 
 $examples_a = array("firefox", "winamp", ".mp3", ".avi", "linux", "любовь", "ubuntu", "solaris", "rt*.mp3");
 $ex = $examples_a[array_rand($examples_a)];
@@ -49,7 +46,7 @@ $out = <<<ZZZ
 	$search_form
 	<div id="result">$searchResults</div>
 ZZZ;
-echo ($out);
+
 
 //
 $onDOMReady = <<<ZZZ
@@ -143,6 +140,8 @@ $onDOMReady = <<<ZZZ
 	}
 ZZZ;
 
+require UP_ROOT.'header.php';
+echo $out;
 $addScript[] = 'jquery.autocomplete.js';
 require UP_ROOT.'footer.php';
 ?>

@@ -755,10 +755,11 @@ UP.fancyLogin = function () {
 
 			// form
 			var options = {
-				url:	'/login/?json',
+				url:	'/login/',
 				dataType: 'json',
 				resetForm: false,
 				cleanForm: false,
+				data: { json: 1 },
 				beforeSubmit: function (formArray, jqForm) {
 					UP.wait.start();
 					$(document).stopTime('checkFancyLoginFormTimer');

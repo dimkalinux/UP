@@ -9,13 +9,13 @@ if (empty($page_title)) {
 	$page_title = 'Пункт сбыта файлов';
 }
 
-$form_action = $base_url.'login/';
-$csrf = generate_form_token($form_action);
+$login_form_action = $base_url.'login/';
+$csrf = generate_form_token($login_form_action);
 $loginForm = <<<FMB
 <div id="fancyLogin">
 	<div id="fancyLoginForm">
 		<div id="fancyLoginFormHeader">Вход на&nbsp;сайт</div>
-		<form method="POST" action="$form_action" name="fancyLogin" accept-charset="utf-8">
+		<form method="POST" action="$login_form_action" name="fancyLogin" accept-charset="utf-8">
 			<input type="hidden" name="form_sent" value="1"/>
 			<input type="hidden" name="csrf_token" value="$csrf"/>
 			<div class="formRow">
