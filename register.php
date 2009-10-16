@@ -181,6 +181,7 @@ require UP_ROOT.'header.php';
 $out = <<<ZZZ
 	<div id="status"><span type="$statusType">$errMsg</span></div>
 	<h2>Регистрация</h2>
+	<p class="pageDescription">Эти данные мы разместим на всех сайтах знакомств и продадим спамерам.</p>
 	$regForm
 ZZZ;
 echo($out);

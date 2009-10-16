@@ -116,6 +116,7 @@ DROP TABLE IF EXISTS `downloads`;
 CREATE TABLE `downloads`
 (
 	`item_id` int(10) unsigned NOT NULL,
+	enum(`iteam`,`world`,`lds`,`office`) int(10) unsigned NOT NULL,
 	`date` datetime NOT NULL,
 	KEY(item_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

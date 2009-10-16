@@ -704,6 +704,8 @@ UP.fancyLogin = function () {
 		} else {
 			fancy.fadeIn(100);
 		}
+
+		$(document).scrollTo(0, { duration:350, axis:'y' });
 	}
 
 
