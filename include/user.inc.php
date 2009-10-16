@@ -68,7 +68,7 @@ class User {
 		upSetCookie($cookie_name, base64_encode($uid.'|'.$sid.'|'.$expire.'|'.sha1($cookieSalt.$uid.$sid.$expire)), $expire);
 	}
 
-	public static function getUserFiles($user_id) {
+	public static function getUserFiles($user_id, $exceptID=FALSE) {
 		global $base_url;
 
 		$out = '';
@@ -78,35 +78,12 @@ class User {
 
 		try {
 			$db = new DB;
-			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 LIMIT 100", $user_id);
+			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 LIMIT 5000", $user_id);
 		} catch (Exception $e) {
 			error($e->getMessage());
 		}
 
 		if ($datas) {
-			$out = <<<FMB
-				<table class="t1" id="top_files_table">
-					<thead>
-					<tr>
-						<th colspan="2" class="noborder"></th>
-						<th class="noborder">
-							<div class="controlButtonsBlock">
-								<button type="button" class="btn" disabled="disabled" onmousedown="UP.userFiles.deleteItem();"><span><span>удалить</span></span></button>
-							</div>
-						</th>
-					</tr>
-					<th colspan="2" class="noborder"></th>
-					<tr>
-						<th class="center checkbox"><input type="checkbox" id="allCB"/></th>
-						<th class="size">Размер</th>
-						<th class="name">Имя файла</th>
-						<th class="download">Скачан</th>
-						<th class="time">Срок</th>
-					</tr>
-					</thead>
-					<tbody>
-FMB;
-
 			foreach ($datas as $item) {
 				$item_id = intval($item['id']);
 				$filename = get_cool_and_short_filename ($item['filename'], 45);
@@ -136,15 +113,9 @@ FMB;
 					</tr>
 FMB;
 				}
-
-				// make all answer with header
-				$out .= <<<FMB
-					</tbody>
-					</table>
-FMB;
 		}
 
-		return ($out);
+		return $out;
 	}
 
 

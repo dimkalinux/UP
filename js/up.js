@@ -1,12 +1,16 @@
 jQuery.fn.extend({
-	fancyAnimate: function(startBG, finishBG, interval) {
+	fancyAnimate: function(startBG, finishBG, interval, callback) {
 		if (interval === 'undefined') {
 			interval = 450;
 		}
 
 		return this.each(function() {
 			$(this).animate({backgroundColor: startBG}, interval, function () {
-				$(this).animate({backgroundColor: finishBG}, interval);
+				$(this).animate({backgroundColor: finishBG}, interval, function () {
+					if (jQuery.isFunction(callback)) {
+						callback.apply($(this));
+					}
+				});
 			});
 		});
 	},
@@ -45,8 +49,7 @@ UP.env = UP.env || {
 	actionGetComments: 14,
 	actionOwnerDeleteItem: 15,
 	actionOwnerUnDeleteItem: 16,
-	actionOwnerHideItem: 17,
-	actionOwnerUnHideItem: 18,
+	actionOwnerGetUpdatedItems: 17,
 
 	actionAdminRemoveFeedbackMessage: 50,
 	actionAdminRemoveComment: 51,
@@ -1252,13 +1255,13 @@ UP.userFiles = function () {
 
 
 	function wait(label, timeout) {
-		$('#wrap').stopTime(label).oneTime(timeout, label, function () {
+		$(document).stopTime(label).oneTime(timeout, label, function () {
 			UP.statusMsg.show('Ожидайте&hellip;', UP.env.msgWait, false);
 		});
 	}
 
 	function onComplete(timerLabel) {
-		$('#wrap').stopTime(timerLabel);
+		$(document).stopTime(timerLabel);
 		$(':checkbox').removeAttr('disabled');
 		$('#allCB').removeAttr('checked');
 		checkButtonsDisabled();
@@ -1276,6 +1279,52 @@ UP.userFiles = function () {
 
 	// public
 	return {
+
+
+		getUpdatedItems: function () {
+			//wait('updateTimer', waitTimeout);
+
+			var items = [];
+
+			$(".row_item:visible").each(function () {
+				var id = parseInt($(this).attr('id').split('row_item_')[1], 10);
+
+				if (! isNaN(id)) {
+					items.push(id);
+				}
+			});
+
+			$.ajax({
+				type: 	'POST',
+				url: 	UP.env.ajaxBackend,
+				data: 	{ t_action: UP.env.actionOwnerGetUpdatedItems, t_ids: items.join(':') },
+				dataType: 'json',
+				error: 	function () {
+					UP.log.debug("UP.env.actionOwnerGetUpdatedItems ERROR");
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						// PROCESS DELETED ITEMS
+						var deleted = data.message.deleted.split(':');
+						for (i = 0, max = deleted.length; i <= max; i = i + 1) {
+							var id = parseInt(deleted[i], 10);
+							if (!isNaN(id) && id > 0 && $("tr#row_item_"+id).is(":visible")) {
+								$("tr#row_item_"+id).fancyAnimate("#fa9cac", "#ffffff", 350, function () {
+									$(this).remove();
+								});
+							}
+						}
+
+						// PROCESS ADDED ITEMS
+						$("#top_files_table tbody").prepend(data.message.added);
+					} else {
+						UP.log.debug("UP.env.actionOwnerGetUpdatedItems ERROR: "+data.message);
+					}
+				}
+			});
+		},
+
+
 
 		//
 		deleteItem: function (undo) {

@@ -9,7 +9,7 @@ require_once UP_ROOT.'include/ajax.owner.inc.php';
 
 // -----------------
 $result = 0;
-$out = 'Внутренняя ошибка AJAX';
+$out = '';
 
 if (!isset($_REQUEST['t_action'])) {
 	$action = -1;
@@ -18,6 +18,12 @@ if (!isset($_REQUEST['t_action'])) {
 }
 
 switch ($action) {
+
+	case ACTION_OWNER_GET_UPDATED_ITEMS:
+		$ajax = new AJAX_OWNER;
+		$ajax->getUpdatedUserFiles();
+		break;
+
 
 	case ACTION_OWNER_DELETE_ITEM:
 		$ajax = new AJAX_OWNER;

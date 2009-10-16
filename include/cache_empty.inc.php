@@ -45,6 +45,10 @@ class Cache {
 		return true;
 	}
 
+	public function clearStat() {
+		return;
+	}
+
 	private function connect() {
 		return true;
 	}

@@ -12,9 +12,76 @@ class AJAX_OWNER extends AJAX {
 	public function __construct() {
 		global $user;
 
-		if (!$user['is_guest'] && !isset($_POST['t_magic'])) {
+		if ($user['is_guest'] && !isset($_POST['t_magic'])) {
 			parent::exitWithError('Недостаточно прав для выполнения операции');
 		}
+	}
+
+	public function getUpdatedUserFiles() {
+		global $user, $out, $result, $base_url;
+
+		$items = explode(':', get_post('t_ids'), 5000);
+		$itemsInDB = $realOUT = array();
+
+
+		$realOUT['deleted'] = '';
+		$realOUT['added'] = '';
+
+		function onlyDigit($var) {
+			return (is_numeric($var) && (intval($var, 10) > 0));
+		}
+
+		try {
+			$db = new DB;
+			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 LIMIT 5000", $user['id']);
+		} catch (Exception $e) {
+			parent::exitWithError('Невозможно получить список файлов: '.$e->getMessage());
+		}
+
+		if ($datas) {
+			foreach ($datas as $item) {
+				$item_id = intval($item['id']);
+				array_push($itemsInDB, $item_id);
+
+				// SKIP
+				if (in_array($item_id, $items)) {
+					continue;
+				}
+
+				$filename = get_cool_and_short_filename($item['filename'], 45);
+				$filesize_text = format_filesize($item['size']);
+				$downloaded = $item['downloads'];
+				$item_pass = $item['delete_num'];
+				$wakkamakka = get_time_of_die($item['size'], $item['downloads'], $item['NDI'], (bool)$item['spam']);
+				if ($wakkamakka < 1) {
+					$wakkamakka_text = '0';
+				} else {
+					$wakkamakka_text = format_days($wakkamakka);
+				}
+
+				$passwordLabel = '';
+				if (!empty($item['password'])) {
+					$passwordLabel = '<span class="passwordLabel" title="Файл защищён паролем">&beta;</span>';
+				}
+
+
+				$realOUT['added'] .= <<<FMB
+					<tr id="row_item_{$item_id}" class="row_item">
+						<td class="center"><input type="checkbox" value="1" id="item_cb_{$item_id}"/></td>
+						<td class="size">$filesize_text</td>
+						<td class="name">{$passwordLabel}<a rel="nofollow" href="{$base_url}{$item_id}/{$item_pass}/">$filename</a></td>
+						<td class="download">$downloaded</td>
+						<td class="time">$wakkamakka_text</td>
+					</tr>
+FMB;
+			}
+		}
+
+		$realOUT['deleted'] = implode(":", array_diff($items, $itemsInDB));
+
+		$out = $realOUT;
+		$result = 1;
+		return;
 	}
 
 	public function deleteItems() {
