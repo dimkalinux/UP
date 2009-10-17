@@ -40,7 +40,7 @@ if ($geo != 'world_'):
 					<input value="Закачать"type="submit" tabindex="11" id="uploadSubmit" disabled="disabled"/>
 				</div>
 				<div class="formRow">
-					<span class="as_js_link dfs" id="advancedUploadLink">дополнительные параметры</span>
+					<span id="advancedUploadLinkBlock"><span class="as_js_link" id="advancedUploadLink">дополнительные параметры</span></span>
 				</div>
 				<div id="advancedUpload">
 					<div class="tt-wedge tt-wedge-up"></div>
@@ -125,7 +125,7 @@ $onDOMReady = <<<ZZZ
 
 			if ($('#advancedUpload').is(':visible')) {
 				$('#advancedUpload').slideToggle();
-				$('#advancedUploadLink').toggleClass('open');
+				$('#advancedUploadLinkBlock').toggleClass('open');
 			}
 
 
@@ -162,7 +162,7 @@ $onDOMReady = <<<ZZZ
 			$('#advancedUpload').slideToggle(0, function () {
 				$('#uploadPassword:visible').focus();
 			});
-			$(this).toggleClass('open');
+			$('#advancedUploadLinkBlock').toggleClass('open');
 		});
 
 
