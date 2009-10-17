@@ -13,7 +13,8 @@ require UP_ROOT.'header.php';
 <p>Работает со всеми версиями&nbsp;1.00 — 3.6.</p>
 
 <h3>Opera</h3>
-<p>Работает начиная с&nbsp;верси&nbsp;9.27 и выше.</p>
+<p>Работает начиная с&nbsp;верси&nbsp;9.27 и выше.<br/>
+Для удобства работы с сервисом рекомендуем отключить настройку <a href="opera:config#UserPrefs|AutomaticSelectMenu">AutomaticSelectMenu</a>.</p>
 
 <h3>Google Chrome, Chromium</h3>
 <p>Работает.</p>
