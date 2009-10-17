@@ -61,15 +61,15 @@ function print_menu() {
 	$menuArrow = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAMAAADeWG8gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF2trawMDA////FCoqwwAAACdJREFUeNpiYMIADFiEGKivihECUFTBRZDMgokgm8VIC3dhCgEEGAAduAIBgj6YfQAAAABJRU5ErkJggg==';
 	$cpage = $_SERVER['PHP_SELF'];
 
-	$main_url = <<<FMB
+	$mainMenu = <<<FMB
 		<li class="niceMenuFirst" style="padding-right: 6px;"><a href="{$base_url}" title="Вернуться на главную страницу">Главная</a></li>
 FMB;
 
-	$search_url = <<<FMB
+	$searchMenu = <<<FMB
 		<li class="niceMenuLast" style="padding-left: 6px;"><a href="{$base_url}search/">Поиск</a></li>
 FMB;
 
-	$project_url = <<<FMB
+	$projectMenu = <<<FMB
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}about/">О&nbsp;проекте</a>
@@ -78,12 +78,9 @@ FMB;
  		<div class="sub_menu">
 	        <a href="{$base_url}rules/">История</a>
 			<a href="{$base_url}stat/">Статистика</a>
-			<a href="{$base_url}help/compability/">Совместимость</a>
 			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
 			<a href="{$base_url}map/">Карта сайта</a>
 			<a href="{$base_url}agree/" class="item_line">Пользовательское соглашение</a>
-			<a href="{$base_url}help/uploaders/" class="item_line">Дополнительные программы</a>
-			<a href="{$base_url}help/ftp/">Доступ по фтп</a>
         </div>
 	</li>
 FMB;
@@ -94,7 +91,7 @@ FMB;
 		$myFilesMenuEntry = '<a href="/files/" class="item_line">Мои файлы</a>';
 	}
 
-	$filelist_url = <<<FMB
+	$filelistMenu = <<<FMB
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}top/new/">Список файлов</a>
@@ -116,8 +113,23 @@ FMB;
 	</li>
 FMB;
 
+	$helpMenu = <<<FMB
+	<li>
+		<span class="head_menu">
+			<a href="{$base_url}help/">Помощь</a>
+			<img src="$menuArrow" width="18" height="15" class="arrow" />
+		</span>
+ 		<div class="sub_menu">
+			<a href="{$base_url}help/labels/">Метки</a>
+			<a href="{$base_url}help/ftp/">Доступ по фтп</a>
+			<a href="{$base_url}help/compability/">Совместимость</a>
+			<a href="{$base_url}help/uploaders/" class="item_line">Дополнительные программы</a>
+      	</div>
+	</li>
+FMB;
 
-	$service_url = <<<FMB
+
+	$serviceMenu = <<<FMB
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}explore/">Сервисы</a>
@@ -161,12 +173,13 @@ FMB;
 	$menu = <<<FMB
 		<div id="nicemenu">
 			<ul>
-				$main_url
-				$project_url
-				$filelist_url
-				$service_url
+				$mainMenu
+				$projectMenu
+				$filelistMenu
+				$serviceMenu
 				$adminMenu
-				$search_url
+				$helpMenu
+				$searchMenu
 			</ul>
 		</div>
 FMB;
