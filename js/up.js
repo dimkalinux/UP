@@ -1013,7 +1013,7 @@ UP.formCheck = {
 		// set minRequired
 		minRequired = parseInt($(form).find("input[name='form_check_required_num']").val(), 10) || 0;
 
-		$(form).find('"input[required], textarea[required]').each(function () {
+		$(form).find("input[required], textarea[required]").each(function () {
 			var el = $(this),
 				elMinLength = parseInt($(el).attr('minlength'), 10) || 0,
 				label;
