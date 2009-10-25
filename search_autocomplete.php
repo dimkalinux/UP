@@ -14,7 +14,7 @@ if (isset($_GET['q'])) {
 	$sug =  urldecode($_GET['q']);
 
 	$cache = new Cache;
-	$cache_key = md5(mb_substr($sug, 0, 10, 'UTF-8'));
+	$cache_key = sha1(mb_substr($sug, 0, 35));
 
 	if (!$out = $cache->get($cache_key)) {
 		if (!$sug || mb_strlen($sug) <= 2) {
@@ -37,15 +37,14 @@ if (isset($_GET['q'])) {
 		}
 
 		if ($datas) {
-			foreach($datas as $rec) {
+			foreach ($datas as $rec) {
 	        	$out .= $rec['filename']."\n";
 			}
 		}
-
 		// set cache
-		$cache->set($out, $cache_key, 60);
+		$cache->set($out, $cache_key, 300);
 	}
 }
 
-echo $out;
+exit($out);
 ?>

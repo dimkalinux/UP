@@ -11,42 +11,44 @@ $max_results=12;
 
 
 
-if (isset ($_GET['sug']))
-{
+if (isset($_GET['sug'])) {
     $sug =  $_GET['sug'];
-	if (!$sug || mb_strlen($sug, 'UTF-8') <= 2) {
-	        echo $out;
-	        return;
+	if (!$sug || mb_strlen($sug) <= 2) {
+		exit($out);
 	}
 
 	$regexp = mb_strpos($sug, '*');
-	if ($regexp === false) {
+	if ($regexp === FALSE) {
 		$regexp = mb_strpos($sug, '?');
 	}
 
 
-	if ($regexp === false) {
+	if ($regexp === FALSE) {
 		$sug = '%'.$sug.'%';
 	} else {
 		$trans = array ('*' => '%', '?' => '_');
 		$sug = strtr($sug, $trans);
 	}
 
-	$db = new DB;
-	$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $max_results", "%{$queryE%}");
+	try {
+		$db = new DB;
+		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $max_results", "%{$queryE%}");
+	} catch (Exception $e) {
+		exit($out);
+	}
 
 	if ($datas) {
 	  	$out = "[\"$sug\", [";
-	    $first = true;
+	    $first = TRUE;
 
-		foreach($datas as $rec) {
-	      	$first == true ? $out .= "\"{$rec['filename']}\"" : $out .= ", \"{$rec['filename']}\"";
-			$first = false;
+		foreach ($datas as $rec) {
+	      	$first == TRUE ? $out .= "\"{$rec['filename']}\"" : $out .= ", \"{$rec['filename']}\"";
+			$first = FALSE;
 		}
 		$out .= ']]';
 	}
 }
 
-echo $out;
+exit($out);
 
 ?>

@@ -62,9 +62,8 @@ $onDOMReady = <<<ZZZ
 		.everyTime(500, 'checkSearchFormTimer', function () { UP.formCheck.register(form); });
 
 
-
 	// autocomplete
-	$('#search_req2').autocomplete('/search_autcomplete.php', {minChars: 3, cacheLength: 100, delay: 300, scroll: false, autoFill: false, selectFirst: false});
+	$('#search_req2').autocomplete('{$base_url}search_autocomplete.php', {minChars: 3, cacheLength: 100, delay: 300, scroll: false, autoFill: false, selectFirst: false});
 	$('#search_req2').result(function(event, data, formatted) {
 		if (data) {
  			form.submit();
