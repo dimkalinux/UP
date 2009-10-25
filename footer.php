@@ -12,6 +12,7 @@ if (!defined('UP')) {
 			<li><a href="<?php echo $base_url; ?>map/">Карта сайта</a></li>
 			<li><a href="<?php echo $base_url; ?>agreement/">Пользовательское соглашение</a></li>
 			<li><a href="<?php echo $base_url; ?>feedback/" title="Форма для&nbsp;связи с&nbsp;администрацией сервиса">Обратная связь</a></li>
+			<li><a href="<?php echo $base_url; ?>help/" title="Помощь сервиса">Справка</a></li>
 			<li><a href="http://forum.lluga.net/forum/up/" title="Форум технической поддержки">Форум</a></li>
 			<li><a href="http://twitter.com/up_ua" title="Твиттер проекта">@up_ua</a></li>
 		</ul>

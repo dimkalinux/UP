@@ -77,6 +77,7 @@ FMB;
 		</span>
  		<div class="sub_menu">
 	        <a href="{$base_url}rules/">История</a>
+	        <a href="{$base_url}help/">Справка</a>
 			<a href="{$base_url}stat/">Статистика</a>
 			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
 			<a href="{$base_url}map/">Карта сайта</a>
@@ -112,22 +113,6 @@ FMB;
       	</div>
 	</li>
 FMB;
-
-	$helpMenu = <<<FMB
-	<li>
-		<span class="head_menu">
-			<a href="{$base_url}help/">Помощь</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow" />
-		</span>
- 		<div class="sub_menu">
-			<a href="{$base_url}help/labels/">Метки</a>
-			<a href="{$base_url}help/ftp/">Доступ по фтп</a>
-			<a href="{$base_url}help/compability/">Совместимость</a>
-			<a href="{$base_url}help/uploaders/" class="item_line">Дополнительные программы</a>
-      	</div>
-	</li>
-FMB;
-
 
 	$serviceMenu = <<<FMB
 	<li>
@@ -178,7 +163,6 @@ FMB;
 				$filelistMenu
 				$serviceMenu
 				$adminMenu
-				$helpMenu
 				$searchMenu
 			</ul>
 		</div>

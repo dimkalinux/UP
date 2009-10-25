@@ -22,15 +22,12 @@ require UP_ROOT.'header.php';
 	<td class="layout">
 		<div class="header"><a href="/about/">О проекте</a></div>
 		<div class="item"><a href="/rules/">История проекта</a></div>
+		<div class="item"><a href="/help/">Справка</a></div>
 		<div class="item"><a href="/stat/">Статистика</a></div>
-		<div class="item"><a href="/compability.php">Совместимость с браузерами</a></div>
 		<br/>
 		<div class="item"><a href="/feedback/">Обратная связь</a></div>
 		<br/>
 		<div class="item"><a href="/agreement/">Пользовательское соглашение</a></div>
-		<div class="item"><a href="/service/uploaders.php">Дополнительные программы</a></div>
-		<div class="item"><a href="/service/ftp/">Доступ по фтп</a></div>
-
 	</td>
 	<td class="layout">
 		<div class="header"><a href="/top/new/">Список файлов</a></div>

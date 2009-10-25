@@ -27,7 +27,7 @@ if (isset ($_GET['first'])) {
 	$out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	<h2>Поздравляем</h2>
-	<p>Вы успешно изменили пароль.</p>
+	<p>Мы выслали новый пароль на ваш электронный адрес.</p>
 ZZZ;
 	echo($out);
 	require UP_ROOT.'footer.php';
@@ -54,13 +54,6 @@ if (isset($_POST['form_sent'])) {
 			break;
 		}
 
-		// check old password
-		if (!isset($_POST['op']) || (mb_strlen($_POST['op']) < 8) || (mb_strlen($_POST['op']) > 64)) {
-			$err = 1;
-			$oldPasswordLabelClass = 'bad';
-			$errFields[] = 'op';
-		}
-
 		// check new password
 		if (!isset($_POST['np']) || (mb_strlen($_POST['np']) < 8) || (mb_strlen($_POST['np']) > 64)) {
 			$err = 1;
@@ -75,22 +68,7 @@ if (isset($_POST['form_sent'])) {
 			break;
 		}
 
-		$old_password = mb_substr($_POST['op'], 0, 64);
-		$new_password = mb_substr($_POST['np'], 0, 64);
-
-		// crypt passwords
-		require UP_ROOT.'include/PasswordHash.php';
-		$t_hasher = new PasswordHash(8, FALSE);
-		$new_cryptPassword = $t_hasher->HashPassword($new_password);
-
-
-
-		if ($old_password == $new_password) {
-			$err = 1;
-			$errMsg = 'Пароли не должны совпадать';
-			$statusType = 'error';
-			break;
-		}
+		$email = mb_substr($_POST['np'], 0, 64);
 
 
 		// part 2
@@ -151,21 +129,19 @@ FMB;
 	$out = <<<ZZZ
 	<div id="status"><span type="$statusType">$errMsg</span></div>
 	<h2>Напомните мне пароль</h2>
-	<p>Введите имя пользователя или e-mail.</p><br/>
+	<p class="pageDescription">Восстановить забытый пароль невозможно,
+	потому что он хранится в зашифрованном виде.
+	Но его можно поменять. Укажите адрес своей электронной почты,
+	с которым вы регистрировались на АПе ранее, чтобы получить новый пароль.</p>
 	<form method="POST" action="$form_action" name="forget_password" accept-charset="utf-8" autocomplete="on">
 		<input type="hidden" name="form_sent" value="1"/>
 		<input type="hidden" name="csrf_token" value="$csrf"/>
-		<input type="hidden" name="form_check_required_num" value="1"/>
-		<div class="formRow">
-			<label for="op" id="label_op" class="$oldPasswordLabelClass">Имя пользователя</label>
-			<input type="text" id="op" name="op" tabindex="1" maxlength="64" minlength="8" required="1"/>
-		</div>
 		<div class="formRow">
 			<label for="np" id="label_np" class="$newPasswordLabelClass">Электропочта</label>
-			<input type="text" id="np" name="np" tabindex="2" maxlength="128" minlength="4" required="1" pattern="\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$"/>
+			<input type="text" id="np" name="np" tabindex="1" maxlength="128" minlength="4" required="1" pattern="\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$"/>
 		</div>
 		<div class="formRow buttons">
-			<input type="submit" name="do" value="Напомнить" tabindex="3"/>
+			<input type="submit" name="do" value="Напомнить" tabindex="2"/>
 		</div>
 	</form>
 ZZZ;

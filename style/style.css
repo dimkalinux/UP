@@ -122,7 +122,7 @@ a:focus { outline-style: none; outline-width: medium; }
 h1 { color: #2b2b2b; font-weight: normal; font-size: 148.5%; margin-bottom: .8em !important;  }
 h2 { color: #000; font-weight: normal !important; font-size:138.1%; line-height: 24px; margin-bottom: 7px; }
 h3 { color: #000; font-weight: normal; font-size:118%; margin-bottom: .4em;  }
-h4 { color: #000; font-weight: bold; font-size: 11px; line-height: 11px; text-transform: uppercase;  }
+h4 { color: #000; font-weight: normal; font-size: 105%; /*line-height: 11px;  */ }
 h5 { color: #000; font-weight: normal; font-size: 11px; line-height: 11px; margin-bottom: 3px;  }
 
 h2 em { color: #999 !important; font-style: normal !important; font-size: .75em !important; }
@@ -145,8 +145,8 @@ label,
 #primary p { margin-bottom: .8em; }
 #primary ol { list-style-type: decimal; list-style-position: inside; margin: 0 1em 0 0em; }
 #primary ul { list-style-type: square; list-style-position: inside; margin: .5em 1em 0 0em; }
-#primary li { margin-bottom: .3em; line-height: 1.5em; }
-#primary ul.simple {  list-style-type: none !important; margin-left: 1em; }
+#primary li { margin-bottom: .3em; line-height: 1.333em; }
+#primary .simple {  list-style-type: none !important; margin-left: 1em; }
 
 .message p { font-size: 100% !important; }
 
@@ -187,6 +187,9 @@ table.t1 td { padding: .3em .5em .3em; font-size: .95em;  }
 /* file info */
 td.ab { font-weight: normal; text-align: right; color: #555; }
 td.bb { color: #000; }
+
+table.t2, .t2 td { border: solid 1px #BFBFBF; }
+.t2 td { padding: .4em 1em .3em 1.2em; }
 
 .form td { padding-right: 1em; }
 
@@ -733,3 +736,4 @@ button[disabled], .btn[disabled]:hover span, .btn[disabled]:focus span { color: 
 .btn:hover span, .btn:hover span span, .btn:focus span, .btn:focus span span { border-color: rgb(153, 204, 255) ! important; cursor: pointer; color: rgb(0, 0, 0); }
 
 p.pageDescription { margin-bottom: 1.5em !important; color: #2b2b2b;  }
+.mb { margin-bottom: 1.3em !important; }
