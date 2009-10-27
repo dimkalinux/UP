@@ -24,17 +24,16 @@ $searchResults = "";
 
 if (isset ($_GET['doSubmit'])) {
 	do {
-		if (!isset($_GET['s']) || (mb_strlen ($_GET['s']) < 3)) {
+		if (!isset($_GET['s']) || (mb_strlen($_GET['s']) < 3)) {
 			$wasError=1;
-			$errMsg='Для начала поиска введите как минимум 3 символа.';
+			$errMsg='Для начала поиска введите как минимум 3&nbsp;символа.';
 			break;
 		}
 
-		//$req = urldecode($_GET['s']);
 		$req = $_GET['s'];
 		$fooltext = isset($_GET['ft']);
-		if (!$searchResults = makeSearch($req, $fooltext)) {
-			$errMsg = 'Файлов с таким именем не найдено';
+		if (!$searchResults = makeSearch($req, $fooltext, TRUE)) {
+			$errMsg = 'Файлов с&nbsp;таким именем не&nbsp;найдено';
 		}
 	}
 	while (0);

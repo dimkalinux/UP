@@ -476,14 +476,15 @@ function prettyDate($mysqlDate) {
 }
 
 
-function makeSearch($req, $fooltext=false) {
+function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
+	global $user;
 	$out = '';
 	$regexp = (bool) preg_match('/\*|\?/u', $req);
 
 	try {
 		$db = new DB;
 
-		if ($fooltext === true) {
+		if ($fooltext === TRUE) {
 			$datas = $db->getData("SELECT * FROM up WHERE
 				deleted='0' AND
 				hidden='0' AND
@@ -505,6 +506,11 @@ function makeSearch($req, $fooltext=false) {
 				AND adult='0'
 				AND filename LIKE ? LIMIT 100", $query);
 		}
+
+		/*$saveThisSearch = ;
+		if ($useSaveFeature) {*/
+			$saveThisSearch = $db->numRows("SELECT * FROM searchs WHERE user_id=? AND searchs=?", $user['id'], $req);
+		//}
 	} catch (Exception $e) {
 		throw new Exception($e->getMessage());
 	}
@@ -513,8 +519,9 @@ function makeSearch($req, $fooltext=false) {
 		$r = '';
 
 		foreach ($datas as $rec) {
-			$item_id = intval ($rec['id']);
-			$filename = get_cool_and_short_filename ($rec['filename'], 45);
+			$item_id = $rec['id'];
+			$fullFilename = htmlspecialchars_decode(stripslashes($rec['filename']));
+			$filename = get_cool_and_short_filename($fullFilename, 55);
 			$filesize_text = format_filesize ($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = $rec['uploaded_date'];
@@ -526,27 +533,37 @@ function makeSearch($req, $fooltext=false) {
 				<td class="center download">$downloaded</td>
 			</tr>
 ZZZ;
-			}
-
-			// make all answer with header
-			$out = <<<ZZZ
-				<h3>Результаты поиска</h3>
-				<table class="t1" id="search_files_table">
-				<thead>
-				<tr>
-					<th class="right">Размер</th>
-					<th class="left">Имя файла</th>
-					<th class="center">Скачан</th>
-				</tr>
-				</thead>
-				<tbody>
-					$r
-				</tbody>
-				</table>
-ZZZ;
 		}
 
-		return $out;
+		if ($saveThisSearch === 0) {
+			$saveSearchLink = <<<FMB
+			<span class="as_js_link">сохранить этот поиск</span>
+FMB;
+		} else {
+			$saveSearchLink = <<<FMB
+			<span class="as_js_link">удалить этот поиск</span>
+FMB;
+		}
+
+		// make all answer with header
+		$out = <<<FMB
+			<h3>Результаты поиска</h3>
+			<table class="t1" id="search_files_table">
+			<thead>
+			<tr>
+				<th class="right">Размер</th>
+				<th class="left">Имя файла</th>
+				<th class="center">Скачан</th>
+			</tr>
+			</thead>
+			<tbody>
+				$r
+			</tbody>
+			</table>
+FMB;
+	}
+
+	return $out;
 }
 
 

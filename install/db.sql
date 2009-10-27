@@ -135,6 +135,16 @@ CREATE TABLE `comments`
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 */
 
+
+DROP TABLE IF EXISTS `searchs`;
+CREATE TABLE `searchs`
+(
+	`id` int(10) unsigned NOT NULL auto_increment,
+	`searchs` varchar(255) NOT NULL,
+	`user_id` int(10) unsigned NOT NULL,
+	KEY(id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 /*
 alter table up change column filename filename varchar(256);
 alter table up change column filename_fuse filename_fuse varchar(256);
