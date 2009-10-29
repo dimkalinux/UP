@@ -85,9 +85,11 @@ $max_file_size_for_upload_antivir_check = 10;
 
 
 // FTP access
+$ftpbaseDir = '/var/fuse/';
 $ftpAccessEnabled = TRUE;
 $ftpUploadRate = 1048576*5;
 $ftpDownloadRate = 1048576*5;
+$ftpRateK = 1.5;
 $ftpUIDBase = 5000;
 $ftpGIDBase = 5000;
 

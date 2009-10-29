@@ -515,8 +515,7 @@ UP.owner = function () {
 							$('#primary').html('<div id="status">&nbsp;</div><div id="r1"><h2>Файл удалён</h2>' +
 								'<p>Примечание: удалён владельцем файла</p></div>' +
 								'<div id="unremoveBlock" style="margin-top: .6em;">' +
-								'<span class="as_js_link" id="unremoveLink">Отменить</span> или ' +
-								'<a href="/">перейти на главную страницу</a>?</div>');
+								'<a href="/">Перейти на главную страницу</a> или <span class="as_js_link" id="unremoveLink">отменить удаление</span>?</div>');
 
 								$('#unremoveLink').mousedown(function() { UP.owner.unRemove(id, magic); });
 							}).fadeIn(250);

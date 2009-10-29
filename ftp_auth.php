@@ -42,15 +42,21 @@ do {
 		if (!$t_hasher->CheckPassword($pass, $user_password_hash)) {
 			break;
 		} else {
-			$dir = '/var/fuse/'.stripslashes($row['username']);
-			$uid = intval($ftpUIDBase+$user_id, 10);
-			$gid = intval($ftpGIDBase+$user_id, 10);
+			$dir = $ftpbaseDir.stripslashes($row['username']);
+			$uid = intval($ftpUIDBase + $user_id, 10);
+			$gid = intval($ftpGIDBase + $user_id, 10);
 
 			if (is_dir($dir) === FALSE) {
 				break;
 			}
 
-			// login ok
+			// IF SYSTEM not BUSY
+			if (getServerLoad() < 1) {
+				$ftpUploadRate = $ftpUploadRate * $ftpRateK;
+				$ftpDownloadRate = $ftpDownloadRate * $ftpRateK;
+			}
+
+			// LOGIN OK
 			$out = <<<FMB
 auth_ok:1
 uid:$uid
