@@ -798,8 +798,7 @@ function getRealFileSize($filename) {
 	return $result;
 }
 
-function upSetCookie($name, $value, $expire)
-{
+function upSetCookie($name, $value, $expire) {
 	global $cookie_path, $cookie_domain, $cookie_secure;
 
 	// Enable sending of a P3P header
@@ -847,18 +846,17 @@ function error() {
 <hr/>
 <?php
 
-	if (isset($message))
+	if (isset($message)) {
 		echo '<p>'.$message.'</p>'."\n";
+	}
 
-	if ($num_args > 1) {
-		if (defined('DEBUG')) {
-			if (isset($file) && isset($line)) {
-				echo '<p><em>Ошибка в строке '.$line.' в '.$file.'</em></p>'."\n";
-			}
+	if ($num_args > 1 && DEBUG === TRUE) {
+		if (isset($file) && isset($line)) {
+			echo '<p><em>Ошибка в строке '.$line.' в '.$file.'</em></p>'."\n";
 		}
 	}
 
-	echo 'Мы уже в&nbsp;курсе и&nbsp;стараемся исправить как можно быстрее. Возвращайтесь немного позже, всё уже будет работать.';
+	echo '<p>Мы уже в&nbsp;курсе и&nbsp;стараемся исправить как можно быстрее.<br/>Возвращайтесь немного позже, всё уже будет работать.</p>';
 ?>
 
 </body>
