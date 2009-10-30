@@ -526,13 +526,13 @@ function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
 			$downloaded = $rec['downloads'];
 			$file_date = $rec['uploaded_date'];
 
-			$r .= <<<ZZZ
+			$r .= <<<FMB
 			<tr>
 				<td class="right size">$filesize_text</td>
 				<td class="left name"><a rel="nofollow" href="/$item_id/">$filename</a></td>
 				<td class="center download">$downloaded</td>
 			</tr>
-ZZZ;
+FMB;
 		}
 
 		if ($saveThisSearch === 0) {
@@ -625,25 +625,25 @@ function get_pe() {
 	}
 
 	if ($datas) {
-		$out = <<<ZZZ
+		$out = <<<FMB
 		<table class="t1" id="pe_files_table">
 		<tbody>
-ZZZ;
+FMB;
 		foreach ($datas as $item) {
 			$item_id = intval ($item['id']);
 			$n = intval ($item['n']);
 			$filename = get_cool_and_short_filename ($item['filename'], 40);
 			$type = $item['type'];
 
-			$out .= <<<ZZZ
+			$out .= <<<FMB
 			<tr><td class="first left $type"><a rel="nofollow" href="/$item_id/">$filename</a></td></tr>
-ZZZ;
+FMB;
 		}
 
-		$out .= <<<ZZZ
+		$out .= <<<FMB
 		</tbody>
 		</table>
-ZZZ;
+FMB;
 	}
 
 	return $out;
