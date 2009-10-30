@@ -118,6 +118,7 @@ $makeVirusesTimeout = 120;
 $undelete_interval = 2;
 $non_downloaded_interval = 10;
 $non_downloaded_spam_interval = 2;
+$non_downloaded_count = 1;
 
 // very small files
 $non_downloaded_very_small_files_interval = intval($non_downloaded_interval * 30, 10);

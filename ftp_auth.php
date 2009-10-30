@@ -69,7 +69,7 @@ end
 FMB;
 
 			$log = new Logger;
-			$log->info("Вход по фтп: $login $dir");
+			$log->debug("Вход по фтп: $login");
 			break;
 		}
 	} catch (Exception $e) {

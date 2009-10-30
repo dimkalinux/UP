@@ -11,7 +11,7 @@ mb_internal_encoding("UTF-8");
 up_unregister_globals();
 
 // Ignore any user abort requests
-ignore_user_abort(true);
+ignore_user_abort(TRUE);
 
 // Attempt to load the configuration file config.php
 if (file_exists(UP_ROOT.'config.inc.php')) {
@@ -29,14 +29,14 @@ if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch') {
 	// Send no-cache headers
 	header('Expires: Thu, 21 Jul 1977 07:30:00 GMT');	// When yours truly first set eyes on this world! :)
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	header('Cache-Control: post-check=0, pre-check=0', false);
+	header('Cache-Control: post-check=0, pre-check=0', FALSE);
 	header('Pragma: no-cache');		// For HTTP/1.0 compability
 
 	exit;
 }
 
 // only for debug
-if (DEBUG === true) {
+if (DEBUG === TRUE) {
 	error_reporting(8191);
 }
 
@@ -246,9 +246,9 @@ function get_file_ext($file_name) {
 
 function is_mp3($file_name, $mime) {
 	if ('mp3' == get_file_ext($file_name)) {
-		return true;
+		return TRUE;
 	} else {
-		return false;
+		return FALSE;
 	}
 }
 
@@ -294,14 +294,14 @@ function is_image_by_mime($full_filename) {
 
 
 function is_image($file_name, $full_filename) {
-	$is_image = false;
-	$is_valid_type = false;
-	$is_valid_mime = false;
+	$is_image = FALSE;
+	$is_valid_type = FALSE;
+	$is_valid_mime = FALSE;
 
 	$is_valid_type = is_image_by_ext($file_name);
 
 	if (!$is_valid_type) {
-		return false;
+		return FALSE;
 	}
 
 	// 3. check mime
@@ -362,11 +362,11 @@ function get_time_of_die($size, $downloads, $ndi, $spam) {
 
 	if ($spam) {
 		$wakkamakka = $GLOBALS['non_downloaded_spam_interval'] - $ndi;
-	} else if (($downloads == 0) && !($size <= ($GLOBALS['very_small_file_size']*1048576))) {
+	} else if (($downloads <= $non_downloaded_count) && ($size >= ($GLOBALS['very_small_file_size']*1048576))) {
 		$wakkamakka = $GLOBALS['non_downloaded_interval'] - $ndi;
-	} else if ($size <= ($GLOBALS['very_small_file_size']*1048576)) {
+	} else if ($size <= ($GLOBALS['very_small_file_size'] * 1048576)) {
 		$wakkamakka = ($is_popular ? $GLOBALS['non_downloaded_very_small_files_popular_interval'] : $GLOBALS['non_downloaded_very_small_files_interval']) - $ndi;
-	} else if ($size > ($GLOBALS['small_file_size']*1048576)) {
+	} else if ($size > ($GLOBALS['small_file_size'] * 1048576)) {
 		$wakkamakka = ($is_popular ? $GLOBALS['non_downloaded_big_files_popular_interval'] : $GLOBALS['non_downloaded_big_files_interval']) - $ndi;
 	} else {
 		$wakkamakka = ($is_popular ? $GLOBALS['non_downloaded_small_files_popular_interval'] : $GLOBALS['non_downloaded_small_files_interval']) - $ndi;
@@ -722,13 +722,13 @@ function similarRemoveShorts($var) {
 
 function similarRemoveBad($var) {
 	$bad_words = array('серии', 'part', '(tv|dvd)rip', 'novafilm', 'torrent(s*)', 'beta', 'there', 'this', 'setup', 'install', 'nforall', 'info', 'edition', 'lostfilm', 'xvid', 'hdtv', 'live', 'season');
-	$is_bad = false;
+	$is_bad = FALSE;
 
 	foreach ($bad_words as $pattern) {
 		$pattern = '/'.$pattern.'/ui';
 
 		if (preg_match($pattern, $var)) {
-			$is_bad = true;
+			$is_bad = TRUE;
 			break;
 		}
 	}
@@ -741,7 +741,7 @@ function similarRemoveBad($var) {
 function remove_file_ext($filename) {
 	$rs = $filename;
 	$extPos = mb_strrpos($filename, '.');
-	if ($extPos !== false) {
+	if ($extPos !== FALSE) {
 		$extPos = mb_strlen($filename) - $extPos;
 		if ($extPos >= 2 && $extPos <= 6) {
 			$rs = strtolower(substr($filename, 0, strrpos($filename, '.')));
@@ -787,7 +787,7 @@ function generate_form_token($target_url) {
 
 function check_form_token($csrf='ss11254BINGO') {
 	if (!isset($_REQUEST['csrf_token'])) {
-		return false;
+		return FALSE;
 	}
 
 	return ($csrf === $_REQUEST['csrf_token']);
@@ -806,7 +806,7 @@ function upSetCookie($name, $value, $expire)
 	header('P3P: CP="CUR ADM"');
 
 	if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
-		setcookie($name, $value, $expire, $cookie_path, $cookie_domain, $cookie_secure, true);
+		setcookie($name, $value, $expire, $cookie_path, $cookie_domain, $cookie_secure, TRUE);
 	} else {
 		setcookie($name, $value, $expire, $cookie_path.'; HttpOnly', $cookie_domain, $cookie_secure);
 	}
@@ -872,7 +872,7 @@ function error() {
 //
 function is_valid_email($email) {
 	if (mb_strlen($email) > 128) {
-		return false;
+		return FALSE;
 	}
 
 	return preg_match('/^(([^<>()[\]\\.,;:\s@"\']+(\.[^<>()[\]\\.,;:\s@"\']+)*)|("[^"\']+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\d\-]+\.)+[a-zA-Z]{2,}))$/ui', $email);
