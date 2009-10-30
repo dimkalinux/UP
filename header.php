@@ -40,7 +40,7 @@ $loginForm = <<<FMB
 FMB;
 
 
-$logDiv = getWelcomeMessage().'&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
+$logDiv = 'Привет, Гость!&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
 $user_login = '';
 
 try {

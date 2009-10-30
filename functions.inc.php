@@ -878,13 +878,13 @@ function is_valid_email($email) {
 	return preg_match('/^(([^<>()[\]\\.,;:\s@"\']+(\.[^<>()[\]\\.,;:\s@"\']+)*)|("[^"\']+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\d\-]+\.)+[a-zA-Z]{2,}))$/ui', $email);
 }
 
-function getWelcomeMessage() {
-	$messages = array('Привет, Гость!');
-	return $messages[array_rand($messages)];
-}
 
 function printPage($content) {
 	global $base_url, $user;
+
+	if (!defined('UP_ROOT')) {
+		die('Not defined UP_ROOT');
+	}
 
 	if (!defined('UP_HEADER')) {
 		require_once UP_ROOT.'header.php';
