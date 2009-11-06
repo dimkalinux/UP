@@ -86,7 +86,7 @@ br.clear { clear: both !important; width: 0; height: 0; }
 #nicemenu .active a:hover { text-decoration:none; }
 #nicemenu img.arrow { cursor:pointer; }
 
-.sub_menu { z-index: 555; display:none; position:absolute; left:0; top:0px; margin-top: 1.5em; border-top:solid 1px #E5E5E5; border-left:solid 1px #E5E5E5; border-right:solid 1px #999999; border-bottom:solid 1px #999999; padding: .1em 0; background: #FFFFFF;}
+.sub_menu { z-index: 555; display:none; position:absolute; left:0; top:0px; margin-top: 1.5em; border: solid 1px #ccc; padding: .1em 0; background: #FFFFFF; -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
 * html .sub_menu { margin-top:23px; } /* IE6 */
 *+html .sub_menu { margin-top:23px; } /* IE7 */
 
@@ -211,6 +211,7 @@ tr.canceled td, tr.selected td { background: #F4F8FF !important; border-bottom: 
 #status span[type=info] { background: #75A900; }
 #status span[type=error] { background: #cc0000; }
 #status span[type=warning] { background: #E44329; }
+#status > span[type=info], #status > span[type=error], #status > span[type=warning], #status > span[type=waiting]  { -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
 
 #commentStatus { text-align: left;  font: .95em/1 Verdana, Tahoma, Arial, sans-serif; margin: .5em 0; }
 #commentStatus span[type=waiting] { color: #006C93; }
@@ -249,7 +250,8 @@ span#advancedUploadLinkBlock.open { background: transparent url('data:image/png;
 #mapTable .item { text-indent: 1em; margin-bottom: .7em; font-size: 95%; }
 
 #advancedUpload { -webkit-border-radius: 7px; -moz-border-radius: 7px; margin-top: .7em; background: #DFEBF7; float: left; }
-#advancedUpload, #upload_progress, #links_block, #desc_block { display: none; }
+#advancedUpload, #upload_progress, #links_block { display: none; }
+#advancedUpload, #links_block { -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
 input[type='checkbox'] { margin: 0;}
 
 .x-progress-wrap { border: 1px solid rgb(101, 147, 207); overflow: hidden;}
@@ -324,7 +326,7 @@ div#loginMenu {
 
 #fancyLogin {  margin-top: 1.7em; display: none; z-index: 1000;  position: absolute; top: 0; left: 0; padding: 1px; }
 #fancyLogin .formRow { margin-right: .4em; text-align: left; }
-#fancyLoginForm { background: #FFFFFF; border: solid 1px #757575; border-bottom-width: 2px; border-right-width: 2px; padding: 1em 1em .8em 1em;}
+#fancyLoginForm { background: #FFFFFF; border: solid 2px #ccc; padding: 1em 1em .8em 1em; -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); }
 #fancyLoginFormHeader { text-align: left; font-size: 135%; color: #000; margin: 0 0 .4em 0; }
 
 
@@ -671,7 +673,7 @@ td#fancy_title_right {
 #TB_overlay { position: fixed; z-index:100; top: 0; left: 0;  height:100%; width:100%; }
 .TB_overlayBG {
 	background-color:#666;
-	opacity: 0.30;
+	opacity: 0.20;
 }
 
 .inlineList li { display:inline; position:relative; margin-right: .5em; }

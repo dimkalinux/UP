@@ -154,4 +154,5 @@ alter table up drop column group_secret_key;
 alter table up drop column group_id;
 alter table up drop column description;
 ALTER TABLE session ADD COLUMN email VARCHAR(129);
+ALTER table up change column md5 hash varchar(64);
 */

@@ -74,7 +74,7 @@ FMB;
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
 	$owner_id = intval($row['user_id'], 10);
-	$md5 = $row['md5'];
+	$hash = $row['hash'];
 	$password = $row['password'];
 	$mime = $row['mime'];
 

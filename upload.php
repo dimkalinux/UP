@@ -83,7 +83,6 @@ try {
 	$owner_key = mt_rand();
 	$up_file_name = $file['file_name'];
 	$up_file_size = $file['file_size'];
-	$md5 = (isset($file['file_md5'])) ? $file['file_md5'] : '';
 	$is_spam = is_spam($file['file_name']);
 	$is_adult = is_adult($file['file_name']);
 	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
@@ -114,8 +113,8 @@ try {
 
 
 	$db = new DB;
-	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', ?, ?, ?, ?, ?)",
-		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $md5, $is_spam, $is_adult, $hidden, $user['id']);
+	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', '', ?, ?, ?, ?)",
+		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $is_spam, $is_adult, $hidden, $user['id']);
 
 	// get ITEM_ID
 	$item_id = $db->lastID();

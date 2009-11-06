@@ -605,6 +605,7 @@ UP.statusMsg = function () {
 
 			var empty = function () {
 				$("#status").css({opacity: "0"}).html("&nbsp;");
+				$("#status > span").attr("type", "default");
 			};
 
 			$("#status").stop();
@@ -646,7 +647,7 @@ UP.statusMsg = function () {
 					break;
 
 				default:
-					msgClass = 'info';
+					msgClass = 'default';
 			}
 
 			// stop animation and show our msg
