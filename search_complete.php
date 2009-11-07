@@ -7,14 +7,14 @@ require UP_ROOT.'functions.inc.php';
 
 
 $out = ('["", []]');
-$max_results=12;
+$max_results = 12;
 
 
 
 if (isset($_GET['sug'])) {
     $sug =  $_GET['sug'];
 	if (!$sug || mb_strlen($sug) <= 2) {
-		exit($out);
+		exit ($out);
 	}
 
 	$regexp = mb_strpos($sug, '*');
@@ -32,9 +32,9 @@ if (isset($_GET['sug'])) {
 
 	try {
 		$db = new DB;
-		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $max_results", "%{$queryE%}");
+		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $max_results", "%{$sug}%");
 	} catch (Exception $e) {
-		exit($out);
+		exit ($out);
 	}
 
 	if ($datas) {
@@ -49,6 +49,6 @@ if (isset($_GET['sug'])) {
 	}
 }
 
-exit($out);
+exit ($out);
 
 ?>
