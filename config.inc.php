@@ -106,6 +106,7 @@ $feedback_email = 'dark@iteam.net.ua';
 
 // CACHE TIMEOUTS
 $cache_timeout_rss = 300;
+$cache_timeout_search_complete = 120;
 
 
 // MAKE HASH TIMEOUT

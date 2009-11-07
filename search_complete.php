@@ -13,7 +13,7 @@ try {
 	}
 
 	$cache = new Cache;
-	$cacheKey = sha1(mb_substr($_GET['sug'], 0, 90));
+	$cacheKey = sha1('sc_'.mb_substr($_GET['sug'], 0, 90));
 
 	if (!$out = $cache->get($cacheKey)) {
 		$sug =  $_GET['sug'];
@@ -44,7 +44,7 @@ try {
 		}
 
 		array_push($out, $result);
-		$cache->set($out, $cacheKey, 60);
+		$cache->set($out, $cacheKey, $cache_timeout_search_complete);
 	}
 
 	exit(json_encode($out));

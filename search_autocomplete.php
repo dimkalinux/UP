@@ -6,16 +6,16 @@ if (!defined('UP_ROOT')) {
 require UP_ROOT.'functions.inc.php';
 
 
-if (isset($_GET['q'])) {
-	$sug =  urldecode($_GET['q']);
+try {
+	if (!isset($_GET['q']) || (mb_strlen($_GET['q']) <= 2)) {
+		throw new Exception('No query');
+	}
 
 	$cache = new Cache;
-	$cache_key = sha1(mb_substr($sug, 0, 35));
+	$cacheKey = sha1('sa_'.mb_substr($_GET['q'], 0, 90));
 
-	if (!$out = $cache->get($cache_key)) {
-		if (!$sug || mb_strlen($sug) <= 2) {
-	        return;
-		}
+	if (!$out = $cache->get($cacheKey)) {
+		$sug =  urldecode($_GET['q']);
 
 		$regexp = (bool) preg_match('/\*|\?/u', $sug);
 		if (!$regexp) {
@@ -25,22 +25,20 @@ if (isset($_GET['q'])) {
 			$sug = strtr($sug, $trans);
 		}
 
-		try {
-			$db = new DB;
-			$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $searchCompleteMaxResults", $sug);
-		} catch (Exception $e) {
-			echo '';
+		$db = new DB;
+		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $searchCompleteMaxResults", "%{$sug}%");
+
+		$out = '';
+		foreach ($datas as $rec) {
+	        $out .= $rec['filename']."\n";
 		}
 
-		if ($datas) {
-			foreach ($datas as $rec) {
-	        	$out .= $rec['filename']."\n";
-			}
-		}
-		// set cache
-		$cache->set($out, $cache_key, 300);
+		$cache->set($out, $cacheKey, $cache_timeout_search_complete);
 	}
+
+	exit($out);
+} catch (Exception $e) {
+	exit('');
 }
 
-exit($out);
 ?>
