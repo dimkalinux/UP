@@ -6,10 +6,6 @@ if (!defined('UP_ROOT')) {
 require UP_ROOT.'functions.inc.php';
 
 
-$out = '';
-$max_results=15;
-
-
 if (isset($_GET['q'])) {
 	$sug =  urldecode($_GET['q']);
 
@@ -31,7 +27,7 @@ if (isset($_GET['q'])) {
 
 		try {
 			$db = new DB;
-			$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $max_results", $sug);
+			$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $searchCompleteMaxResults", $sug);
 		} catch (Exception $e) {
 			echo '';
 		}
