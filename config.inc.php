@@ -154,6 +154,9 @@ $thumbs_preview_h = 768;
 // GOOGLE ANALYTICS SECTION
 $googleAnalyticsCode = '';
 
+// SEARCH
+$searchCompleteMaxResults = 12;
+
 
 
 // STORAGE SECTION
