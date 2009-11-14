@@ -191,32 +191,6 @@ FMB;
 		error($e->getMessage());
 	}
 
-
-
-	// DESCRIPTION SECTION
-	try {
-		$row = $db->getRow("SELECT description FROM description WHERE id=? LIMIT 1", $item_id);
-		$desc = isset($row['description']) ? htmlspecialchars_decode($row['description']) : '';
-		$desc_block = $desc_link = $desc_js_block = '';
-
-		if (mb_strlen($desc) > 0) {
-			$desc_block = <<<FMB
-			<div id="desc_block">
-				<div class="tt-wedge tt-wedge-up tt-wedge-desc"></div>
-				<div id="formBlock">
-				<h3>Описание</h3>
-		    	<div id="desc_text">$desc</div>
-			</div>
-			<br class="clear"/>
-FMB;
-			$desc_link = '<li><span class="as_js_link" rel="desc_block">описание</span></li>';
-		}
-	} catch (Exception $e) {
-		error($e->getMessage());
-	}
-
-
-
 	// ANTIVIR SECTION
 	switch ($antivir_check_result) {
 		case ANTIVIR_VIRUS:
@@ -440,7 +414,6 @@ FMB;
 				<ul class="as_js_link_list itemNotOwnerActions">
 					<li><span class="as_js_link" rel="links_block">ссылки на файл</span></li>
 					{$commentsLink}
-					{$desc_link}
 				</ul>
 				</td>
 			</tr>
@@ -504,7 +477,6 @@ FMB;
 			<input size="35" value="{$base_url}{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
 		</div>
 	</div>
-	$desc_block
 	$commentsBlock
 	</td>
 	<td>$thumbs_block</td>
@@ -588,7 +560,7 @@ ZZZ;
 	$("[required='1'][value='']:first").focus();
 FMB;
 
-	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$desc_js_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;
+	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;
 } while (0);
 
 if ($error === 0) {
