@@ -76,17 +76,17 @@ br.clear { clear: both !important; width: 0; height: 0; }
 #nicemenu li { display:inline; position:relative; margin-right: .1em;}
 #nicemenu li.niceMenuFirst { padding-right: 1em; }
 #nicemenu li.niceMenuLast { padding-left: 1em; }
-#nicemenu span { position:relative; z-index:10; padding: .3em .1em .2em .2em; border: solid 1px #fff; }
+#nicemenu span { position:relative; z-index:10; padding: .3em .1em .2em .2em; border: solid 1px #fff; border-bottom: none; }
 #nicemenu span a { padding: 0 .3em 0 .2em;  }
-#nicemenu .over { padding: .3em .1em .2em .2em;  border-top:solid 1px #E5E5E5; border-left:solid 1px #E5E5E5;  border-right:solid 1px #999999; border-bottom:solid 1px #fff;  }
+#nicemenu .over { padding: .3em .1em .2em .2em;  border: solid 1px #ccc; border-bottom: none;  }
 *+html #nicemenu .over {  border-top:solid 2px #E5E5E5; padding-bottom: .8em; } /* IE6 */
 #nicemenu .over a:hover { text-decoration:none; }
-#nicemenu .active { padding: .3em .1em .3em .2em;  border-top:solid 1px #E5E5E5; border-left:solid 1px #E5E5E5; border-right:solid 1px #999999; border-bottom:solid 1px #e5e5e5; }
+#nicemenu .active { padding: .3em .1em .3em .2em;  border: solid 1px #ccc; border-bottom: none; }
 *+html #nicemenu span.active {  border-top:solid 2px #E5E5E5; padding-bottom: .1em; }
 #nicemenu .active a:hover { text-decoration:none; }
 #nicemenu img.arrow { cursor:pointer; }
 
-.sub_menu { z-index: 555; display:none; position:absolute; left:0; top:0px; margin-top: 1.5em; border: solid 1px #ccc; padding: .1em 0; background: #FFFFFF; -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); }
+.sub_menu { z-index: 555; display:none; position:absolute; left:0; top:-1px; margin-top: 1.5em; border: solid 1px #ccc; padding: .1em 0; background: #FFFFFF; -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); }
 * html .sub_menu { margin-top:23px; } /* IE6 */
 *+html .sub_menu { margin-top:23px; } /* IE7 */
 
