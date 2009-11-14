@@ -78,7 +78,7 @@ class Comments {
 
 		try {
 			$db = new DB;
-			$datas = $db->getData("SELECT comments.id,user_id,date,message,username FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? AND comments.id > ? ORDER BY id", $this->item_id, $lastCommentID);
+			$datas = $db->getData("SELECT comments.id,user_id,date,message,username,email FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? AND comments.id > ? ORDER BY id", $this->item_id, $lastCommentID);
 
 			if ($datas) {
 				$out = '';
@@ -87,7 +87,12 @@ class Comments {
 					$text = stripslashes($rec['message']);
 					$date = $rec['date'];
 					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=40&amp;hash='.md5($rec["username"]).'" height="40" width="40" alt="'.$rec["username"].'"/>';
+
+					$gravatar = new Gravatar($rec['email'], '');
+					$gravatar->size = 40;
+					$gravatar->rating = "G";
+					$identicon = $gravatar->toHTML();
+
 					$deleteLink = '';
 					if ($user['is_admin']) {
 						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
