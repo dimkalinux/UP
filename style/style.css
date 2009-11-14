@@ -738,3 +738,6 @@ button[disabled], .btn[disabled]:hover span, .btn[disabled]:focus span { color: 
 
 p.pageDescription { margin-bottom: 1.5em !important; color: #2b2b2b;  }
 .mb { margin-bottom: 1.3em !important; }
+
+input.default { font-weight: bold; }
+

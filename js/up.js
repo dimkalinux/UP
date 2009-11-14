@@ -718,10 +718,9 @@ UP.fancyLogin = function () {
 				return;
 			}
 
-
 			UP.formCheck.register(form);
 
-			form.find("input[required],textarea[required]")
+			$(form).find("input[required],textarea[required]")
 				.change(function () { UP.formCheck.register(form); })
 				.keyup(function () { UP.formCheck.register(form);	})
 
@@ -737,7 +736,7 @@ UP.fancyLogin = function () {
 					UP.formCheck.register(form);
 				}
 
-				$("[required][value='']:first").focus();
+				$(form).find("[required][value='']:first").focus();
 				return false;
 			}).addClass("as_js_link");
 
@@ -798,7 +797,7 @@ UP.fancyLogin = function () {
 								});
 							}
 
-							$(".bad:first").focus();
+							$(form).find(".bad:first").focus();
 							$(document).everyTime(500, 'checkFancyLoginFormTimer', function () { UP.formCheck.register(form); });
 						}
 					} else {
@@ -807,9 +806,13 @@ UP.fancyLogin = function () {
 				}
 			};
 
-			form.submit(function () {
+			$(form).submit(function () {
 				$(this).ajaxSubmit(options);
 				return false;
+			});
+
+			$(form).bind("reset", function () {
+				$(document).oneTime(100, 'z', function () { $(form).find("[required='1'][value='']:first").focus(); });
 			});
 		}
 	};

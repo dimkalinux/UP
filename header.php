@@ -27,7 +27,7 @@ $loginForm = <<<FMB
 				<input type="password" id="p" name="p" tabindex="101" maxlength="64" minlength="8" required="1"/>
 			</div>
 			<div class="formRow buttons">
-				<input type="submit" name="do" value="Войти" tabindex="102"/>
+				<input type="submit" name="do" value="Войти" class="default" tabindex="102"/>
 				<input type="button" name="close" value="Закрыть" tabindex="103"/>
 			</div>
 		</form>

@@ -46,7 +46,8 @@ $form = <<<ZZZ
 		<div class="inputHelp">объём файла не&nbsp;должен превышать 5&nbsp;МБ.</div>
 	</div>
 	<div class="formRow buttons">
-		<input type="submit" name="do" value="Отправить" tabindex="4"/>
+		<input type="submit" name="do" value="Отправить" class="default" tabindex="4"/>
+		<input type="reset" name="reset" value="Очистить" tabindex="5"/>
 	</div>
 	</form>
 ZZZ;
@@ -145,7 +146,7 @@ $onDOMReady = <<<ZZZ
 	var form = $("form[name='feedback']");
 	UP.formCheck.register(form);
 
-	form.find("input[required],textarea[required]")
+	$(form).find("input[required],textarea[required]")
 		.change(function () { UP.formCheck.register(form);})
 		.keyup(function () { UP.formCheck.register(form); })
 
@@ -163,7 +164,7 @@ $onDOMReady = <<<ZZZ
 		beforeSubmit: function (formArray, jqForm) {
 			UP.wait.start();
 			$('#wrap').stopTime('checkFeedbackFormTimer');
-			form.find("input[type='submit']").attr("disabled", "disabled");
+			$(form).find("input[type='submit']").attr("disabled", "disabled");
 			return true;
 		},
 
@@ -175,11 +176,11 @@ $onDOMReady = <<<ZZZ
 
 		success: function (r) {
 			UP.wait.stop();
-			form.find("input[type='submit']").removeAttr("disabled");
+			$(form).find("input[type='submit']").removeAttr("disabled");
 
 			if (r) {
 				if (parseInt(r.error, 10) === 0) {
-					form.clearForm().resetForm();
+					$(form).clearForm().resetForm();
 					$('#primary').fadeOut(350, function() {
 						$('#primary').html('<div id="status">&nbsp;</div><h2>Сообщение отправлено</h2>' +
 								'<p>Спасибо, что потратили время для связи&nbsp;с&nbsp;нами. Мы&nbsp;ценим все ваши комментарии, касающиеся работы сервиса.</p>' +
@@ -194,13 +195,17 @@ $onDOMReady = <<<ZZZ
 		}
 	};
 
-	form.submit(function () {
+	$(form).submit(function () {
 		$(this).ajaxSubmit(options);
 		return false;
 	});
 
+	$(form).bind("reset", function () {
+		$(document).oneTime(100, 'z', function () { $(form).find("[required='1'][value='']:first").focus(); });
+	});
+
 	UP.statusMsg.defferedClear();
-	$("[required='1'][value='']:first").focus();
+	$(form).find("[required='1'][value='']:first").focus();
 ZZZ;
 
 require UP_ROOT.'header.php';
