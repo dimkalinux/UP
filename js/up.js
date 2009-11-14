@@ -663,7 +663,7 @@ UP.statusMsg = function () {
 
 		defferedClear: function() {
 			// set mouse and keyboard
-			$(document).stopTime('t1').oneTime(1500, 't1', function () { bindEvents(); });
+			$(document).stopTime('t1').oneTime(2000, 't1', function () { bindEvents(); });
 
 			// set just timeout gone
 			var that = this;

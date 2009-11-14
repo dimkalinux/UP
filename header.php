@@ -31,9 +31,9 @@ $loginForm = <<<FMB
 				<input type="button" name="close" value="Закрыть" tabindex="103"/>
 			</div>
 		</form>
-		<div class="formRow buttons">
+		<!--<div class="formRow buttons">
 			<a href="{$base_url}forget_password/">Напомните&nbsp;мне&nbsp;пароль</a>
-		</div>
+		</div>-->
 	</div>
 </div>
 

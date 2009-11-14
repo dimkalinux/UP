@@ -74,7 +74,7 @@ FMB;
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
 	$owner_id = intval($row['user_id'], 10);
-	$hash = $row['hash'];
+	$hash = $row['md5'];
 	$password = $row['password'];
 	$mime = $row['mime'];
 
@@ -518,7 +518,7 @@ ZZZ;
 	var form = $("form[name='comments']");
 	UP.formCheck.register(form);
 
-	form.find("input[required],textarea[required]")
+	$(form).find("input[required],textarea[required]")
 		.change(function () { UP.formCheck.register(form);})
 		.keyup(function () { UP.formCheck.register(form); })
 
@@ -538,7 +538,7 @@ ZZZ;
 		beforeSubmit: function (formArray, jqForm) {
 			$('#wrap').stopTime('checkCommentsFormTimer');
 			$("#commentStatus").html('&nbsp;');
-			form.find("input[type='submit']").attr("disabled", "disabled");
+			$(form).find("input[type='submit']").attr("disabled", "disabled");
 
 			$(document).oneTime(250, 'commentAddWaitTimer', function () {
 				$("#commentStatus").html('<span type="waiting">Ожидайте, комментарий добавляется&hellip;</span>').show(200);
@@ -551,12 +551,12 @@ ZZZ;
 			$(document).stopTime('commentAddWaitTimer');
 			$('#wrap').everyTime(500, 'checkCommentsFormTimer', function () { UP.formCheck.register(form); });
 			$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
+			$(form).find("input[type='submit']").removeAttr("disabled");
 		},
 
 		success: function (r) {
 			$(document).stopTime('commentAddWaitTimer');
 			$("#commentStatus").html('&nbsp;');
-			form.find("input[type='submit']").removeAttr("disabled");
 
 			if (r) {
 				if (parseInt(r.error, 10) === 0) {
@@ -564,14 +564,17 @@ ZZZ;
 					UP.comments.loadCommentsList($item_id, $owner_id);
 				} else {
 					$("#commentStatus").html('<span type="error">'+r.message+'</span>').show();
+					$(form).find("input[type='submit']").removeAttr("disabled");
 				}
 			} else {
 				$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
+				$(form).find("input[type='submit']").removeAttr("disabled");
 			}
+			$("[required='1'][value='']:first").focus();
 		}
 	};
 
-	form.submit(function () {
+	$(form).submit(function () {
 		$(this).ajaxSubmit(options);
 		return false;
 	});

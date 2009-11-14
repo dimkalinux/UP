@@ -357,6 +357,8 @@ function get_geo() {
 // size in bytes
 // ndi in days
 function get_time_of_die($size, $downloads, $ndi, $spam) {
+	global $non_downloaded_count;
+
 	$is_popular = (bool)($downloads >= $GLOBALS['popular_num']);
 	$wakkamakka = 0;
 
