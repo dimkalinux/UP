@@ -70,7 +70,7 @@ class DB {
 
 
 	private function makeSafeQuery($sql, $silent=false) {
-		if (mb_strlen($sql, 'UTF-8') > 140000) {
+		if (mb_strlen($sql) > 140000) {
 			throw new Exception('MySQL: Insane query.');
 		}
 
@@ -152,11 +152,13 @@ class DB {
 		$link = @mysqli_connect(MYSQL_ADDRESS, MYSQL_LOGIN, MYSQL_PASSWORD, MYSQL_DB);
 
 		if (!$link || mysqli_connect_errno()) {
-			throw new Exception('База данных недоступна.');
+			throw new Exception('База данных недоступна');
 		}
 
 		// Setup the client-server character set (UTF-8)
-		//mysqli_query($link, "SET NAMES 'utf8'"); //or error(__FILE__, __LINE__);
+		/*if (!mysqli_query($link, "SET NAMES 'cp1251'")) {
+			throw new Exception('Ошибка кодировки в базе данных');
+		}*/
 
 		return $link;
 	}

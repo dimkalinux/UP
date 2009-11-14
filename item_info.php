@@ -138,8 +138,8 @@ FMB;
 						<label for="feedbackText">Ваш комментарий</label>
 						<textarea name="commentText" rows="5" minLength="5" maxLength="1024" required="1" tabindex="1"></textarea>
 					</div>
-					<div class="formRow">
-						<input type="submit" name="do" value="Отправить" tabindex="2"/>
+					<div class="formRow buttons">
+						<input type="submit" name="do" value="Отправить" tabindex="2" class="default"/>
 						<input type="reset" name="doClean" value="Очистить" tabindex="3"/>
 					</div>
 				</form>
@@ -557,7 +557,11 @@ ZZZ;
 		$('#'+$.cookie(UP.env.itemInfoStatusCookie)).toggle();
 	}
 
-	$("[required='1'][value='']:first").focus();
+	$(form).bind("reset", function () {
+		$(document).oneTime(100, 'z', function () { $(form).find("[required='1'][value='']:first").focus(); });
+	});
+
+	$(form).find("[required='1'][value='']:first").focus();
 FMB;
 
 	$onDOMReady = $js_spam_warning_block.$js_adult_warning_block.$js_pass_block.$js_thumbs_block.$js_video_block.$jsBindActionList.$jsGetCommentsList;
