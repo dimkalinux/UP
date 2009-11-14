@@ -81,7 +81,7 @@ FMB;
 			<a href="{$base_url}stat/">Статистика</a>
 			<a href="{$base_url}feedback/" class="item_line">Обратная связь</a>
 			<a href="{$base_url}map/">Карта сайта</a>
-			<a href="{$base_url}agree/" class="item_line">Пользовательское соглашение</a>
+			<a href="{$base_url}agreement/" class="item_line">Пользовательское соглашение</a>
         </div>
 	</li>
 FMB;
