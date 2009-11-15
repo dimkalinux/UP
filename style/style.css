@@ -249,7 +249,7 @@ span#advancedUploadLinkBlock.open { background: transparent url('data:image/png;
 #mapTable .header { font-weight: bold; margin-bottom: .6em; }
 #mapTable .item { text-indent: 1em; margin-bottom: .7em; font-size: 95%; }
 
-#advancedUpload { -webkit-border-radius: 7px; -moz-border-radius: 7px; margin-top: .7em; background: #DFEBF7; float: left; position: absolute; }
+#advancedUpload { -webkit-border-radius: 7px; -moz-border-radius: 7px; margin-top: .7em; background: #DFEBF7; float: left; }
 #advancedUpload, #upload_progress, #links_block { display: none; }
 #advancedUpload, #links_block { -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); }
 input[type='checkbox'] { margin: 0;}
