@@ -110,7 +110,7 @@ $onDOMReady = <<<ZZZ
 				}
 			},
 			error: function (r) {
-				UP.uploadForm.error("Сервер загрузки недоступен. Попробуйте немного позже.");
+				UP.uploadForm.error("Сервер загрузки недоступен");
 			}
 		};
 
@@ -144,7 +144,7 @@ $onDOMReady = <<<ZZZ
 					options.url = data.message +'?X-Progress-ID=' +$('#progress_id').val();
 					canUpload = true;
 				} else {
-					UP.uploadForm.error("Нет свободных серверов. Попробуйте немного позже.");
+					UP.uploadForm.error("Сервер загрузки недоступен");
 				}
 			});
 

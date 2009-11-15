@@ -102,8 +102,8 @@ FMB;
 	       	<a href="{$base_url}top/new/">Cвежие</a>
 			<a href="{$base_url}top/size/">Большие</a>
 			<a href="{$base_url}top/popular/">Популярные</a>
-			<a href="{$base_url}top/mp3/" class="item_line">Музыка</a>
-			<a href="{$base_url}top/video/">Видео</a>
+			<a href="{$base_url}top/video/" class="item_line">Видео</a>
+			<a href="{$base_url}top/mp3/">Музыка</a>
 			<a href="{$base_url}top/archive/">Архивы</a>
 			<a href="{$base_url}top/photo/">Картинки</a>
 			<a href="{$base_url}top/image/">Образы дисков</a>

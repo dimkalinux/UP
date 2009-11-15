@@ -211,7 +211,7 @@ tr.canceled td, tr.selected td { background: #F4F8FF !important; border-bottom: 
 #status span[type=info] { background: #75A900; }
 #status span[type=error] { background: #cc0000; }
 #status span[type=warning] { background: #E44329; }
-#status > span[type=info], #status > span[type=error], #status > span[type=warning], #status > span[type=waiting]  { -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
+#status > span[type=info], #status > span[type=error], #status > span[type=warning], #status > span[type=waiting]  { -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
 
 #commentStatus { text-align: left;  font: .95em/1 Verdana, Tahoma, Arial, sans-serif; margin: .5em 0; }
 #commentStatus span[type=waiting] { color: #006C93; }
@@ -254,7 +254,7 @@ span#advancedUploadLinkBlock.open { background: transparent url('data:image/png;
 #advancedUpload, #links_block { -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); }
 input[type='checkbox'] { margin: 0;}
 
-.x-progress-wrap { border: 1px solid rgb(101, 147, 207); overflow: hidden; -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
+.x-progress-wrap { border: 1px solid rgb(101, 147, 207); overflow: hidden; -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
 .x-progress-inner { background: rgb(224, 232, 243) url('/img/bg_001.gif') repeat-x scroll 0% 0%; height: 1.2em; position: relative; }
 .x-progress-bar { border-top: 1px solid rgb(209, 228, 253); border-right: 1px solid rgb(127, 169, 228); border-bottom: 1px solid rgb(127, 169, 228); background: rgb(156, 191, 238) url('/img/progress-bg.gif') repeat-x scroll left center; height: 1.2em; float: left; width: 0pt; }
 .x-progress-text { padding: .1em .2em; overflow: hidden; font-size: .9em; font-weight: bold; color: rgb(255, 255, 255); position: absolute; left: 0pt; text-align: center; }
