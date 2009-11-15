@@ -294,9 +294,7 @@ function is_image_by_mime($full_filename) {
 
 
 function is_image($file_name, $full_filename) {
-	$is_image = FALSE;
-	$is_valid_type = FALSE;
-	$is_valid_mime = FALSE;
+	$is_image = $is_valid_type = $is_valid_mime = FALSE;
 
 	$is_valid_type = is_image_by_ext($file_name);
 
@@ -304,10 +302,7 @@ function is_image($file_name, $full_filename) {
 		return FALSE;
 	}
 
-	// 3. check mime
 	$is_valid_mime = is_image_by_mime($full_filename);
-
-	//
 	return ($is_valid_type && $is_valid_mime);
 }
 
@@ -317,7 +312,7 @@ function is_flv($file_name, $mime) {
 }
 
 function get_client_ip() {
-	if (isset ($_SERVER['REMOTE_ADDR'])) {
+	if (isset($_SERVER['REMOTE_ADDR'])) {
 		return $_SERVER['REMOTE_ADDR'];
 	} else {
 		return null;
@@ -379,8 +374,10 @@ function get_time_of_die($size, $downloads, $ndi, $spam) {
 
 
 
-function is_spam($str) {
-	if (!$str) {
+function is_spam($filename, $filesize=0) {
+	global $maxSPAM_Size;
+
+	if (empty($filename) || ($filesize > $maxSPAM_Size)) {
 		return FALSE;
 	}
 
@@ -401,7 +398,7 @@ function is_spam($str) {
 	foreach ($a_patterns as $pattern) {
 		$pattern = '/'.$pattern.'/ui';
 
-		if (preg_match($pattern, $str)) {
+		if (preg_match($pattern, $filename)) {
 			$is_spam = TRUE;
 			break;
 		}
@@ -411,8 +408,8 @@ function is_spam($str) {
 }
 
 
-function is_adult($str) {
-	if (!$str || !is_can_be_adult($str)) {
+function is_adult($filename, $filesize=0) {
+	if (empty($filename) || !is_can_be_adult($filename)) {
 		return FALSE;
 	}
 
@@ -442,7 +439,7 @@ function is_adult($str) {
 	foreach ($a_patterns as $pattern) {
 		$pattern = '/'.$pattern.'/ui';
 
-		if (preg_match($pattern, $str)) {
+		if (preg_match($pattern, $filename)) {
 			$is_adult = TRUE;
 			break;
 		}
@@ -478,7 +475,7 @@ function prettyDate($mysqlDate) {
 }
 
 
-function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
+function makeSearch($req, $fooltext=FALSE) {
 	global $user;
 	$out = '';
 	$regexp = (bool) preg_match('/\*|\?/u', $req);
@@ -508,11 +505,6 @@ function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
 				AND adult='0'
 				AND filename LIKE ? LIMIT 100", $query);
 		}
-
-		/*$saveThisSearch = ;
-		if ($useSaveFeature) {*/
-			$saveThisSearch = $db->numRows("SELECT * FROM searchs WHERE user_id=? AND searchs=?", $user['id'], $req);
-		//}
 	} catch (Exception $e) {
 		throw new Exception($e->getMessage());
 	}
@@ -524,7 +516,7 @@ function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
 			$item_id = $rec['id'];
 			$fullFilename = htmlspecialchars_decode(stripslashes($rec['filename']));
 			$filename = get_cool_and_short_filename($fullFilename, 55);
-			$filesize_text = format_filesize ($rec['size']);
+			$filesize_text = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = $rec['uploaded_date'];
 
@@ -534,16 +526,6 @@ function makeSearch($req, $fooltext=FALSE, $useSaveFeature=FALSE) {
 				<td class="left name"><a rel="nofollow" href="/$item_id/">$filename</a></td>
 				<td class="center download">$downloaded</td>
 			</tr>
-FMB;
-		}
-
-		if ($saveThisSearch === 0) {
-			$saveSearchLink = <<<FMB
-			<span class="as_js_link">сохранить этот поиск</span>
-FMB;
-		} else {
-			$saveSearchLink = <<<FMB
-			<span class="as_js_link">удалить этот поиск</span>
 FMB;
 		}
 

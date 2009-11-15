@@ -82,6 +82,7 @@ $max_file_size = 9000;
 $very_small_file_size = 3;
 $small_file_size = 200;
 $max_file_size_for_upload_antivir_check = 10;
+$maxSPAM_Size = 128*1048576;
 
 
 // FTP access

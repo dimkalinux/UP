@@ -83,8 +83,8 @@ try {
 	$owner_key = mt_rand();
 	$up_file_name = $file['file_name'];
 	$up_file_size = $file['file_size'];
-	$is_spam = is_spam($file['file_name']);
-	$is_adult = is_adult($file['file_name']);
+	$is_spam = is_spam($file['file_name'], $file['file_size']);
+	$is_adult = is_adult($file['file_name'], $file['file_size']);
 	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
 
 	// get filename for FUSE
