@@ -29,11 +29,13 @@ try {
 		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $searchCompleteMaxResults", "%{$sug}%");
 
 		$out = '';
-		foreach ($datas as $rec) {
-	        $out .= $rec['filename']."\n";
-		}
+		if ($datas) {
+			foreach ($datas as $rec) {
+	        	$out .= $rec['filename']."\n";
+			}
 
-		$cache->set($out, $cacheKey, $cache_timeout_search_complete);
+			$cache->set($out, $cacheKey, $cache_timeout_search_complete);
+		}
 	}
 
 	exit($out);

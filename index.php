@@ -19,7 +19,7 @@ if ($Upload->is_upload_flood()) {
 	<p>Если вы хотите загружать много файлов одновременно — рекомендуем использовать <a href="/ftp_access/">доступ по фтп-протоколу</a>.</p>');
 } else {
 	$uploadFloodCounter = $Upload->get_upload_flood_counter();
-	if ($uploadFloodCounter > 2 && $uploadFloodCounter < 5) {
+	if ($uploadFloodCounter > 4 && $uploadFloodCounter < 7) {
 		$js_flood_warning_block = "UP.statusMsg.show('Вы слишком быстро закачиваете. Сделайте паузу на пару минут.', UP.env.msgWarn, true);";
 	}
 }
@@ -103,7 +103,7 @@ $onDOMReady = <<<ZZZ
 			url: '/upload',
 			type: 'POST',
 			success: function (r) {
-				if (r.error == 0) {
+				if (parseInt(r.error, 10) === 0) {
 					UP.uploadForm.finish(r.id, r.pass);
 				} else {
 					UP.uploadForm.error(r.message);

@@ -3,9 +3,9 @@
 define('DEBUG', true);
 
 
-define('MYSQL_ADDRESS', 'localhost');
-define('MYSQL_LOGIN', 'root');
-define('MYSQL_PASSWORD', '');
+define('MYSQL_ADDRESS', '194.146.132.67');
+define('MYSQL_LOGIN', 'up');
+define('MYSQL_PASSWORD', 'K-lldupupdown2.01795hg78HFR');
 define('MYSQL_DB', 'up');
 define('MYSQL_CHARSET', 'utf8');
 
@@ -60,7 +60,7 @@ define('ACTION_COMMENTS_DEL', 101);
 
 // BASE URL aka CDN
 define('CSS_BASE_URL', 'http://up.lluga.net/');
-define('JS_BASE_URL', 'http://ftp.lluga.net/');
+define('JS_BASE_URL', 'http://up.lluga.net/');
 define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
 
 
@@ -87,7 +87,7 @@ $maxSPAM_Size = 128*1048576;
 
 // FTP access
 $ftpbaseDir = '/var/fuse/';
-$ftpAccessEnabled = TRUE;
+$ftpAccessEnabled = FALSE;
 $ftpUploadRate = 1048576*5;
 $ftpDownloadRate = 1048576*5;
 $ftpRateK = 1.5;
@@ -97,7 +97,8 @@ $ftpGIDBase = 5000;
 
 // PATH SECTION
 $upload_dir = '/var/upload/';
-$thumbs_dir = $upload_dir.'/thumbs/';
+$server_root = '/srv/www/apache/up/htdocs/';
+$thumbs_dir = $server_root.'thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
 
 
@@ -120,7 +121,7 @@ $makeVirusesTimeout = 120;
 $undelete_interval = 2;
 $non_downloaded_interval = 10;
 $non_downloaded_spam_interval = 2;
-$non_downloaded_count = 1;
+$non_downloaded_count = 3;
 
 // very small files
 $non_downloaded_very_small_files_interval = intval($non_downloaded_interval * 30, 10);
@@ -146,8 +147,8 @@ $minFileSizeForTOP = 1048576;
 
 // THUMBS SECTION
 // in px
-$thumbs_w = 250;
-$thumbs_h = 250;
+$thumbs_w = 150;
+$thumbs_h = 150;
 //
 $thumbs_preview_w = 1024;
 $thumbs_preview_h = 768;
@@ -163,43 +164,13 @@ $searchCompleteMaxResults = 12;
 
 // STORAGE SECTION
 $storage_1 = array(
-	'upload_url' => '/upload',
-	'name' => 'upload',
+	'upload_url' => '/upload14',
+	'name' => 'upload14',
 	'device' => '/dev/sdb1',
-	'mount_point' => '/var/upload',
+	'mount_point' => '/var/upload/14',
 	'prio' => 5,
 	'disabled' => 0,
-	'hash' => array('1','2','3','4')
-);
-
-$storage_2 = array(
-	'upload_url' => '/upload17',
-	'name' => 'upload17',
-	'device' => '/dev/sdd1',
-	'mount_point' => '/var/upload/17',
-	'prio' => 3,
-	'disabled' => 0,
-	'hash' => array('17')
-);
-
-$storage_3 = array(
-	'upload_url' => '/upload18',
-	'name' => 'upload18',
-	'device' => '/dev/mapper/pdc_gcdcfciap1',
-	'mount_point' => '/var/upload/18',
-	'disabled' => 1,
-	'prio' => 3,
-	'hash' => array('18')
-);
-
-$storage_4 = array(
-	'upload_url' => '/upload19',
-	'name' => 'upload19',
-	'device' => '/dev/sde1',
-	'mount_point' => '/var/upload/19',
-	'prio' => 3,
-	'disabled' => 0,
-	'hash' => array('19')
+	'hash' => array('14')
 );
 
 $storage_5 = array(
@@ -211,6 +182,48 @@ $storage_5 = array(
 	'disabled' => 0,
 	'hash' => array('15')
 );
+
+$storage_2 = array(
+	'upload_url' => '/upload17',
+	'name' => 'upload17',
+	'device' => '/dev/sdf1',
+	'mount_point' => '/var/upload/17',
+	'prio' => 3,
+	'disabled' => 0,
+	'hash' => array('17')
+);
+
+$storage_3 = array(
+	'upload_url' => '/upload18',
+	'name' => 'upload18',
+	'device' => '/dev/sdc1',
+	'mount_point' => '/var/upload/18',
+	'disabled' => 0,
+	'prio' => 0,
+	'hash' => array('18')
+);
+
+$storage_4 = array(
+	'upload_url' => '/upload19',
+	'name' => 'upload19',
+	'device' => '/dev/sdg1',
+	'mount_point' => '/var/upload/19',
+	'prio' => 3,
+	'disabled' => 0,
+	'hash' => array('19')
+);
+
+
+$storage_6 = array(
+	'upload_url' => '/upload16',
+	'name' => 'upload16',
+	'device' => '/dev/sdd1',
+	'mount_point' => '/var/upload/16',
+	'prio' => 3,
+	'disabled' => 0,
+	'hash' => array('16')
+);
+
 
 define('UP', 1);
 

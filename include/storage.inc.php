@@ -17,30 +17,7 @@ class Storage {
 
 	//
 	public function __construct() {
-		try {
-			$db = new DB;
-			$datas = $db->getData("SELECT * FROM storage WHERE disabled=0");
-		} catch (Exception $e) {
-			throw new Exception('Storage error: «cant init storages»');
-		}
-
-		if (!$datas) {
-			return;
-		}
-
-		foreach($datas as $st) {
-	    	if (is_dir($st['mount_point'])) {
-				$storage  = $st;
-				$storage['hash'] = unserialize($storage['hash']);
-				$this->storage[] = $storage;
-			} else {
-				$log = new Logger;
-				$log->error("Storage module invalid mount_point: ".$st['mount_point']);
-			}
-		}
-
-		//print_r($this->storage);
-		/*for ($i = 1; $i <= 32; $i++) {
+		for ($i = 1; $i <= 32; $i++) {
 			if (isset($GLOBALS["storage_$i"])) {
 				$storage = $GLOBALS["storage_$i"];
 
@@ -57,7 +34,7 @@ class Storage {
 					$log->error("Storage module invalid mount_point: ".$storage['mount_point']);
 				}
 			}
-		}*/
+		}
 	}
 
 	//

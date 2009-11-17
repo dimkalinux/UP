@@ -48,9 +48,6 @@ class AJAX {
 	public function search() {
 		global $out, $result;
 
-
-		sleep(5);
-
 		if (!isset($_GET['s'])) {
 			$this->exitWithError('Отсутствует аргумент поиска');
 		}

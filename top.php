@@ -11,8 +11,9 @@ $blocks = null;
 $type = get_get('type');
 $page = get_get('page');
 
-if (!$page || $page < 1)
+if (!$page || $page < 1) {
 	$page = 1;
+}
 
 switch ($type) {
 	case 'new':
@@ -43,8 +44,8 @@ switch ($type) {
 		$blocks = top_get($type, $page, "/top/image");
 		break;
 
-	case 'picture':
-		$blocks = top_get($type, $page, "/top/pic");
+	case 'photo':
+		$blocks = top_get($type, $page, "/top/photo");
 		break;
 
 	case 'popular':
@@ -202,7 +203,7 @@ function top_get($type, $page, $link_base) {
 					LIMIT $start_from,$items_per_page";
 			break;
 
-		case 'pic':
+		case 'photo':
 			$cache_id = 'top_pic';
 			$header = 'Картинки';
 			$th_name = '<th class="name current">Имя файла</th>';
@@ -322,8 +323,8 @@ ZZZ;
 					$popularLabel = '<span class="popularLabel" title="Более 1000 скачиваний">+1k</span>';
 			} else if ($downloaded > 100) {
 					$popularLabel = '<span class="popularLabel" title="Более 100 скачиваний">+100</span>';
-			} else if ($downloaded > 50) {
-					$popularLabel = '<span class="popularLabel" title="Более 50 скачиваний">+50</span>';
+			} else if ($downloaded > 20) {
+					$popularLabel = '<span class="popularLabel" title="Более 20 скачиваний">+20</span>';
 			}
 
 			$blocks .= <<<ZZZ

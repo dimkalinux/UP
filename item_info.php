@@ -74,7 +74,7 @@ FMB;
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
 	$owner_id = intval($row['user_id'], 10);
-	$hash = $row['md5'];
+	$hash = $row['hash'];
 	$password = $row['password'];
 	$mime = $row['mime'];
 
@@ -301,9 +301,9 @@ FMB;
 	$thumbs_block = $js_thumbs_block = '';
 	$is_image = is_image_by_ext($filename);
 	if ($is_image && !$is_password) {
-		$thumbs_full_url = $base_url.'thumbs/'.md5($md5.$item_id).'.jpg';
-		$thumbs_preview_small_url = $base_url.'thumbs/'.md5($md5.$item_id).'.jpg';
-		$thumbs_preview_url = $base_url.'thumbs/large/'.md5($md5.$item_id).'.jpg';
+		$thumbs_full_url = $base_url.'thumbs/'.sha1($item_id).'.jpg';
+		$thumbs_preview_small_url = $base_url.'thumbs/'.sha1($item_id).'.jpg';
+		$thumbs_preview_url = $base_url.'thumbs/large/'.sha1($item_id).'.jpg';
 		$thumbs_block = <<<FMB
 		<div class="thumbs"><a href="$thumbs_preview_url"><img src="$thumbs_full_url"/></a></div>
 FMB;
@@ -325,7 +325,7 @@ FMB;
 		<td class="bb" id="videoBlock">
 			<a href="#flvBlock" class="as_js_link" id="fancyVideo">смотреть</span>
 		</td>
-		<div id="flvBlock superHidden"></div>
+		<div id="flvBlock" class="superHidden">FLV</div>
 FMB;
 
 		$js_video_block = <<<FMB
@@ -342,7 +342,6 @@ FMB;
 			});
 FMB;
 
-		$addScript[] .= 'swfobject.js';
 		$addScript[] .= 'jquery.fancybox-1.2.1.js';
 	}
 
@@ -394,7 +393,6 @@ FMB;
 	<div id="status">&nbsp;</div>
 	$im_owner_block
 	<h2>{$passwordLabel}<span id="item_info_filename" title="$fullFilename">$filename</span></h2>
-	<form method="$form_method" action="$dlink_raw" autocomplete="off">
 	<table class="asDiv">
 	<tr><td>
 		<table class="t1" id="file_info_table">
@@ -407,7 +405,7 @@ FMB;
 			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
 			$pass_input
 			$owner_block
-			<tr><td class="ab"></td><td class="bb"><div id="download_link">$dlink</div></td></tr>
+			<tr><td class="ab"></td><td class="bb">	<form method="$form_method" action="$dlink_raw" autocomplete="off"><div id="download_link">$dlink</div></form></td></tr>
 			<tr>
 				<td class="ab"></td>
 				<td class="bb">
@@ -418,7 +416,6 @@ FMB;
 				</td>
 			</tr>
 		</table>
-	</form>
 
 	<div id="links_block">
 		<div class="tt-wedge tt-wedge-up tt-wedge-links"></div>

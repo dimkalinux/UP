@@ -29,7 +29,7 @@ class Upload {
 
 		$not_unique = true;
 		while ($not_unique) {
-			$newfile = sha1($this->generate_pathname().$messagelenght.$filesize.'24111988').'.attach';
+			$newfile = sha1($this->generatePathname().$messagelenght.$filesize.'24111988').'.attach';
 
 			if (!is_file($storagepath.$newfile)) {
 				return $newfile;
@@ -97,12 +97,12 @@ class Upload {
 			$floodCounter = 1;
 		}
 
-		if ($floodCounter < 4) {
+		if ($floodCounter < 7) {
 			return false;
 		}
 
 		// flood
-		if ($floodCounter > 4 && $floodCounter != 100) {
+		if ($floodCounter > 7 && $floodCounter != 100) {
 			$floodCounter = 100;
 			$cache->set($floodCounter, $floodKey, 1800);
 		}
@@ -180,12 +180,12 @@ class Upload {
 	}
 
 	public function generateThumbs($uploadfile, $up_file_name, $item_id) {
-		global $thumbs_w, $thumbs_h, $thumbs_preview_w, $thumbs_preview_h;
+		global $thumbs_w, $thumbs_h, $thumbs_preview_w, $thumbs_preview_h, $thumbs_dir;
 
 		if (is_file($uploadfile) && is_image($up_file_name, $uploadfile)) {
 			$key_name = $this->getThumbsFilename($item_id);
-			$thumbs_filename = 'thumbs/'.$key_name.'.jpg';
-			$thumbs_preview_filename = 'thumbs/large/'.$key_name.'.jpg';
+			$thumbs_filename = $thumbs_dir.$key_name;
+			$thumbs_preview_filename = $thumbs_dir.'large/'.$key_name;
 
 			require_once UP_ROOT.'include/phpThumb/phpthumb.class.php';
 
@@ -228,8 +228,8 @@ class Upload {
 	}
 
 
-	private static function getThumbsFilename($item_id) {
-		return 'thumbs/'.sha1($item_id).'.jpg';
+	public static function getThumbsFilename($item_id) {
+		return sha1($item_id).'.jpg';
 	}
 }
 

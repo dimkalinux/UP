@@ -301,7 +301,6 @@ UP.uploadForm = function () {
 			var options = {
 				pass: pass,
 			}
-
 			UP.utils.makePOSTRequest('/'+id+'/', options);
 		},
 

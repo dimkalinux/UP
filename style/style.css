@@ -697,12 +697,12 @@ a.oneLineLink { margin-top: .6em; display: block; }
 .feedbackList, .commentList { list-style-type: none !important; }
 .feedbackList + li, .commentList + li { color: #333; padding: .8em 1em 1em 1em; margin-bottom: 1.5em; font-size: .95em; }
 .feedbackList img.avatar { padding: .8em 1em 0 0; }
-ul.commentList { max-width: 65em !important; }
+ul.commentList { max-width: 65em !important; padding-left: 1em; }
 .commentList li { padding-bottom: 1em; margin-bottom: 1em !important; border-bottom: solid 1px #eee; }
 .commentMeta { width: 9em !important; }
 .commentAuthor { font-weight: bold; margin-right: .7em; }
 .commentText { font-size: .95em; color: #333; overflow: visible; }
-.commentID { float: left; width: 6em; }
+.commentID { float: left; width: 50px; }
 .commentBody { float: right; width: 45em; }
 .commentList img.avatar { border: solid 4px #eee; margin-top: .3em;}
 

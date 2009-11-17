@@ -8,7 +8,8 @@ require UP_ROOT.'functions.inc.php';
 require UP_ROOT.'include/PasswordHash.php';
 require UP_ROOT.'include/upload.inc.php';
 
-define('UPLOAD_ERROR_EMPTY_FILE', 0);
+define('UPLOAD_NO_ERROR', 0);
+define('UPLOAD_ERROR_EMPTY_FILE', 8);
 define('UPLOAD_ERROR_FOUND_VIRUS', 1);
 define('UPLOAD_ERROR_SAVE', 2);
 define('UPLOAD_ERROR_MAX_SIZE', 3);
@@ -19,7 +20,7 @@ define('UPLOAD_ERROR_STORAGE', 7);
 
 
 // DEFAULT ERROR
-$error = UPLOAD_ERROR_SERVER_FAIL;
+$error = UPLOAD_NO_ERROR;
 $item_id = -1;
 $owner_id = 0;
 $log = $owner_key = $message = $add_error_message = null;
@@ -28,7 +29,7 @@ $is_web = isset($_POST['progress_id']);
 
 // ERRORS TEXT MESSAGE
 $a_err_msg = array(
-	'получен пустой файл',											// 0
+	'',
 	'файл заражён вирусом',											// 1
 	'сбой при сохранении файла',									// 2
 	'превышен максимально разрешенный размер загружаемого файла',	// 3
@@ -36,6 +37,7 @@ $a_err_msg = array(
 	'сработала зашита от флуда',									// 5
 	'получен запрос без файла',										// 6
 	'ошибка в системе хранения файлов',								// 7
+	'получен пустой файл',											// 0
 	);
 
 
@@ -86,10 +88,13 @@ try {
 	$is_spam = is_spam($file['file_name'], $file['file_size']);
 	$is_adult = is_adult($file['file_name'], $file['file_size']);
 	$hidden = isset($_POST['uploadHidden']) && $_POST['uploadHidden'] == 1;
+	$filepath = $file['file_path'];
 
 	// get filename for FUSE
 	if (!$user['is_guest']) {
 		$up_file_name_fuse = $Upload->getFilenameForFUSE($up_file_name, $user['id']);
+	} else {
+		$up_file_name_fuse = $up_file_name;
 	}
 
 	// PASSWORD
@@ -109,6 +114,10 @@ try {
 	if (!link($filepath, $uploadfile)) {
 		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
 		throw new Exception(UPLOAD_ERROR_SAVE);
+	} else {
+		if (is_file($file['file_path'])) {
+			unlink($file['file_path']);
+		}
 	}
 
 
@@ -144,6 +153,7 @@ try {
 
 	// clear stat cache
 	clear_stat_cache();
+	$error = 0;
 } catch (Exception $e) {
 	if (is_numeric($e->getMessage())) {
 		$error = $e->getMessage();

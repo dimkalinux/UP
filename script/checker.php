@@ -3,6 +3,7 @@ if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
 }
 require UP_ROOT.'functions.inc.php';
+require UP_ROOT.'include/upload.inc.php';
 
 $fix_problems = true;
 $check_size = false;
@@ -22,7 +23,7 @@ if ($datas) {
 		$file_id = $rec['id'];
 		$file = $GLOBALS['upload_dir'].$rec['sub_location'].'/'.$rec['location'];
 		$file_size = $rec['size'];
-		$file_md5 = $rec['md5'];
+		$file_md5 = $rec['hash'];
 		$file_name = $rec['filename'];
 
 		echo ("$file_id\t");
@@ -104,10 +105,11 @@ function checker_md5($file, $db_md5) {
 
 
 function checker_thumbs($file, $filename, $id, $md5) {
-	$server_root = '/srv/www/apache/up/htdocs/';
+	global $server_root;
+
 	if (is_image($filename, $file)) {
-		$small_t = $server_root.'thumbs/'.md5($md5.$id).'.jpg';
-		$large_t = $server_root.'thumbs/large/'.md5($md5.$id).'.jpg';
+		$small_t = $server_root.'thumbs/'.sha1($id).'.jpg';
+		$large_t = $server_root.'thumbs/large/'.sha1($id).'.jpg';
 
 		if (!file_exists ($small_t) || !file_exists ($large_t)) {
 			echo ("\tthumbs: ERR not exists");
@@ -129,7 +131,9 @@ function checker_thumbs($file, $filename, $id, $md5) {
 					}
 				}
 
-				if ($err == 0 && create_thumbs($file, $small_t, $large_t)) {
+				$upload = new Upload();
+
+				if ($err == 0 && $upload->generateThumbs($file, $filename, $id)) {
 					echo "\t FIXED";
 				} else {
 					$GLOBALS['count_problems']++;
