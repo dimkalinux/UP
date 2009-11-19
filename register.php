@@ -189,7 +189,7 @@ $onDOMReady = <<<ZZZ
 	var form = $("form[name='register']");
 	UP.formCheck.register(form);
 
-	form.find("input[required],textarea[required]")
+	$(form).find("input[required],textarea[required]")
 		.change(function () { UP.formCheck.register(form); })
 		.keyup(function () { UP.formCheck.register(form); })
 
@@ -208,7 +208,7 @@ $onDOMReady = <<<ZZZ
 		beforeSubmit: function (formArray, jqForm) {
 			UP.wait.start();
 			$('#wrap').stopTime('checkRegisterFormTimer');
-			form.find("input[type='submit']").attr("disabled", "disabled");
+			$(form).find("input[type='submit']").attr("disabled", "disabled");
 			return true;
 		},
 
@@ -220,15 +220,15 @@ $onDOMReady = <<<ZZZ
 
 		success: function (r) {
 			UP.wait.stop();
-			form.find("input[type='submit']").removeAttr("disabled");
+			$(form).find("input[type='submit']").removeAttr("disabled");
 
 			if (r) {
-				form.find("label").each(function () {
+				$(form).find("label").each(function () {
 					$(this).removeClass('bad').addClass('good');
 				});
 
 				if (parseInt(r.error, 10) === 0) {
-					form.clearForm().resetForm();
+					$(form).clearForm().resetForm();
 					$('#primary').fadeOut(350, function() {
 						$('#primary').html('<div id="status">&nbsp;</div><h2>Поздравляем, регистрация завершена</h2>' +
 								'<p>Спасибо, что потратили время на&nbsp;регистрацию.</p>' +
@@ -244,7 +244,7 @@ $onDOMReady = <<<ZZZ
     					});
 					}
 
-					$(".bad:first").focus();
+					$(form).find(".bad:first").focus();
 					$('#wrap').everyTime(500, 'checkRegisterFormTimer', function () { UP.formCheck.register(form); });
 				}
 			} else {
@@ -259,7 +259,7 @@ $onDOMReady = <<<ZZZ
 	});
 
 	UP.statusMsg.defferedClear();
-	form.find("[required][value='']:first").focus();
+	$(form).find("[required][value='']:first").focus();
 ZZZ;
 
 require UP_ROOT.'footer.php';
