@@ -295,8 +295,7 @@ ZZZ;
 		$owner_key = intval(get_post('t_magic'), 10);
 
 		if (!isset($_POST['t_new_name']) || mb_strlen($_POST['t_new_name']) < 1) {
-			$out = "невозможно переименовать файл";
-			return;
+			throw new Exception('not set new name');
 		} else {
 			$newName = $_POST['t_new_name'];
 		}
@@ -325,7 +324,7 @@ ZZZ;
 				return;
 			}
 		} catch (Exception $e) {
-			parent::exitWithError('невозможно переименовать файл');
+			parent::exitWithError('невозможно переименовать файл: '.$e->getMessage());
 		}
 
 		$out = "невозможно переименовать файл";

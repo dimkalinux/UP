@@ -148,10 +148,10 @@ class Upload {
 	}
 
 
-	public function antivirCheckFileDrWEB($file) {
+	public static function antivirCheckFileDrWEB($file) {
 		$ret = 2;
 
-		if (is_file($file)) {
+		if (file_exists($file)) {
 			$file = escapeshellcmd($file);
 			exec("/opt/drweb/drwebdc -nlocalhost -f '$file'", $output, $ret);
 		}
@@ -159,10 +159,10 @@ class Upload {
 		return $ret;
 	}
 
-	public function antivirCheckFileClam($file) {
-		$ret = 2;
+	public static function antivirCheckFileClam($file) {
+		$ret = ANTIVIR_ERROR;
 
-		if (is_file($file)) {
+		if (file_exists($file)) {
 			$file = escapeshellcmd($file);
 			exec("/usr/bin/clamdscan --no-summary '$file'", $output, $ret);
 		}
@@ -182,7 +182,7 @@ class Upload {
 	public function generateThumbs($uploadfile, $up_file_name, $item_id) {
 		global $thumbs_w, $thumbs_h, $thumbs_preview_w, $thumbs_preview_h, $thumbs_dir;
 
-		if (is_file($uploadfile) && is_image($up_file_name, $uploadfile)) {
+		if (file_exists($uploadfile) && is_image($up_file_name, $uploadfile)) {
 			$key_name = $this->getThumbsFilename($item_id);
 			$thumbs_filename = $thumbs_dir.$key_name;
 			$thumbs_preview_filename = $thumbs_dir.'large/'.$key_name;
@@ -220,11 +220,25 @@ class Upload {
 	}
 
 	public static function makeHash($file) {
-		if (!is_file($file)) {
+		if (!file_exists($file)) {
 			throw new Exception("makeHash: file '$file' not exists");
 		}
 
-		return sha1_file($file);
+		return md5_file($file);
+	}
+
+	public static function makeHashMD5($file) {
+		if (!file_exists($file)) {
+			throw new Exception("makeHash: file '$file' not exists");
+		}
+
+		exec("nice -n 19 /usr/bin/md5sum -b '$file'", $output, $ret);
+		if ($ret == 0) {
+			list($hash,) = split(' ', $output[0]);
+		} else {
+			$hash = FALSE;
+		}
+		return $hash;
 	}
 
 

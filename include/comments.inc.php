@@ -51,20 +51,7 @@ class Comments {
 			// typografy comments
 			$text = $this->typografyComments($text);
 			$db = new DB;
-			// check last poster
-			/*$row = $db->getRow("SELECT id,user_id,message FROM comments WHERE item_id=? ORDER BY id DESC LIMIT 1", $this->item_id);
-			$lastPosterID = ($row === null) ? -1 : $row['user_id'];
-			$lastCommentID = ($row === null) ? -1 : $row['id'];
-			$lastCommentText = ($row === null) ? -1 : $row['message'];
-
-			if ($lastPosterID == $user['id']) {
-				// update prev comments
-				$lastCommentText .= "\n\n$text";
-				$db->query("UPDATE comments SET message=?,date=NOW() WHERE id=? LIMIT 1", $lastCommentText, $lastCommentID);
-				return
-			} else {*/
 			$db->query("INSERT INTO comments VALUES('', ?, ?, NOW(), ?)", $this->item_id, $user['id'], $text);
-			//}
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
@@ -91,6 +78,7 @@ class Comments {
 					$gravatar = new Gravatar($rec['email'], '');
 					$gravatar->size = 40;
 					$gravatar->rating = "G";
+					$gravatar->default = $base_url.'include/identicon.php?size=40&hash='.md5($rec["username"]);
 					$identicon = $gravatar->toHTML();
 
 					$deleteLink = '';
@@ -108,6 +96,57 @@ class Comments {
 					<div class="commentID">$identicon</div>
 					<div class="commentBody">
 						<span class="commentAuthor">$username</span><small>{$date}{$deleteLink}</small><br/>
+						$text
+					</div>
+					<br class="clear"/>
+				</li>
+FMB;
+				}
+			}
+			return $out;
+
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+	}
+
+	public static function getLastCommentList() {
+		global $base_url, $user;
+
+		$out = '';
+
+		try {
+			$db = new DB;
+			$datas = $db->getData("SELECT comments.id,comments.item_id,comments.user_id,date,message,username,email,filename FROM comments LEFT JOIN users ON user_id=users.id LEFT JOIN up ON item_id=up.id ORDER BY id DESC LIMIT 50");
+
+			if ($datas) {
+				$out = '';
+				foreach ($datas as $rec) {
+					$id = $rec['id'];
+					$text = stripslashes($rec['message']);
+					$date = $rec['date'];
+					$username = "<a href=\"{$base_url}user/{$rec['user_id']}/\">{$rec['username']}</a>";
+					$fullFilename = htmlspecialchars_decode(stripslashes($rec['filename']));
+					$coolFilename = get_cool_and_short_filename($fullFilename, 55);
+					$filename = "<a href=\"{$base_url}{$rec['item_id']}/\">$coolFilename</a>";
+
+					$gravatar = new Gravatar($rec['email'], '');
+					$gravatar->size = 40;
+					$gravatar->rating = "G";
+					$gravatar->default = $base_url.'include/identicon.php?size=40&hash='.md5($rec["username"]);
+					$identicon = $gravatar->toHTML();
+
+					$deleteLink = '';
+					if ($user['is_admin']) {
+						$deleteLink = ', <span class="as_js_link" title="Удалить комментарий" onclick="UP.comments.remove('.$id.')">X</span>';
+					}
+
+					$out .= <<<FMB
+				<li id="comment_$id">
+					<div class="commentID">$identicon</div>
+					<div class="commentBody">
+						<span class="commentAuthor">$username</span><small>{$date}{$deleteLink}</small><br/>
+						<div class="commentFilename">$filename</div>
 						$text
 					</div>
 					<br class="clear"/>

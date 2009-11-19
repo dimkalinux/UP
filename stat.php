@@ -15,12 +15,11 @@ if (!$out = $cache->get('up_stats')) {
 	$sum_file_size = format_filesize($row['sum_sizes']);
 
 	// Средние значения
-	$row = $db->getRow("SELECT
-			COUNT(id)/DATEDIFF(MAX(uploaded_date),MIN(uploaded_date)) AS m_upload,
-			SUM(downloads)/DATEDIFF(MAX(uploaded_date),MIN(uploaded_date)) AS m_download FROM up");
-
+	$row = $db->getRow("SELECT COUNT(id)/DATEDIFF(MAX(uploaded_date),MIN(uploaded_date)) AS m_upload FROM up");
 	$m_upload_per_day = (int) $row['m_upload'];
-	$m_download_per_day = (int) $row['m_download'];
+
+	$row = $db->getRow("SELECT COUNT(*) AS n FROM downloads WHERE date >= DATE_SUB(CURDATE(),INTERVAL 1 DAY)");
+	$m_download_per_day = (int) $row['n'];
 
 	$storage = new Storage;
 	$fs = $storage->get_stat();

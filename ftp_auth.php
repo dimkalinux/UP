@@ -47,8 +47,13 @@ do {
 			$gid = intval($ftpGIDBase + $user_id, 10);
 
 			if (is_dir($dir) === FALSE) {
-				break;
+				exec('ls /var/fuse/ >> /dev/null');
+				sleep (1);
+				if (is_dir($dir) === FALSE) {
+					break 2;
+				}
 			}
+
 
 			// IF SYSTEM not BUSY
 			if (getServerLoad() < 1) {
@@ -73,6 +78,8 @@ FMB;
 			break;
 		}
 	} catch (Exception $e) {
+		$log = new Logger;
+		$log->debug("Вход по фтп: exception");
 		exit($out);
 	}
 } while(0);

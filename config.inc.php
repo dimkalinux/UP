@@ -1,6 +1,6 @@
 <?php
 
-define('DEBUG', true);
+define('DEBUG', FALSE);
 
 
 define('MYSQL_ADDRESS', '194.146.132.67');
@@ -81,13 +81,13 @@ $csrfKey = '05dddlaoezz:_=dd';
 $max_file_size = 9000;
 $very_small_file_size = 3;
 $small_file_size = 200;
-$max_file_size_for_upload_antivir_check = 10;
+$max_file_size_for_antivir_check = 800*1048576;
 $maxSPAM_Size = 128*1048576;
 
 
 // FTP access
 $ftpbaseDir = '/var/fuse/';
-$ftpAccessEnabled = FALSE;
+$ftpAccessEnabled = TRUE;
 $ftpUploadRate = 1048576*5;
 $ftpDownloadRate = 1048576*5;
 $ftpRateK = 1.5;
@@ -112,8 +112,8 @@ $cache_timeout_search_complete = 120;
 
 
 // MAKE HASH TIMEOUT
-$makeHashTimeout = 120;
-$makeVirusesTimeout = 120;
+$makeHashTimeout = 60;
+$makeVirusesTimeout = 30;
 
 
 // TIMEOUT SECTION

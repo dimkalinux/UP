@@ -115,15 +115,15 @@ try {
 		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
 		throw new Exception(UPLOAD_ERROR_SAVE);
 	} else {
-		if (is_file($file['file_path'])) {
+		if (file_exists($file['file_path'])) {
 			unlink($file['file_path']);
 		}
 	}
 
 
 	$db = new DB;
-	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', '0', '', '', '', ?, ?, ?, ?)",
-		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, $is_spam, $is_adult, $hidden, $user['id']);
+	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', ?, '0', '', '', '', ?, ?, ?, ?)",
+		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, ANTIVIR_NOT_CHECKED, $is_spam, $is_adult, $hidden, $user['id']);
 
 	// get ITEM_ID
 	$item_id = $db->lastID();
@@ -161,11 +161,11 @@ try {
 		$add_error_message = $e->getMessage();
 	}
 
-	if (isset($uploadfile) && is_file($uploadfile)) {
+	if (isset($uploadfile) && file_exists($uploadfile)) {
 		unlink($uploadfile);
 	}
 
-	if (isset($file['file_path']) && is_file($file['file_path'])) {
+	if (isset($file['file_path']) && file_exists($file['file_path'])) {
 		unlink($file['file_path']);
 	}
 

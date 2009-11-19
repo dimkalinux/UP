@@ -50,7 +50,7 @@ $file_location_on_server = $GLOBALS['upload_dir'].$row['sub_location'].'/'.$row[
 $path = '/'.$row['sub_location'].'/'.$row['location'];
 
 // check is file fysicaly exists on server
-if (!is_file($file_location_on_server)) {
+if (!file_exists($file_location_on_server)) {
 	show_error_message("Файл временно недоступен.<br/>Попробуйте скачать его немного позже.");
 }
 

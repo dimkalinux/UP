@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cd /srv/www/apache/up/htdocs/script/ && nice -n 19 /usr/bin/php ./hasher.php >> /var/log/up_hasher.log

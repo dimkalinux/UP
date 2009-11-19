@@ -127,7 +127,7 @@ h5 { color: #000; font-weight: normal; font-size: 11px; line-height: 11px; margi
 
 h2 em { color: #999 !important; font-style: normal !important; font-size: .75em !important; }
 h3 em { color: #2b2b2b !important; font-style: normal !important; }
-h2 + p, h2 + div.message, h2 + h3, h2 + form, h2 + #serviceTable, h2 + #mapTable  { margin-top: 1em; }
+h2 + p, h2 + div.message, h2 + h3, h2 + form, h2 + #serviceTable, h2 + #mapTable { margin-top: 1em; }
 h2 + ol { margin-top: 1em !important; }
 p + h3 { margin-top: 1em; }
 
@@ -701,9 +701,10 @@ ul.commentList { max-width: 65em !important; padding-left: 1em; }
 .commentList li { padding-bottom: 1em; margin-bottom: 1em !important; border-bottom: solid 1px #eee; }
 .commentMeta { width: 9em !important; }
 .commentAuthor { font-weight: bold; margin-right: .7em; }
+.commentFilename { margin: .2em 0 .3em; }
 .commentText { font-size: .95em; color: #333; overflow: visible; }
 .commentID { float: left; width: 50px; }
-.commentBody { float: right; width: 45em; }
+.commentBody { /*float: right;*/ width: 45em; }
 .commentList img.avatar { border: solid 4px #eee; margin-top: .3em;}
 
 small { font-size: .9em; }
@@ -741,3 +742,4 @@ p.pageDescription { margin-bottom: 1.5em !important; color: #2b2b2b;  }
 
 input.default { font-weight: bold; }
 
+#lastComments { display: block; margin-top: 1.8em !important; }

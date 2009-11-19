@@ -616,7 +616,8 @@ FMB;
 		foreach ($datas as $item) {
 			$item_id = intval ($item['id']);
 			$n = intval ($item['n']);
-			$filename = get_cool_and_short_filename ($item['filename'], 40);
+			$fullFilename = htmlspecialchars_decode(stripslashes($item['filename']));
+			$filename = get_cool_and_short_filename($fullFilename, 55);
 			$type = $item['type'];
 
 			$out .= <<<FMB

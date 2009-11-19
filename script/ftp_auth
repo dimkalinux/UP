@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /srv/www/apache/up/htdocs/
+/usr/bin/php ./ftp_auth.php

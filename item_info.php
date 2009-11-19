@@ -211,6 +211,11 @@ FMB;
 			break;
 	}
 
+	$row_hash = '';
+	if (!empty($hash)) {
+		$row_hash = '<tr><td class="ab">md5-хеш</td><td class="bb">'.$hash.'</td></tr>';
+	}
+
 
 	// DOWNLOAD ROW
 	if ($downloaded < 1) {
@@ -403,6 +408,7 @@ FMB;
 			$flv_block
 			$search_like_block
 			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
+			$row_hash
 			$pass_input
 			$owner_block
 			<tr><td class="ab"></td><td class="bb">	<form method="$form_method" action="$dlink_raw" autocomplete="off"><div id="download_link">$dlink</div></form></td></tr>
@@ -466,12 +472,12 @@ FMB;
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
-				<param name="FlashVars" value="text={$base_url}{$dlink_raw}">
+				<param name="FlashVars" value="text={$dlink_raw}">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$base_url}{$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
-			<input size="35" value="{$base_url}{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
+			<input size="35" value="{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
 		</div>
 	</div>
 	$commentsBlock
