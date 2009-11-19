@@ -428,54 +428,54 @@ FMB;
 		<div id="formBlock">
 			<label for="link">ссылка</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
-				<param name="movie" value="/flash/clippy.swf">
+				<param name="movie" value="{$base_url}flash/clippy.swf">
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
 				<param name="FlashVars" value="text={$base_url}{$item_id}/">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$base_url}{$item_id}/" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="{$base_url}flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$base_url}{$item_id}/" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
 
 			<input size="35" value="{$base_url}{$item_id}" readonly="readonly" type="text" id="link" onclick="this.select()"/>
 
 			<label for="html">для сайта или блога</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
-				<param name="movie" value="/flash/clippy.swf">
+				<param name="movie" value="{$base_url}flash/clippy.swf">
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
 				<param name="FlashVars" value="text=&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="{$base_url}flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
 			<input size="35" value="&lt;a href=&quot;{$base_url}{$item_id}/&quot;&gt;{$filename} — {$filesize_text_plain}&lt;/a&gt;" readonly="readonly" type="text" id="html" onclick="this.select()"/>
 
 			<label for="bbcode">для форума</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
-				<param name="movie" value="/flash/clippy.swf">
+				<param name="movie" value="{$base_url}flash/clippy.swf">
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
 				<param name="FlashVars" value="text=$links_bbcode_raw">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=$links_bbcode_raw" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="{$base_url}flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text=$links_bbcode_raw" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
 			$links_bbcode
 
 			<label for="dlink">прямая ссылка</label>
 			 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" class="clippy" id="clippy" height="14" width="110">
-				<param name="movie" value="/flash/clippy.swf">
+				<param name="movie" value="{$base_url}flash/clippy.swf">
 				<param name="allowScriptAccess" value="always">
 				<param name="quality" value="high">
 				<param name="scale" value="noscale">
 				<param name="FlashVars" value="text={$dlink_raw}">
 				<param name="bgcolor" value="#DFEBF7">
 				<param name="wmode" value="opaque">
-				<embed src="/flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
+				<embed src="{$base_url}flash/clippy.swf" name="clippy" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="text={$dlink_raw}" bgcolor="#DFEBF7" wmode="opaque" height="14" width="110">
 			</object>
 			<input size="35" value="{$dlink_raw}" readonly="readonly" type="text" id="dlink" onclick="this.select()"/>
 		</div>
@@ -525,7 +525,7 @@ ZZZ;
 		error: function () {
 			$(document).stopTime('commentAddWaitTimer');
 			$('#wrap').everyTime(500, 'checkCommentsFormTimer', function () { UP.formCheck.register(form); });
-			$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
+			$("#commentStatus").html('<span type="error">Невозможно добавить комментарий.</span>').show();
 			$(form).find("input[type='submit']").removeAttr("disabled");
 		},
 
@@ -535,17 +535,17 @@ ZZZ;
 
 			if (r) {
 				if (parseInt(r.error, 10) === 0) {
-					form.clearForm().resetForm();
+					$(form).clearForm().resetForm();
 					UP.comments.loadCommentsList($item_id, $owner_id);
 				} else {
 					$("#commentStatus").html('<span type="error">'+r.message+'</span>').show();
 					$(form).find("input[type='submit']").removeAttr("disabled");
 				}
 			} else {
-				$("#commentStatus").html('<span type="error">Невозможно добавить комментарий. Попробуйте позже.</span>').show();
+				$("#commentStatus").html('<span type="error">Невозможно добавить комментарий.</span>').show();
 				$(form).find("input[type='submit']").removeAttr("disabled");
 			}
-			$("[required='1'][value='']:first").focus();
+			$(form).find("[required='1'][value='']:first").focus();
 		}
 	};
 
@@ -572,7 +572,7 @@ FMB;
 
 if ($error === 0) {
 	require UP_ROOT.'header.php';
-	echo ($out);
+	echo $out;
 	require UP_ROOT.'footer.php';
 	exit();
 } else {
