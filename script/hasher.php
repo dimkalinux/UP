@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
@@ -40,6 +40,8 @@ function TryAMakeHash() {
 			}
 		}
 	} catch (Exception $e) {
+		$log = new Logger;
+		$log->error("Сбой хешера: ".$e->getMessage());
 		die($e->getMessage());
 	}
 }

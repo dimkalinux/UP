@@ -161,12 +161,12 @@ try {
 		$add_error_message = $e->getMessage();
 	}
 
-	if (isset($uploadfile) && file_exists($uploadfile)) {
-		unlink($uploadfile);
+	if (isset($uploadfile)) {
+		safeUnlink($uploadfile);
 	}
 
-	if (isset($file['file_path']) && file_exists($file['file_path'])) {
-		unlink($file['file_path']);
+	if (isset($file['file_path'])) {
+		safeUnlink($file['file_path']);
 	}
 
 	if (isset($a_err_msg[$error])) {
