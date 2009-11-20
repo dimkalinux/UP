@@ -155,7 +155,7 @@ $thumbs_preview_h = 768;
 
 
 // GOOGLE ANALYTICS SECTION
-$googleAnalyticsCode = '';
+$googleAnalyticsCode = 'UA-6106025-1';
 
 // SEARCH
 $searchCompleteMaxResults = 12;

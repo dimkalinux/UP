@@ -17,12 +17,14 @@ if ($datas) {
 
 	foreach ($datas as $rec) {
 		$file = $GLOBALS['upload_dir'].$rec['sub_location'].'/'.$rec['location'];
-		if (is_file($file)) {
+		if (file_exists($file)) {
 			unlink($file);
 		}
 
-		$thumbs = 'thumbs/'.md5 ($rec['location']).'.png';
-		is_file ($thumbs) and unlink ($thumbs);
+		$thumbs = 'thumbs/'.md5($rec['location']).'.png';
+		if (is_file($thumbs)) {
+			unlink ($thumbs);
+		}
 	}
 
 	unset($datas);

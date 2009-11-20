@@ -78,7 +78,7 @@ class User {
 
 		try {
 			$db = new DB;
-			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 LIMIT 5000", $user_id);
+			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 ORDER BY id DESC LIMIT 5000", $user_id);
 		} catch (Exception $e) {
 			error($e->getMessage());
 		}

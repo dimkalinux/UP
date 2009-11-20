@@ -5,10 +5,10 @@ if (!defined('UP_ROOT')) {
 require UP_ROOT.'functions.inc.php';
 require UP_ROOT.'include/upload.inc.php';
 
-$fix_problems = true;
+$fix_problems = false;
 $check_size = false;
 $check_md5 = false;
-$check_thumbs = true;
+$check_thumbs = false;
 //
 $count_problems = 0;
 $count_problems_fixed = 0;

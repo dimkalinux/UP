@@ -10,7 +10,7 @@ class Upload {
 	private function generatePathname($storagepath='') {
 		if (mb_strlen($storagepath) > 0) {
 			//we have to check so that path doesn't exist already...
-			$not_unique = true;
+			$not_unique = TRUE;
 
 			while ($not_unique) {
 				$newdir = $this->generatePathname();
@@ -19,7 +19,7 @@ class Upload {
 				}
 			}
 		} else {
-			return mb_substr(sha1(time().'24111988'), 0, 32);
+			return mb_substr(sha1(time().'24111988'), 0, 40);
 		}
 	}
 
@@ -27,9 +27,9 @@ class Upload {
 	public function generateFilename($storagepath, $messagelenght=0, $filesize=0) {
 		clearstatcache();
 
-		$not_unique = true;
+		$not_unique = TRUE;
 		while ($not_unique) {
-			$newfile = sha1($this->generatePathname().$messagelenght.$filesize.'24111988').'.attach';
+			$newfile = sha1($this->generatePathname().$messagelenght.$filesize.'24111988');
 
 			if (!is_file($storagepath.$newfile)) {
 				return $newfile;

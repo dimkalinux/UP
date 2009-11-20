@@ -358,10 +358,10 @@ imagecopy($identicon,$side,$spriteZ*2,$spriteZ,0,0,$spriteZ,$spriteZ);
 $center=getcenter($xsh,$cfr,$cfg,$cfb,$sfr,$sfg,$sfb,$xbg);
 imagecopy($identicon,$center,$spriteZ,$spriteZ,0,0,$spriteZ,$spriteZ);
 
-// $identicon=imagerotate($identicon,$angle,$bg);
+//$identicon=imagerotate($identicon,$angle,$bg);
 
 /* make white transparent */
-imagecolortransparent($identicon,$bg);
+//imagecolortransparent($identicon,$bg);
 
 /* create blank image according to specified dimensions */
 $resized=imagecreatetruecolor($_GET["size"],$_GET["size"]);
@@ -375,9 +375,11 @@ imagefilledrectangle($resized,0,0,$_GET["size"],$_GET["size"],$bg);
 imagecopyresampled($resized,$identicon,0,0,(imagesx($identicon)-$spriteZ*3)/2,(imagesx($identicon)-$spriteZ*3)/2,$_GET["size"],$_GET["size"],$spriteZ*3,$spriteZ*3);
 
 /* make white transparent */
-imagecolortransparent($resized,$bg);
+//imagecolortransparent($resized,$bg);
 
 /* and finally, send to standard output */
+header("Cache-Control: public, max-age=315360000");
+header("Expires: Mon, 01 Jul 2019 00:00:00");
 header("Content-Type: image/png");
 imagepng($resized);
 

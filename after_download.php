@@ -11,14 +11,12 @@ $uri = $_REQUEST['uri'];
 list(,,$item_id,) = split('/', $uri);
 $item_id = intval($item_id, 10);
 
-if ($item_id < 1) {
-	$log = new Logger;
-	$log->error("After download item_id < 1: $uri");
-	return;
-}
-
 // get info
 try {
+	if ($item_id < 1) {
+		throw new Exception("item_id < 1: $uri");
+	}
+
 	$db = new DB;
 	$row = $db->getRow("SELECT size,adult,hidden FROM up WHERE id=? LIMIT 1", $item_id);
 	$db_size = intval($row['size'], 10);
@@ -40,7 +38,6 @@ try {
 
 	// Update downloads table
 	$db->query("INSERT INTO downloads VALUES(?, NOW())", $item_id);
-
 } catch(Exception $e) {
 	$log = new Logger;
 	$log->error("After download error: ".$e->getMessage());
