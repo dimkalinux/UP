@@ -9,7 +9,6 @@ require UP_ROOT.'include/PasswordHash.php';
 require UP_ROOT.'include/upload.inc.php';
 
 define('UPLOAD_NO_ERROR', 0);
-define('UPLOAD_ERROR_EMPTY_FILE', 8);
 define('UPLOAD_ERROR_FOUND_VIRUS', 1);
 define('UPLOAD_ERROR_SAVE', 2);
 define('UPLOAD_ERROR_MAX_SIZE', 3);
@@ -17,7 +16,7 @@ define('UPLOAD_ERROR_SERVER_FAIL', 4);
 define('UPLOAD_ERROR_FLOOD', 5);
 define('UPLOAD_ERROR_NO_FILE', 6);
 define('UPLOAD_ERROR_STORAGE', 7);
-
+define('UPLOAD_ERROR_EMPTY_FILE', 8);
 
 // DEFAULT ERROR
 $error = UPLOAD_NO_ERROR;
@@ -37,7 +36,7 @@ $a_err_msg = array(
 	'сработала зашита от флуда',									// 5
 	'получен запрос без файла',										// 6
 	'ошибка в системе хранения файлов',								// 7
-	'получен пустой файл',											// 0
+	'получен пустой файл',											// 8
 	);
 
 
@@ -66,11 +65,17 @@ try {
 	// CHECK MIN FILESIZE
 	if ($file['file_size'] < 1) {
 		$add_error_message .= 'размер: '.$file['file_size'].' имя: '.$file['file_name'];
+		if (file_exists($file['file_path'])) {
+			$add_error_message .= ' real size: '.filesize($file['file_path']);
+		} else {
+			$add_error_message .= ' not exists';
+		}
+
 		throw new Exception(UPLOAD_ERROR_EMPTY_FILE);
 	}
 
 	// CHECK MAX FILESIZE
-	if ($file['file_size'] > ($max_file_size*1048576)) {
+	if ($file['file_size'] > ($max_file_size * 1048576)) {
 		throw new Exception(UPLOAD_ERROR_MAX_SIZE);
 	}
 
@@ -115,9 +120,7 @@ try {
 		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
 		throw new Exception(UPLOAD_ERROR_SAVE);
 	} else {
-		if (file_exists($file['file_path'])) {
-			unlink($file['file_path']);
-		}
+		safeUnlink($file['file_path']);
 	}
 
 
