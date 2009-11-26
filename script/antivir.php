@@ -1,4 +1,4 @@
-<?php
+<?
 
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
@@ -47,9 +47,8 @@ function TryACheckForAVirus() {
 		}
 	} catch (Exception $e) {
 		$log = new Logger;
-		$log->error("Сбой антивируса: ".$e->getMessage());
-
-		die($e->getMessage());
+		$log->error('Антивир: '.$e->getMessage());
+		echo $e->getMessage();
 	}
 }
 

@@ -520,7 +520,7 @@ function makeSearch($req, $fooltext=FALSE) {
 		foreach ($datas as $rec) {
 			$item_id = $rec['id'];
 			$fullFilename = htmlspecialchars_decode(stripslashes($rec['filename']));
-			$filename = get_cool_and_short_filename($fullFilename, 55);
+			$filename = get_cool_and_short_filename($fullFilename, 65);
 			$filesize_text = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$file_date = $rec['uploaded_date'];

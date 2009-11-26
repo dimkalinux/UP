@@ -1,15 +1,15 @@
-<?
+<?php
 
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
 }
 require UP_ROOT.'functions.inc.php';
 
+
 try {
 	$db = new DB;
 
-	//	1. Realy remove deleted files from filesystem
-	$datas = $db->getData("SELECT id,sub_location,location,deleted_date FROM up WHERE deleted='1' AND deleted_date < NOW()-INTERVAL $undelete_interval DAY");
+	$datas = $db->getData("SELECT id,sub_location,location,deleted_date FROM up WHERE deleted='1' AND deleted_date < NOW()-interval $undelete_interval day");
 
 	if ($datas) {
 		clearstatcache();
@@ -29,20 +29,22 @@ try {
 		unset($datas);
 	}
 
-
-// 2.
 	$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE deleted='0'");
 	if ($datas) {
 		array_walk($datas, 'remove_files_callback');
 	}
 } catch (Exception $e) {
 	$log = new Logger;
-	$log->error("Сбой модуля очистки: ".$e->getMessage());
+	$log->error("Cleaner: ".$e->getMessage());
 }
+
+clear_stat_cache ();
+exit();
+
 
 function remove_files_callback($item, $key) {
 	global $db;
-	$item_id = intval($item['id']);
+	$item_id = intval($item['id'], 10);
 	$size = $item['size'];
 	$ndi = $item['NDI'];
 	$downloaded = $item['downloads'];
