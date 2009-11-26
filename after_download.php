@@ -1,4 +1,5 @@
-<?
+<?php
+
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -29,18 +30,16 @@ try {
 
 	if (($geo === 'lds') || ($geo === 'iteam')) {
 		$db->query("UPDATE up SET last_downloaded_date=NOW(), downloads=downloads+1 WHERE id=? LIMIT 1", $item_id);
+		$db->query("INSERT INTO downloads VALUES(?, NOW())", $item_id);
 	}
 
 	if (!$is_adult && !$is_hidden) {
 		$db->query("DELETE FROM dnow WHERE ld < (NOW() - INTERVAL 2 HOUR)");
 		$db->query("INSERT INTO dnow VALUES(?, NOW(), 1, 'down') ON DUPLICATE KEY UPDATE ld=NOW(), n=n+1", $item_id);
 	}
-
-	// Update downloads table
-	$db->query("INSERT INTO downloads VALUES(?, NOW())", $item_id);
 } catch(Exception $e) {
 	$log = new Logger;
-	$log->error("After download error: ".$e->getMessage());
+	$log->error("After download: ".$e->getMessage());
 }
 
 ?>
