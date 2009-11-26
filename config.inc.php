@@ -83,7 +83,7 @@ $csrfKey = '05dddlaoezz:_=dd';
 // FILES SIZE SECTION
 $max_file_size = 9000;
 $very_small_file_size = 3;
-$small_file_size = 200;
+$small_file_size = 400;
 $max_file_size_for_antivir_check = 800*1048576;
 $maxSPAM_Size = 128*1048576;
 
