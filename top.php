@@ -145,11 +145,15 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
+			$query = "SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
 					AND filename REGEXP BINARY '.mp3$'
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page";
@@ -161,11 +165,15 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
+			$query = "SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
 					AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page";
@@ -177,14 +185,18 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
-					AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
+						AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
+						ORDER BY $order_by DESC
+						LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'image':
@@ -193,11 +205,15 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
+			$query = "SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
 					AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page";
@@ -209,11 +225,15 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
+			$query = "SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
 					AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
 					ORDER BY $order_by DESC
 					LIMIT $start_from,$items_per_page";
@@ -251,11 +271,15 @@ function top_get($type, $page, $link_base) {
 		if (isset($query)) {
 			$datas = $db->getData($query);
 		} else {
-			$datas = $db->getData("SELECT * FROM up
-					WHERE spam='0'
-					AND deleted='0'
-					AND hidden='0'
-					AND adult='0'
+			$datas = $db->getData("SELECT *,
+						d.dc AS download_count
+						FROM ((SELECT item_id, COUNT(*) AS dc
+						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
+						d RIGHT JOIN up u ON (d.item_id=u.id))
+						WHERE spam='0'
+						AND deleted='0'
+						AND hidden='0'
+						AND adult='0'
 					AND size>$minFileSizeForTOP
 					AND password=''
 					ORDER BY $order_by DESC
@@ -297,6 +321,7 @@ ZZZ;
 			}
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
+			$hotDownloads = intval($rec['download_count'], 10);
 			$file_date = prettyDate($rec['uploaded_date']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
 			$spam = $rec['spam'];
@@ -319,12 +344,12 @@ ZZZ;
 			}
 
 			$popularLabel = '';
-			if ($downloaded > 1000) {
-					$popularLabel = '<span class="popularLabel" title="Более 1000 скачиваний">+1k</span>';
-			} else if ($downloaded > 100) {
-					$popularLabel = '<span class="popularLabel" title="Более 100 скачиваний">+100</span>';
-			} else if ($downloaded > 20) {
-					$popularLabel = '<span class="popularLabel" title="Более 20 скачиваний">+20</span>';
+			if ($hotDownloads > 1000) {
+				$popularLabel = '<span class="popularLabel" title="Более 1000 скачиваний за неделю">+1k</span>';
+			} else if ($hotDownloads > 100) {
+				$popularLabel = '<span class="popularLabel" title="Более 100 скачиваний за неделю">+100</span>';
+			} else if ($hotDownloads > 20) {
+				$popularLabel = '<span class="popularLabel" title="Более 20 скачиваний за неделю">+20</span>';
 			}
 
 			$blocks .= <<<ZZZ

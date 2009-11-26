@@ -18,8 +18,8 @@ if (!$out = $cache->get('up_stats')) {
 	$row = $db->getRow("SELECT COUNT(id)/DATEDIFF(MAX(uploaded_date),MIN(uploaded_date)) AS m_upload FROM up");
 	$m_upload_per_day = (int) $row['m_upload'];
 
-	$row = $db->getRow("SELECT COUNT(*) AS n FROM downloads WHERE date >= DATE_SUB(CURDATE(),INTERVAL 1 DAY)");
-	$m_download_per_day = (int) $row['n'];
+	$row = $db->getRow("SELECT COUNT(*)/7 AS n FROM downloads WHERE date >= DATE_SUB(CURDATE(),INTERVAL 7 DAY)");
+	$m_download_per_day = intval($row['n'], 10);
 
 	$storage = new Storage;
 	$fs = $storage->get_stat();
