@@ -16,13 +16,13 @@ try {
 	$storageAll = format_filesize($st_stat['totalSpace']);
 	$storageUse = format_filesize($st_stat['totalUseSpace']);
 	$storageFree = format_filesize($st_stat['totalFreeSpace']);
-	$storagePercentFree = round($fs['totalFreeSpace']/$fs['totalSpace'], 2)*100;
-	$storagePercentUse = round($fs['totalUseSpace']/$fs['totalSpace'], 2)*100;
+	$storagePercentFree = round($st_stat['totalFreeSpace'] / $st_stat['totalSpace'], 2)*100;
+	$storagePercentUse = round($st_stat['totalUseSpace'] / $st_stat['totalSpace'], 2)*100;
 } catch (Exception $e) {
 	error($e->getMessage());
 }
 
-$out = <<<ZZZ
+$out = <<<FMB
 	<div id="status">&nbsp;</div>
 	<h2>Storage</h2>
 	<table class="t1" id="search_files_table">
@@ -48,19 +48,17 @@ $out = <<<ZZZ
 	</tr>
 	</thead>
 	<tbody>
-ZZZ;
+FMB;
 
 array_walk($st_list, 'storage_list_callback', &$out);
 
-$out .= <<<ZZZ
+$out .= <<<FMB
 	</tbody>
 	</table>
-ZZZ;
+FMB;
 
 
-require UP_ROOT.'header.php';
-echo($out);
-require UP_ROOT.'footer.php';
+printPage($out);
 exit();
 
 
