@@ -125,12 +125,11 @@ try {
 
 
 	$db = new DB;
-	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', ?, '0', '', '', '', ?, ?, ?, ?)",
+	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', ?, '0', '', '', '', ?, ?, ?, ?)",
 		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, ANTIVIR_NOT_CHECKED, $is_spam, $is_adult, $hidden, $user['id']);
 
 	// get ITEM_ID
 	$item_id = $db->lastID();
-
 
 	// COMMENT/DESCRIPTION
 	if (isset($_POST['uploadDesc']) && mb_strlen(trim($_POST['uploadDesc']) > 1)) {
