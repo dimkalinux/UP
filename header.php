@@ -47,7 +47,7 @@ try {
 	if (!$user['is_guest']) {
 		$user_login	= $user['login'];
 		$logDiv = <<<FMB
-	Вы зашли как&nbsp;&nbsp;<a href="{$base_url}profile/" title="Зайти к себе в профиль">$user_login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}files/" id="mainMenuMyFiles" title="Перейти к вашим файлам">Мои файлы</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}logout/" title="Выйти из системы">Выйти</a></div>
+	Вы зашли как&nbsp;&nbsp;<a href="{$base_url}profile/" title="Зайти к себе в профиль">$user_login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}files/my/" id="mainMenuMyFiles" title="Перейти к вашим файлам">Мои файлы</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{$base_url}logout/" title="Выйти из системы">Выйти</a></div>
 FMB;
 	}
 } catch(Exception $e) {
@@ -90,30 +90,47 @@ FMB;
 
 	$myFilesMenuEntry = '';
 	if (!$user['is_guest']) {
-		$myFilesMenuEntry = '<a href="/files/" class="item_line">Мои файлы</a>';
+		$myFilesMenuEntry = '<a href="/files/my/" class="item_line">Мои файлы</a>';
 	}
 
 	$filelistMenu = <<<FMB
 	<li>
 		<span class="head_menu">
-			<a href="{$base_url}top/new/">Список файлов</a>
+			<a href="{$base_url}files/new/">Список файлов</a>
 			<img src="$menuArrow" width="18" height="15" class="arrow" />
 		</span>
  		<div class="sub_menu">
-	       	<a href="{$base_url}top/new/">Cвежие</a>
-			<a href="{$base_url}top/size/">Большие</a>
-			<a href="{$base_url}top/popular/">Популярные</a>
-			<a href="{$base_url}top/video/" class="item_line">Видео</a>
-			<a href="{$base_url}top/mp3/">Музыка</a>
-			<a href="{$base_url}top/archive/">Архивы</a>
-			<a href="{$base_url}top/photo/">Картинки</a>
-			<a href="{$base_url}top/image/">Образы дисков</a>
+	       	<a href="{$base_url}files/new/">Cвежие</a>
+			<a href="{$base_url}files/size/">Большие</a>
+			<a href="{$base_url}files/popular/">Популярные</a>
+			<a href="{$base_url}files/video/" class="item_line">Видео</a>
+			<a href="{$base_url}files/mp3/">Музыка</a>
+			<a href="{$base_url}files/archive/">Архивы</a>
+			<a href="{$base_url}files/photo/">Картинки</a>
+			<a href="{$base_url}files/image/">Образы дисков</a>
 			<a href="{$base_url}on-air/" class="item_line">Прямой эфир</a>
-			<a href="{$base_url}spam/" class="item_line">Спам</a>
+			<a href="{$base_url}files/spam/" class="item_line">Спам</a>
 			$myFilesMenuEntry
       	</div>
 	</li>
 FMB;
+
+	$topMenu = <<<FMB
+	<li>
+		<span class="head_menu">
+			<a href="{$base_url}top/">Топ файлов</a>
+			<img src="$menuArrow" width="18" height="15" class="arrow" />
+		</span>
+ 		<div class="sub_menu">
+			<a href="{$base_url}top/video/">Видео</a>
+			<a href="{$base_url}top/mp3/">Музыка</a>
+			<a href="{$base_url}top/archive/">Архивы</a>
+			<a href="{$base_url}top/photo/">Картинки</a>
+			<a href="{$base_url}top/image/">Образы дисков</a>
+      	</div>
+	</li>
+FMB;
+
 
 	$serviceMenu = <<<FMB
 	<li>
@@ -163,6 +180,7 @@ FMB;
 				$mainMenu
 				$projectMenu
 				$filelistMenu
+				$topMenu
 				$serviceMenu
 				$adminMenu
 				$searchMenu
