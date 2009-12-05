@@ -145,18 +145,9 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.mp3$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.mp3$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'video':
@@ -165,18 +156,9 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'archive':
@@ -185,18 +167,9 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
-						ORDER BY $order_by DESC
-						LIMIT $start_from,$items_per_page";
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'image':
@@ -205,18 +178,9 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'photo':
@@ -225,18 +189,9 @@ function top_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 
@@ -268,23 +223,13 @@ function top_get($type, $page, $link_base) {
 
 
 	try {
-		if (isset($query)) {
-			$datas = $db->getData($query);
-		} else {
-			$datas = $db->getData("SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND size>$minFileSizeForTOP
-					AND password=''
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page");
+		if (!isset($query)) {
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND size > $minFileSizeForTOP
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 		}
+
+		$datas = $db->getData($query);
 	} catch (Exception $e) {
 		throw new Exception($e->getMessage());
 	}
@@ -321,21 +266,19 @@ ZZZ;
 			}
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
-			$hotDownloads = intval($rec['download_count'], 10);
+			$hotDownloads = intval($rec['hot_downloads'], 10);
 			$file_date = prettyDate($rec['uploaded_date']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
 			$spam = $rec['spam'];
 
+			$spam_class = "";
 			if ($spam == 1) {
-				$spam_class="spam";
-			} else {
-				$spam_class="zz";
+				$spam_class = "spam";
 			}
 
+			$admin_td_row = '';
 			if ($admin) {
 				$admin_td_row = '<td class="center"><input type="checkbox" value="1" id="item_cb_'.$item_id.'"/></td>';
-			} else {
-				$admin_td_row = '';
 			}
 
 
@@ -375,7 +318,7 @@ ZZZ;
 		</table>
 ZZZ;
 	} else {
- 		$blocks = '<div id="status">&nbsp;</div><h2>Уппс!</h2><p>Я пустая страница.</p>';
+ 		$blocks = '<div id="status">&nbsp;</div><h2>Список файлов</h2><p>Файлы отсутсвуют.</p>';
 	}
 
 	return $blocks;

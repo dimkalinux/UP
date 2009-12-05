@@ -1,5 +1,4 @@
-<?php
-
+<?
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
@@ -28,8 +27,12 @@ try {
 		return;
 	}
 
+	$rec = $db->getRow("SELECT COUNT(*) AS dc FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) and item_id=?", $item_id);
+	$numHotDownloads = intval($rec['dc'], 10);
+
 	if (($geo === 'lds') || ($geo === 'iteam')) {
-		$db->query("UPDATE up SET last_downloaded_date=NOW(), downloads=downloads+1 WHERE id=? LIMIT 1", $item_id);
+		$db->query("UPDATE up SET last_downloaded_date=NOW(), downloads=downloads+1, hot_downloads=? WHERE id=? LIMIT 1", $numHotDownloads, $item_id);
+			// Update downloads table
 		$db->query("INSERT INTO downloads VALUES(?, NOW())", $item_id);
 	}
 
@@ -39,7 +42,7 @@ try {
 	}
 } catch(Exception $e) {
 	$log = new Logger;
-	$log->error("After download: ".$e->getMessage());
+	$log->error("After download error: ".$e->getMessage());
 }
 
 ?>
