@@ -61,11 +61,11 @@ class DB {
 
 
 	public function lastID() {
-		return ($this->link) ? @mysqli_insert_id($this->link) : false;
+		return ($this->link) ? @mysqli_insert_id($this->link) : FALSE;
 	}
 
 	public function affected() {
-		return ($this->link) ? @mysqli_affected_rows($this->link) : false;
+		return ($this->link) ? @mysqli_affected_rows($this->link) : FALSE;
 	}
 
 
@@ -81,7 +81,7 @@ class DB {
 
 			if (!$silent) {
 				$log = new Logger;
-				$log->debug("DB query failed: '$sql'");
+				$log->error("Database: '$sql'");
 
 				throw new Exception('Ошибка базы данных: «'.$err.'»');
 			}
@@ -112,7 +112,7 @@ class DB {
 
 			return $row;
 		} else {
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -127,9 +127,9 @@ class DB {
 			}
 			// free query results
 			$this->freeResult();
-			return (count($datas) > 0) ? $datas : false;
+			return (count($datas) > 0) ? $datas : FALSE;
 		} else {
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -143,7 +143,7 @@ class DB {
 			$this->freeResult();
 			return $num;
 		} else {
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -186,18 +186,14 @@ class DB {
 	}
 
 	private function freeResult() {
-		return ($this->query_result) ? @mysqli_free_result($this->query_result) : false;
+		return ($this->query_result) ? @mysqli_free_result($this->query_result) : FALSE;
 	}
 
 	private function close() {
 		if ($this->link) {
-			/*if ($this->query_result) {
-				@mysqli_free_result($this->query_result);
-			}*/
-
 			return @mysqli_close($this->link);
 		} else {
-			return false;
+			return FALSE;
 		}
 	}
 }

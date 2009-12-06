@@ -743,3 +743,7 @@ p.pageDescription { margin-bottom: 1.5em !important; color: #2b2b2b;  }
 input.default { font-weight: bold; }
 
 #lastComments { display: block; margin-top: 1.8em !important; }
+
+.logs_error td { color: red; }
+.logs_warn td { color: #F88E24; }
+.logs_debug td { color: #999; }

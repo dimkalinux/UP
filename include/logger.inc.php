@@ -22,7 +22,7 @@ class Logger {
 	}
 
 	public function debug($message) {
-		if (DEBUG === true) {
+		if (DEBUG === TRUE) {
 			$this->log('debug', $message);
 		}
 	}
@@ -41,13 +41,9 @@ class Logger {
 			return;
 		}
 
-		if ($message && mb_strlen($message) > 0) {
+		if (!empty($message)) {
 			$message = mb_substr($message, 0, 2048);
-
-			if (!$this->db->silentQuery("INSERT INTO `logs` VALUES('', NOW(), ?, ?)", $type, $message)) {
-				// try log to file
-				return;
-			}
+			$this->db->silentQuery("INSERT INTO `logs` VALUES('', NOW(), ?, ?)", $type, $message);
 		}
 	}
 }
