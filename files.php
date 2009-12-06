@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
@@ -62,7 +62,7 @@ if ($user['is_admin']) {
 		$onDOMReady = 'UP.admin.cbStuffStart();';
 }
 require UP_ROOT.'footer.php';
-exit ();
+exit();
 
 
 function files_get($type, $page, $link_base) {
@@ -77,9 +77,9 @@ function files_get($type, $page, $link_base) {
 
 	try {
 		$db = new DB;
-		$res = $db->getRow("SELECT COUNT(*) as num FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND size>1048576");
+		$res = $db->getRow("SELECT COUNT(*) as num FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0'");
 	} catch (Exception $e) {
-		throw new Exception($e->getMessage());
+		error($e->getMessage());
 	}
 
 	$num_items = $res['num'];
@@ -104,10 +104,10 @@ function files_get($type, $page, $link_base) {
 
 	$page_links = '<ul class="page_links" id="page_links">'.$back_page.'<span class="ctrl_links">&nbsp;'.$page.'/'.$num_pages.'</span>'.$next_page.'</ul>';
 
-	$th_size = '<th class="size"><a href="/files/size/">Размер</a></th>';
-	$th_name = '<th class="name"><a href="/files/name/">Имя файла</a></th>';
-	$th_downloads = '<th class="download"><a href="/files/popular/">Скачан</a></th>';
-	$th_date = '<th class="time"><a href="/files/new/">Время</a></th>';
+	$th_size = '<th class="size"><a href="/top/size/">Размер</a></th>';
+	$th_name = '<th class="name"><a href="/top/name/">Имя файла</a></th>';
+	$th_downloads = '<th class="download"><a href="/top/popular/">Скачан</a></th>';
+	$th_date = '<th class="time"><a href="/top/new/">Время</a></th>';
 
 	$td_date_class = $td_name_class = $td_size_class = $td_downloads_class = '';
 	$admin_th_row = $admin_td_row = $admin_actions_block = '';
@@ -116,7 +116,6 @@ function files_get($type, $page, $link_base) {
 
 	switch ($type) {
 		case 'new':
-			$cache_id = 'top_new';
 			$header = 'Список&nbsp;свежих файлов';
 			$th_date = '<th class="time current">Время</th>';
 			$td_date_class = "current";
@@ -124,7 +123,6 @@ function files_get($type, $page, $link_base) {
 			break;
 
 		case 'size':
-			$cache_id = 'top_size';
 			$header = 'Список&nbsp;больших файлов';
 			$th_size = '<th class="size current">Размер</th>';
 			$td_size_class = "current";
@@ -132,7 +130,6 @@ function files_get($type, $page, $link_base) {
 			break;
 
 		case 'name':
-			$cache_id = 'top_name';
 			$header = 'Сортировка:&nbsp;имя';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
@@ -140,109 +137,58 @@ function files_get($type, $page, $link_base) {
 			break;
 
 		case 'mp3':
-			$cache_id = 'top_mp3';
 			$header = 'MP3';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.mp3$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.mp3$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'video':
-			$cache_id = 'top_video';
 			$header = 'Видео';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'archive':
-			$cache_id = 'top_archive';
 			$header = 'Архивы';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
-						ORDER BY $order_by DESC
-						LIMIT $start_from,$items_per_page";
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'image':
-			$cache_id = 'top_image';
 			$header = 'Образы';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 		case 'photo':
-			$cache_id = 'top_pic';
 			$header = 'Картинки';
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page";
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
 
 
 		case 'popular':
 		default:
-			$cache_id = 'top_top';
 			$header = '<em>Список</em>&nbsp;популярных файлов';
 			$th_downloads = '<th class="download current">Скачан</th>';
 			$td_downloads_class = "current";
@@ -268,25 +214,14 @@ function files_get($type, $page, $link_base) {
 
 
 	try {
-		if (isset($query)) {
-			$datas = $db->getData($query);
-		} else {
-			$datas = $db->getData("SELECT *,
-						d.dc AS download_count
-						FROM ((SELECT item_id, COUNT(*) AS dc
-						FROM downloads WHERE (date > (NOW()-INTERVAL 1 WEEK)) GROUP BY item_id)
-						d RIGHT JOIN up u ON (d.item_id=u.id))
-						WHERE spam='0'
-						AND deleted='0'
-						AND hidden='0'
-						AND adult='0'
-					AND size>$minFileSizeForTOP
-					AND password=''
-					ORDER BY $order_by DESC
-					LIMIT $start_from,$items_per_page");
+		if (!isset($query)) {
+			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 		}
+
+		$datas = $db->getData($query);
 	} catch (Exception $e) {
-		throw new Exception($e->getMessage());
+		error($e->getMessage());
 	}
 
 
@@ -321,15 +256,14 @@ ZZZ;
 			}
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
-			$hotDownloads = intval($rec['download_count'], 10);
+			$hotDownloads = intval($rec['hot_downloads'], 10);
 			$file_date = prettyDate($rec['uploaded_date']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
 			$spam = $rec['spam'];
 
+			$spam_class = "";
 			if ($spam == 1) {
-				$spam_class="spam";
-			} else {
-				$spam_class="zz";
+				$spam_class = "spam";
 			}
 
 			$admin_td_row = '';
@@ -352,7 +286,7 @@ ZZZ;
 			}
 
 			$blocks .= <<<ZZZ
-		<tr id="row_item_{$rec['id']}" class="row_item">
+		<tr id="row_item_{$item_id}" class="row_item">
 			$admin_td_row
 			<td class="size $td_size_class">$filesize</td>
 			<td id="cell_item_{$rec['id']}" class="name $td_name_class" $filenameTitle>$popularLabel <a href="/{$rec['id']}/">${filename}</a></td>
@@ -374,7 +308,7 @@ ZZZ;
 		</table>
 ZZZ;
 	} else {
- 		$blocks = '<div id="status">&nbsp;</div><h2>Уппс!</h2><p>Я пустая страница.</p>';
+ 		$blocks = '<div id="status">&nbsp;</div><h2>Список файлов</h2><p>Файлы отсутствуют.</p>';
 	}
 
 	return $blocks;
