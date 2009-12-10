@@ -1,0 +1,12 @@
+Для работы сервиса необходимо:
+ - UNIX like OS
+ - apache
+ - mysql5
+ - nginx
+ - nginx_upload_module
+ - nginx_upload_progress_module
+ - memcached
+ - PHP 5 with JSON, Memcached, MySQLi
+
+ Для проверки файлов антивирусом:
+  - clamav
