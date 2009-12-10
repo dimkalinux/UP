@@ -409,9 +409,11 @@ FMB;
 			$search_like_block
 			<tr><td class="ab">антивирус</td><td class="bb">$antivir_check</td></tr>
 			$row_hash
+			<form method="$form_method" action="$dlink_raw" autocomplete="off">
 			$pass_input
 			$owner_block
-			<tr><td class="ab"></td><td class="bb">	<form method="$form_method" action="$dlink_raw" autocomplete="off"><div id="download_link">$dlink</div></form></td></tr>
+			<tr><td class="ab"></td><td class="bb"><div id="download_link">$dlink</div></td></tr>
+			</form>
 			<tr>
 				<td class="ab"></td>
 				<td class="bb">
