@@ -59,10 +59,9 @@ if (!$out = $cache->get('up_stats')) {
 				<tr><td class="ab">Свободно:</td><td class="last">$storageFree</td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
 
-				<tr><td class="ab">Загрузок на сервер в день:</td><td class="last">$m_upload_per_day</td></tr>
-				<tr><td class="ab">Скачиваний в день:</td><td class="last">$m_download_per_day</td></tr>
+				<tr><td class="ab">Загрузок в&nbsp;день:</td><td class="last">$m_upload_per_day</td></tr>
+				<tr><td class="ab">Скачиваний в&nbsp;день:</td><td class="last">$m_download_per_day</td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
-
 
 				<tr><td class="ab">Пользователей:</td><td class="last">$numUsers</td></tr>
 
