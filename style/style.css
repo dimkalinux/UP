@@ -171,7 +171,7 @@ input[type=password] { min-width: 12.5em; }
 table { border-collapse: collapse; }
 td { vertical-align: top; }
 #top_files_table, #search_files_table, #myFilesTable { width: 90%; margin-top: 1em;}
-#top_files_table tbody td, #search_files_table tbody td { border-bottom: solid 1px #eee;  }
+#top_files_table tbody td, #search_files_table tbody td { border-bottom: solid 1px #ccc;  }
 #file_info_table .header td { padding-bottom: .7em;  }
 #top_files_table tbody a,  #search_files_table tbody a { font-weight: normal; color: #101010 !important; }
 #top_files_table tbody a:visited,  #search_files_table tbody a:visited { color: #777 !important; }
