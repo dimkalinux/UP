@@ -47,7 +47,7 @@ require_once UP_ROOT.'include/logger.inc.php';
 if (function_exists('memcache_pconnect')) {
 	require_once UP_ROOT.'include/cache.inc.php';
 } else {
-	require_once UP_ROOT.'include/cache_empty.inc.php';
+	error('Not found Memcached in PHP');
 }
 require_once UP_ROOT.'include/storage.inc.php';
 require_once UP_ROOT.'include/gravatar.inc.php';
