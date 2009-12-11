@@ -6,9 +6,6 @@ define('DEBUG', TRUE);
 define('MYSQL_ADDRESS', '127.0.0.1');
 define('MYSQL_LOGIN', 'root');
 define('MYSQL_PASSWORD', '');
-//define('MYSQL_ADDRESS', '194.146.132.67');
-//define('MYSQL_LOGIN', 'up');
-//define('MYSQL_PASSWORD', 'K-lldupupdown2.01795hg78HFR');
 define('MYSQL_DB', 'up');
 define('MYSQL_CHARSET', 'utf8');
 
