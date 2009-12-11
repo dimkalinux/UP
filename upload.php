@@ -7,6 +7,7 @@ if (!defined('UP_ROOT')) {
 require UP_ROOT.'functions.inc.php';
 require UP_ROOT.'include/PasswordHash.php';
 require UP_ROOT.'include/upload.inc.php';
+require UP_ROOT.'include/comments.inc.php';
 
 define('UPLOAD_NO_ERROR', 0);
 define('UPLOAD_ERROR_FOUND_VIRUS', 1);
