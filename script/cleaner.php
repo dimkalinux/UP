@@ -5,18 +5,30 @@ if (!defined('UP_ROOT')) {
 }
 require UP_ROOT.'functions.inc.php';
 
+$numDeletedFromStorage = 0;
+$numDeletedFromDB = 0;
+$numNotExistsFiles = 0;
+$numNotDeletedFiles = 0;
 
 try {
 	$db = new DB;
-
-	$datas = $db->getData("SELECT id,sub_location,location,deleted_date FROM up WHERE deleted='1' AND deleted_date < NOW()-interval $undelete_interval day");
+	$datas = $db->getData("SELECT id,sub_location,location,deleted_date FROM up WHERE deleted='1' AND deleted_date < NOW()-INTERVAL $undelete_interval DAY");
 
 	if ($datas) {
 		clearstatcache();
 
 		foreach ($datas as $rec) {
 			$file = $upload_dir.$rec['sub_location'].'/'.$rec['location'];
-			safeUnlink($file);
+			// TRY to REMOVE FILE
+			if (file_exists($file)) {
+				if (!unlink($file)) {
+					$numNotDeletedFiles++;
+				} else {
+					$numDeletedFromStorage++;
+				}
+			} else {
+				$numNotExistsFiles++;
+			}
 
 			// REMOVE THUMBS
 			$small_thumb = $server_root.'thumbs/'.sha1($rec['id']).'.jpg';
@@ -38,12 +50,22 @@ try {
 	$log->error("Cleaner: ".$e->getMessage());
 }
 
+// LOG REPORT
+$log = new Logger;
+$log->info("Cleaner: from storage: $numDeletedFromStorage, from DB: $numDeletedFromDB");
+
+// LOG NON-CRITICAL ERRORS
+if (($numNotExistsFiles != 0) || ($numNotDeletedFiles)) {
+	$log->error("Cleaner: not exists: $numNotExistsFiles, not deleted: $numNotDeletedFiles");
+}
+
+
 clear_stat_cache ();
 exit();
 
 
 function remove_files_callback($item, $key) {
-	global $db;
+	global $db, $numDeletedFromDB;
 	$item_id = intval($item['id'], 10);
 	$size = $item['size'];
 	$ndi = $item['NDI'];
@@ -55,6 +77,7 @@ function remove_files_callback($item, $key) {
 
 	if (($wakkamakka < 1) && ($item_id > 0)) {
 		$db->query("UPDATE up SET deleted='1', deleted_reason=?, deleted_date=NOW() WHERE id=?", $reason, $item_id);
+		$numDeletedFromDB++;
 	}
 }
 
