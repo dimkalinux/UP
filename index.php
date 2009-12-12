@@ -16,7 +16,7 @@ $Upload = new Upload;
 if ($Upload->is_upload_flood()) {
 	show_error_message('<p>Слишком много загрузок с&nbsp;вашего <nobr>ip-адреса</nobr>.
 	<br/>Возможность загрузки для вас отключена на&nbsp;30&nbsp;минут.</p>
-	<p>Если вы хотите загружать много файлов одновременно — рекомендуем использовать <a href="/ftp_access/">доступ по фтп-протоколу</a>.</p>');
+	<p>Если вы хотите загружать несколько файлов одновременно — рекомендуем использовать <a href="'.$base_url.'help/#ftpAccess">доступ по фтп</a>.</p>');
 } else {
 	$uploadFloodCounter = $Upload->get_upload_flood_counter();
 	if ($uploadFloodCounter > 4 && $uploadFloodCounter < 7) {
@@ -35,7 +35,7 @@ if ($geo != 'world_'):
 				<iframe id="target_upload" name="target_upload" src="about:blank"></iframe>
 				<div class="formRow">
 					<input value="<?php echo $unuiq; ?>" name="progress_id" type="hidden" id="progress_id"/>
-					<input value="<?php echo ($GLOBALS['max_file_size']*1048576); ?>" name="MAX_FILE_SIZE" type="hidden"/>
+					<input value="<?php echo ($max_file_size*1048576); ?>" name="MAX_FILE_SIZE" type="hidden"/>
 					<input name="file" id="uploadFile" type="file" tabindex="10"/>
 					<input value="Закачать"type="submit" tabindex="11" id="uploadSubmit" disabled="disabled"/>
 				</div>
@@ -83,10 +83,10 @@ if ($geo != 'world_'):
 						<div class="x-progress-inner">
 							<div style="width: 0%;" id="num_progress" class="x-progress-bar"></div>
 							<div id="ext-gen10" class="x-progress-text x-progress-text-back"></div>
+						</div>
 					</div>
+					<div id="progress_text"></div>
 				</div>
-				<div id="progress_text"></div>
-			</div>
 			</div>
 			<noscript>Сервис требует браузера с включённым JavaScript</noscript>
 <?
@@ -110,7 +110,7 @@ $onDOMReady = <<<ZZZ
 				}
 			},
 			error: function (r) {
-				UP.uploadForm.error("Сервер загрузки недоступен");
+				UP.uploadForm.error("Произошел сбой при загрузке");
 			}
 		};
 
@@ -128,10 +128,9 @@ $onDOMReady = <<<ZZZ
 				$('#advancedUploadLinkBlock').toggleClass('open');
 			}
 
-
 			$('#wrap').oneTime(400, 'selectUploadServer', function () {
 				$('#upload_status')
-				.html('Ожидайте, выбирается сервер для загрузки&hellip; <a href="$base_url" id="link_abort_upload">отменить</a>')
+				.html('Ожидайте, выбирается сервер для загрузки&hellip; <a href="$base_url" id="link_abort_upload" title="Отменить загрузку файла">отменить</a>')
 				.fadeIn(250);
 			});
 
@@ -177,7 +176,8 @@ else:
 ?>
 	<div id="status">&nbsp;</div>
 	<h2>Привет</h2>
-	<p>Для гостей из «мира» загрузка файлов отключена.<br/>Но вы можете скачивать <a href="<?php echo $base_url; ?>files/">файлы</a> без каких-либо ограничений.</p>
+	<p>Для гостей из «мира» загрузка файлов отключена.<br/>
+	Но вы можете скачивать <a href="<?php echo $base_url; ?>files/">файлы</a> без каких-либо ограничений.</p>
 <?php
 endif;
 
