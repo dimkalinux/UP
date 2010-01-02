@@ -145,7 +145,7 @@ FMB;
 			<a href="http://photo.lluga.net/">Фотопечать</a>
 			<a href="http://torrents.iteam.net.ua/">Торрент-трекер</a>
 			<a href="http://bf2.iteam.net.ua/">Игровой сервер</a>
-			<a href="http://radio.lluga.net/">Интернет радио</a>
+			<a href="http://radio.iteam.net.ua/">Интернет радио</a>
 			<a href="http://files.iteam.net.ua/">Файловый сервер</a>
 			<a href="http://forum.iteam.net.ua/labs/" class="item_line">Labs</a>
 		</div>
