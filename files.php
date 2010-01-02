@@ -104,10 +104,10 @@ function files_get($type, $page, $link_base) {
 
 	$page_links = '<ul class="page_links" id="page_links">'.$back_page.'<span class="ctrl_links">&nbsp;'.$page.'/'.$num_pages.'</span>'.$next_page.'</ul>';
 
-	$th_size = '<th class="size"><a href="/top/size/">Размер</a></th>';
-	$th_name = '<th class="name"><a href="/top/name/">Имя файла</a></th>';
-	$th_downloads = '<th class="download"><a href="/top/popular/">Скачан</a></th>';
-	$th_date = '<th class="time"><a href="/top/new/">Время</a></th>';
+	$th_size = '<th class="size"><a href="/files/size/">Размер</a></th>';
+	$th_name = '<th class="name"><a href="/files/name/">Имя файла</a></th>';
+	$th_downloads = '<th class="download"><a href="/files/popular/">Скачан</a></th>';
+	$th_date = '<th class="time"><a href="/files/new/">Время</a></th>';
 
 	$td_date_class = $td_name_class = $td_size_class = $td_downloads_class = '';
 	$admin_th_row = $admin_td_row = $admin_actions_block = '';

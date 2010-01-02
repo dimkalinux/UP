@@ -8,11 +8,20 @@ require UP_ROOT.'header.php';
 <div id="status">&nbsp;</div>
 <h2>F.A.Q.</h2>
 <ol class="simple mb">
+	<li><a href="#avatar">Аватар</a></li>
 	<li><a href="#labels">Метки</a></li>
 	<li><a href="#ftpAccess">Доступ по фтп</a></li>
 	<li><a href="#compability">Совместимость с браузерами</a></li>
 	<li><a href="#addons">Дополнительные программы</a></li>
 </ol>
+
+
+<h3 id="avatar">Аватар</h3>
+<p>На нашем сервисе поддерживаются <a href="http://www.gravatar.com">Граватары</a> — аватары, привязанные к вашему адресу
+электронной почты.</p>
+<p>Мы настоятельно рекомндуем вам <a href="www.gravatar.com/site/signup/">зарегистрироваться в Граватаре</a>.
+Это очень просто. После регистрации ваш аватар автоматически будет отображаться в комментариях.</p>
+
 
 <h3 id="labels">Метки</h3>
 <table class="t2">

@@ -10,6 +10,12 @@ $numDeletedFromDB = 0;
 $numNotExistsFiles = 0;
 $numNotDeletedFiles = 0;
 
+if (!$enableCleaner) {
+	$log = new Logger;
+	$log->info("Cleaner: disabled by config");
+	exit();
+}
+
 try {
 	$db = new DB;
 	$datas = $db->getData("SELECT id,sub_location,location,deleted_date FROM up WHERE deleted='1' AND deleted_date < NOW()-INTERVAL $undelete_interval DAY");

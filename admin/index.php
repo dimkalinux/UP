@@ -14,15 +14,15 @@ $out = <<<FMB
 <h2>Панель управления</h2>
 <h3>Списки</h3>
 <ul class="simple">
-	<li><a href="">Adult</a></li>
-	<li><a href="">Скрытые</a></li>
+	<li><a href="{$base_url}admin/adult/">Adult</a></li>
+	<li><a href="{$base_url}admin/hidden/">Скрытые</a></li>
 </ul>
 
 <h3>Разное</h3>
 <ul class="simple">
-	<li><a href="">Журнал событий (логи)</a></li>
-	<li><a href="">Хранилища</a></li>
-	<li><a href="">Обратная связь</a></li>
+	<li><a href="{$base_url}admin/logs/">Журнал событий (логи)</a></li>
+	<li><a href="{$base_url}admin/storage/">Хранилища</a></li>
+	<li><a href="{$base_url}admin/feedback/">Обратная связь</a></li>
 </ul>
 FMB;
 

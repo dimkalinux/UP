@@ -12,14 +12,7 @@ $feedbackList = getFeedbackList();
 
 $out = <<<FMB
 	<div id="status">&nbsp;</div>
-	<h2>Сообщения «обратной связи»</h2>
-	<p>Всего сообщений: 5</p>
-	<ul class="as_js_link_list">
-		<li><span class="as_js_link currentLinkAsTab">за неделю</span></li>
-		<li><span class="as_js_link">месяц</span></li>
-		<li><span class="as_js_link">3 месяца</span></li>
-		<li><span class="as_js_link">год</span></li>
-	</ul>
+	<h2>Сообщения «обратной связи» за 2 недели</h2>
 	<ol class="feedbackList">
 		$feedbackList
 	</ol>
@@ -50,17 +43,12 @@ $onDOMReady = <<<FMB
 								$(this).remove();
 							});
 						} else {
-							li.animate({backgroundColor: "#FA9CAC"}, 250)
-								.animate({backgroundColor: "#ffffff"}, 250)
-								.animate({backgroundColor: "#FA9CAC"}, 250)
-								.animate({backgroundColor: "#ffffff"}, 250);
-
+							li.fancyAnimate("#FA9CAC", "#ffffff", 250);
 							UP.statusMsg.show(data.message, UP.env.msgError, false);
 						}
 					}
 				});
-			})
-
+			});
 	});
 FMB;
 
@@ -79,7 +67,7 @@ function getFeedbackList() {
 
 	try {
 		$db = new DB;
-		$datas = $db->getData("SELECT * FROM feedback ORDER BY id DESC LIMIT 100");
+		$datas = $db->getData("SELECT * FROM feedback WHERE (date > (NOW()-INTERVAL 2 WEEK)) ORDER BY id DESC");
 
 		if ($datas) {
 			foreach ($datas as $rec) {
@@ -90,9 +78,9 @@ function getFeedbackList() {
 				$message = stripslashes($rec['message']);
 
 				if (empty($rec['email'])) {
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=64&amp;hash='.md5("Mr. Anonymous").'" height="64" width="64" alt="Mr. Anonymous"/>';
+					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=50&amp;hash='.md5("Mr. Anonymous").'" height="50" width="50" alt="Mr. Anonymous"/>';
 				} else {
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=64&amp;hash='.md5($rec["email"]).'" height="64" width="64" alt="'.$rec["email"].'"/>';
+					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=50&amp;hash='.md5($rec["email"]).'" height="50" width="50" alt="'.$rec["email"].'"/>';
 				}
 
 				$deleteLink = ", <span class=\"as_js_link\" title=\"Удалить это сообщение\">X</span>";

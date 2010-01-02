@@ -12,7 +12,7 @@ define('MYSQL_CHARSET', 'utf8');
 // memcache
 define('MEMCACHE_HOST', '194.146.132.66');
 define('MEMCACHE_PORT', '11211');
-define('MEMCACHE_PERSISTENT_CONNECT', true);
+define('MEMCACHE_PERSISTENT_CONNECT', TRUE);
 
 // top page
 define('SORT_BY_DOWNLOADS', 1);
@@ -159,6 +159,17 @@ $googleAnalyticsCode = 'UA-6106025-1';
 
 // SEARCH
 $searchCompleteMaxResults = 12;
+
+//
+$enableCleaner = TRUE;
+$enableChecker = TRUE;
+
+// CHECKER
+$checker_fix_problems = FALSE;
+$checker_check_size = FALSE;
+$checker_check_hash = FALSE;
+$checker_check_thumbs = FALSE;
+
 
 
 
