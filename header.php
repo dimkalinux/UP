@@ -36,12 +36,15 @@ $loginForm = <<<FMB
 		</div>-->
 	</div>
 </div>
-
 FMB;
 
 
 $logDiv = 'Привет, Гость!&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
 $user_login = '';
+
+if (defined('USE_OPENID') && USE_OPENID === TRUE) {
+	$logDiv = 'Привет, Гость!&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login_openid.php" title="Войти в систему используя OpenID" id="mainMenuLoginOpenID" class="mainMenuLoginOpenID">войти в систему</a></span>';
+}
 
 try {
 	if (!$user['is_guest']) {

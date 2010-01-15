@@ -867,7 +867,7 @@ function is_valid_email($email) {
 
 
 function printPage($content) {
-	global $base_url, $user;
+	global $base_url, $user, $addScript, $onDOMReady;
 
 	if (!defined('UP_ROOT')) {
 		die('Not defined UP_ROOT');

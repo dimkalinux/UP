@@ -1,6 +1,6 @@
 <?php
 
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 
 define('MYSQL_ADDRESS', '127.0.0.1');
@@ -67,6 +67,9 @@ define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
 
 $base_url = 'http://up.lluga.net/';
 
+// LOGIN METHOD
+define('USE_OPENID', TRUE);
+
 
 // COOKIE SECTION
 $cookie_name = 'up_cookie_login';
@@ -97,7 +100,7 @@ $ftpGIDBase = 5000;
 
 // PATH SECTION
 $upload_dir = '/var/upload/';
-$server_root = '/srv/www/apache/up/htdocs/';
+$server_root = '/home/opt/lampp/htdocs/';
 $thumbs_dir = $server_root.'thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
 
