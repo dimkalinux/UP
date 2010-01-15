@@ -13,15 +13,15 @@ $feedbackList = getFeedbackList();
 $out = <<<FMB
 	<div id="status">&nbsp;</div>
 	<h2>Сообщения «обратной связи» за 2 недели</h2>
-	<ol class="feedbackList">
+	<ul class="feedbackList">
 		$feedbackList
-	</ol>
+	</ul>
 FMB;
 
 $onDOMReady = <<<FMB
 	$('.feedbackList li').each(function () {
 		var li = $(this),
-			id = parseInt($(this).attr('id').split('item_')[1], 10),
+			id = parseInt($(this).attr('id').split('feeback_')[1], 10),
 			deleteLink = li.find('span.as_js_link');
 
 			deleteLink.click(function () {
@@ -78,9 +78,9 @@ function getFeedbackList() {
 				$message = stripslashes($rec['message']);
 
 				if (empty($rec['email'])) {
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=50&amp;hash='.md5("Mr. Anonymous").'" height="50" width="50" alt="Mr. Anonymous"/>';
+					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=40&amp;hash='.md5("Mr. Anonymous").'" height="40" width="40" alt="Mr. Anonymous"/>';
 				} else {
-					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=50&amp;hash='.md5($rec["email"]).'" height="50" width="50" alt="'.$rec["email"].'"/>';
+					$identicon = '<img class="avatar" src="'.$base_url.'include/identicon.php?size=40&amp;hash='.md5($rec["email"]).'" height="40" width="40" alt="'.$rec["email"].'"/>';
 				}
 
 				$deleteLink = ", <span class=\"as_js_link\" title=\"Удалить это сообщение\">X</span>";
@@ -90,17 +90,15 @@ function getFeedbackList() {
 				}
 
 				$out .= <<<FMB
-				<li id="item_$id">
-					$identicon
-					$email<br/>
-					<small>
-						{$date}{$deleteLink}<br/>
-						$file<br/>
-					</small>
-					<p>$message</p>
+				<li id="feedback_$id">
+					<div class="commentID">$identicon</div>
+					<div class="commentBody">
+						<span class="commentAuthor">$email</span><small>{$date}{$deleteLink}</small><br/>
+						$message
+					</div>
+					<br class="clear"/>
 				</li>
 FMB;
-
 			}
 		}
 

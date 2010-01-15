@@ -26,9 +26,9 @@ do {
 	try {
 		$db = new DB;
 		if ($magic !== null) {
-			$row = $db->getRow("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE id=? AND delete_num=? LIMIT 1", $item_id, $magic);
+			$row = $db->getRow("SELECT up.*, username, DATEDIFF(NOW(), GREATEST(up.last_downloaded_date,up.uploaded_date)) as NDI FROM up LEFT JOIN users ON up.user_id=users.id WHERE up.id=? AND up.delete_num=? LIMIT 1", $item_id, $magic);
 		} else {
-			$row = $db->getRow("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE id=? LIMIT 1", $item_id);
+			$row = $db->getRow("SELECT up.*, username, DATEDIFF(NOW(), GREATEST(up.last_downloaded_date,up.uploaded_date)) as NDI FROM up LEFT JOIN users ON up.user_id=users.id WHERE up.id=? LIMIT 1", $item_id);
 		}
 
 		if (!$row) {
@@ -70,13 +70,14 @@ FMB;
 	$downloaded = $row['downloads'];
 	$downloaded_text = format_raz($downloaded);
 	$antivir_check_result = $row['antivir_checked'];
-	$hidden = (bool) $row['spam'];
+	$is_hidden = (bool) $row['hidden'];
 	$is_spam = (bool) $row['spam'];
 	$is_adult = (bool) $row['adult'];
 	$owner_id = intval($row['user_id'], 10);
 	$hash = $row['hash'];
 	$password = $row['password'];
 	$mime = $row['mime'];
+	$username = $row['username'];
 
 	$ndi = $row['NDI'];
 	$wakkamakka = get_time_of_die($filesize, $downloaded, $ndi, $is_spam);
@@ -227,7 +228,7 @@ FMB;
 
 	// SPAM SECTION
 	$js_spam_warning_block = '';
-	if ($is_spam && !$hidden) {
+	if ($is_spam && !$is_hidden) {
 		if ($magic || $im_owner) {
 			$js_spam_warning_block = "UP.statusMsg.show('Найден СПАМ: cрок хранения сокращён до 2-х дней', UP.env.msgWarn, false);";
 		} else {
@@ -238,12 +239,21 @@ FMB;
 
 	// ADULT SECTION
 	$js_adult_warning_block = '';
-	if ($is_adult && !$hidden) {
+	if ($is_adult && !$is_hidden) {
 		$js_spam_warning_block = '';
 		if ($magic || $im_owner) {
 			$js_adult_warning_block = "UP.statusMsg.show('Обнаружен контент «только для взрослых». Файл не будет показан в общем списке', UP.env.msgWarn, false);";
 		} else {
 			$js_adult_warning_block = "UP.statusMsg.show('Внимание: возможен контент «только для взрослых»', UP.env.msgWarn, true);";
+		}
+	}
+
+	// AUTHOR BLOCK
+	$author_block = '';
+	if (!empty($username)) {
+		if (!$is_hidden || ($user['is_admin'])) {
+			$authorProfileLink = '<a href="'.$base_url.'user/'.$owner_id.'/" title="Перейти в профиль владельца">'.$username.'</a>';
+			$author_block = '<tr><td class="ab">залил</td><td class="bb">'.$authorProfileLink.'</td></tr>';
 		}
 	}
 
@@ -401,6 +411,7 @@ FMB;
 	<table class="asDiv">
 	<tr><td>
 		<table class="t1" id="file_info_table">
+			$author_block
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
 			<tr><td class="ab">срок хранения</td><td class="bb">$wakkamakka_text</td></tr>

@@ -68,7 +68,7 @@ define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
 $base_url = 'http://up.lluga.net/';
 
 // LOGIN METHOD
-define('USE_OPENID', TRUE);
+define('USE_OPENID', FALSE);
 
 
 // COOKIE SECTION
