@@ -20,7 +20,7 @@ if (!defined('UP')) {
 		<p>©&nbsp;<? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="http://iteam.net.ua/">iTeam</a>.</p>
 	</div>
 	<div id="footerBottom">&nbsp;</div>
-	<script src="<?php echo JS_BASE_URL; ?>js/jquery-1.3.2.min.js?ver=789654" type="text/javascript"></script>
+	<script src="<?php echo JS_BASE_URL; ?>js/up.js" type="text/javascript"></script>
 <?php
 
 
@@ -52,4 +52,3 @@ define('UP_FOOTER', 1);
 ?>
 </body>
 </html>
-<?php //ob_end_flush(); ?>
