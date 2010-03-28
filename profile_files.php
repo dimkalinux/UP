@@ -29,32 +29,5 @@ ZZZ;
 	$myFiles = User::getUserFiles($user['id']);
 }
 
-if (!empty($myFiles)) {
-	$myFiles = '
-	<table class="t1" id="top_files_table">
-	<thead>
-	<tr>
-		<th colspan="2" class="noborder"></th>
-		<th class="noborder">
-			<div class="controlButtonsBlock">
-				<button type="button" class="btn" disabled="disabled" onmousedown="UP.userFiles.deleteItem();"><span><span>удалить</span></span></button>
-			</div>
-		</th>
-	</tr>
-	<th colspan="2" class="noborder"></th>
-	<tr>
-		<th class="center checkbox"><input type="checkbox" id="allCB"/></th>
-		<th class="size">Размер</th>
-		<th class="name">Имя файла</th>
-		<th class="download">Скачан</th>
-		<th class="time">Срок</th>
-	</tr>
-	</thead>
-	<tbody>'.$myFiles.'</tbody></table>';
-}
-
-require UP_ROOT.'header.php';
-echo($out.$myFiles);
-
-require UP_ROOT.'footer.php';
+printPage($out.$myFiles);
 ?>

@@ -77,7 +77,7 @@ if (defined('ADMIN_PAGE')) {
 
 
 function check_plain($text) {
-  	return htmlspecialchars ($text, ENT_QUOTES);
+  	return htmlspecialchars($text, ENT_QUOTES);
 }
 
 function get_safe_string($str) {
@@ -900,6 +900,53 @@ function safeUnlink($file) {
 	if (file_exists($file)) {
 		unlink($file);
 	}
+}
+
+// Generate a string with numbered links (for multipage scripts)
+function paginate($num_pages, $cur_page, $link, $separator, $args = null) {
+	$max_pages = 10;
+	$pages = array();
+
+	// If $cur_page == -1, we link to all pages (used in viewforum.php)
+	if ($cur_page == -1) {
+		$cur_page = 1;
+	}
+
+	$start_page = 1;
+
+	if ($cur_page > 6) {
+		$start_page = $cur_page - 5;
+	}
+
+	$end_page = $start_page + ($max_pages);
+
+
+	if ($num_pages <= 1) {
+		$pages = array('<strong class="first-item">1</strong>');
+	} else {
+		// Add a previous page link
+		if ($num_pages > 1 && $cur_page > $max_pages) {
+			$pages[] = '<a'.(empty($pages) ? ' class="first-item"' : '').' href="'.$link.'/'.($start_page - 1).'/">&larr;</a>';
+		}
+
+		for ($current = $start_page; $current < $end_page; ++$current) {
+			if ($current < 1 || $current > $num_pages) {
+				continue;
+			} else if ($current != $cur_page) {
+				//$results_hint = sprintf('Результаты: %d&ndash;%d', ((($current - 1) * $this->searchResultsNum) + 1), (($current) * $this->searchResultsNum));
+				$pages[] = '<a'.(empty($pages) ? ' class="first-item" ' : '').' href="'.$link.'/'.$current.'/" title="'.$results_hint.'">'.($current).'</a>';
+			} else {
+				$pages[] = '<strong'.(empty($pages) ? ' class="first-item"' : '').'>'.$current.'</strong>';
+			}
+		}
+
+		// Add a next page link
+		if ($num_pages > 1 && $cur_page < $num_pages && $end_page < $num_pages) {
+			$pages[] = '<a'.(empty($pages) ? ' class="first-item" ' : '').' href="'.$link.'/'.($end_page).'/">&rarr;</a>';
+		}
+	}
+
+	return '<div id="pg">'.implode($separator, $pages).'</div>';
 }
 
 ?>

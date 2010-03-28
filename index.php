@@ -37,7 +37,7 @@ if ($geo != 'world_'):
 					<input value="<?php echo $unuiq; ?>" name="progress_id" type="hidden" id="progress_id"/>
 					<input value="<?php echo ($max_file_size*1048576); ?>" name="MAX_FILE_SIZE" type="hidden"/>
 					<input name="file" id="uploadFile" type="file" tabindex="10"/>
-					<input value="Закачать"type="submit" tabindex="11" id="uploadSubmit" disabled="disabled"/>
+					<input value="Закачать" type="submit" tabindex="11" id="uploadSubmit" disabled="disabled"/>
 				</div>
 				<div class="formRow">
 					<span id="advancedUploadLinkBlock"><span class="as_js_link" id="advancedUploadLink">дополнительные параметры</span></span>
@@ -90,8 +90,7 @@ if ($geo != 'world_'):
 			</div>
 			<noscript>Сервис требует браузера с включённым JavaScript</noscript>
 <?
-$onDOMReady = <<<ZZZ
-	window.setTimeout(function(){
+$onDOMReady = <<<FMB
 		$("input[type='file']").bind("change", UP.formCheck.upload).bind("keyup", UP.formCheck.upload);
 		UP.formCheck.upload();
 
@@ -101,7 +100,7 @@ $onDOMReady = <<<ZZZ
 			resetForm: true,
 			cleanForm: true,
 			url: '/upload',
-			type: 'POST',
+			type: 'post',
 			success: function (r) {
 				if (parseInt(r.error, 10) === 0) {
 					UP.uploadForm.finish(r.id, r.pass);
@@ -123,30 +122,42 @@ $onDOMReady = <<<ZZZ
 				return;
 			}
 
+			$("#uploadSubmit").attr("disabled", "disabled");
+
 			if ($('#advancedUpload').is(':visible')) {
 				$('#advancedUpload').slideToggle();
 				$('#advancedUploadLinkBlock').toggleClass('open');
 			}
 
-			$('#wrap').oneTime(400, 'selectUploadServer', function () {
-				$('#upload_status')
-				.html('Ожидайте, выбирается сервер для загрузки&hellip; <a href="$base_url" id="link_abort_upload" title="Отменить загрузку файла">отменить</a>')
-				.fadeIn(250);
-			});
 
 			// get upload url
-			$.ajaxSetup({async: false});
-			$.getJSON(UP.env.ajaxBackend +'?t_action=' +UP.env.actionGetUploadUrl +'&t=' +UP.utils.gct(), function (data) {
-				$.ajaxSetup({async: true});
-				$('#wrap').stopTime('selectUploadServer');
-				if (parseInt(data.result, 10) === 1) {
-					options.url = data.message +'?X-Progress-ID=' +$('#progress_id').val();
-					canUpload = true;
-				} else {
-					UP.uploadForm.error("Сервер загрузки недоступен");
+			$.ajax({
+				type: 	'GET',
+				url: 	UP.env.ajaxBackend +'?t_action=' +UP.env.actionGetUploadUrl +'&t=' +UP.utils.gct(),
+				dataType: 'json',
+				async:	false,
+				beforeSend: function () {
+					$('#upload_status')
+						.html('Ожидайте, выбирается сервер для загрузки&hellip;')
+						.fadeIn(200);
+				},
+				complete: function () {
+					$('#upload_status').html("&nbsp;");
+				},
+				error: 	function () {
+					UP.uploadForm.error("Невозможно выбрать сервер загрузки");
+					$("#uploadSubmit").removeAttr("disabled");
+				},
+				success: function (data) {
+					if (parseInt(data.result, 10) === 1) {
+						options.url = data.message +'?X-Progress-ID=' +$('#progress_id').val();
+						canUpload = true;
+					} else {
+						UP.uploadForm.error("Сервер загрузки недоступен");
+						$("#uploadSubmit").removeAttr("disabled");
+					}
 				}
 			});
-
 
 			if (canUpload == true) {
 				$(this).ajaxSubmit(options);
@@ -164,14 +175,11 @@ $onDOMReady = <<<ZZZ
 			$('#advancedUploadLinkBlock').toggleClass('open');
 		});
 
-
 		$js_flood_warning_block
-
 
 		// at the end
 		$('#uploadFile').focus();
-	},100);
-ZZZ;
+FMB;
 else:
 ?>
 	<div id="status">&nbsp;</div>

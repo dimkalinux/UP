@@ -252,7 +252,7 @@ FMB;
 	$author_block = '';
 	if (!empty($username)) {
 		if (!$is_hidden || ($user['is_admin'])) {
-			$authorProfileLink = '<a href="'.$base_url.'user/'.$owner_id.'/" title="Перейти в профиль владельца">'.$username.'</a>';
+			$authorProfileLink = '<a href="'.$base_url.'user/'.$owner_id.'/files/" title="Перейти к файлам владельца">'.$username.'</a>';
 			$author_block = '<tr><td class="ab">залил</td><td class="bb">'.$authorProfileLink.'</td></tr>';
 		}
 	}
@@ -381,7 +381,7 @@ FMB;
 		$similar_num = get_similar_count($search_filename, $item_id);
 
 		if ($similar_num > 0 && $similar_num < 50) {
-			$search_like_block = '<tr><td class="ab">похожие файлы</td><td class="bb"><a title="Показать похожие файлы" href="'.$base_url.'search/?s='.urlencode($search_filename).'&amp;doSubmit&amp;ft=1">'.$similar_num.'</a></td></tr>';
+			$search_like_block = '<tr><td class="ab">подобные файлы</td><td class="bb"><a title="Показать файлы с подобным именем" href="'.$base_url.'search/?s='.urlencode($search_filename).'&amp;doSubmit&amp;ft=1">'.$similar_num.'</a></td></tr>';
 		}
 	} catch (Exception $e) {
 		error($e->getMessage());
@@ -403,18 +403,17 @@ FMB;
 	}
 
 
-
-	$out = <<<ZZZ
+	$out = <<<FMB
 	<div id="status">&nbsp;</div>
 	$im_owner_block
 	<h2>{$passwordLabel}<span id="item_info_filename" title="$fullFilename">$filename</span></h2>
 	<table class="asDiv">
 	<tr><td>
 		<table class="t1" id="file_info_table">
-			$author_block
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
 			<tr><td class="ab">срок хранения</td><td class="bb">$wakkamakka_text</td></tr>
+			$author_block
 			$mp3_block
 			$flv_block
 			$search_like_block
@@ -498,9 +497,10 @@ FMB;
 	<td>$thumbs_block</td>
 	</tr>
 	</table>
-ZZZ;
+FMB;
 
 	$jsBindActionList = '$(".itemNotOwnerActions li span.as_js_link").click(function () { UP.utils.JSLinkListToggle($(this)); });';
+
 	$jsGetCommentsList = <<<FMB
 	UP.comments.loadCommentsList($item_id, $owner_id);
 	var form = $("form[name='comments']");
@@ -520,7 +520,7 @@ ZZZ;
 		dataType: 'json',
 		resetForm: false,
 		cleanForm: false,
-		type: 'POST',
+		type: 'post',
 		data: { json: 1 },
 
 		beforeSubmit: function (formArray, jqForm) {
@@ -584,9 +584,7 @@ FMB;
 } while (0);
 
 if ($error === 0) {
-	require UP_ROOT.'header.php';
-	echo $out;
-	require UP_ROOT.'footer.php';
+	printPage($out);
 	exit();
 } else {
 	show_error_message("Ссылка не&nbsp;верна или устарела.");

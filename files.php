@@ -83,26 +83,10 @@ function files_get($type, $page, $link_base) {
 	}
 
 	$num_items = $res['num'];
-	$num_pages = ceil ($num_items / $items_per_page);
+	$num_pages = ceil($num_items / $items_per_page);
 	$start_from = $items_per_page * ($page - 1);
 
-	if ($page > 1) {
-		$back_page_number = $page - 1;
-		$back_page = "<a class=\"page_links\" rev='$back_page_number' href=\"$link_base/$back_page_number/\" title=\"Предыдущая страница\">&larr;</a>";
-	} else {
-		$back_page = '&larr;';
-		$back_page_number = -1;
-	}
-
-	if ($page < $num_pages) {
-		$next_page_number =  $page + 1;
-		$next_page = "<a class=\"page_links\" rel='$next_page_number' href=\"$link_base/$next_page_number/\" title=\"Следующая страница\">&rarr;</a>";
-	} else {
-		$next_page = "&rarr;";
-		$next_page_number = -1;
-	}
-
-	$page_links = '<ul class="page_links" id="page_links">'.$back_page.'<span class="ctrl_links">&nbsp;'.$page.'/'.$num_pages.'</span>'.$next_page.'</ul>';
+	$page_links = paginate($num_pages, $page, $link_base, '');
 
 	$th_size = '<th class="size"><a href="/files/size/">Размер</a></th>';
 	$th_name = '<th class="name"><a href="/files/name/">Имя файла</a></th>';
@@ -112,7 +96,7 @@ function files_get($type, $page, $link_base) {
 	$td_date_class = $td_name_class = $td_size_class = $td_downloads_class = '';
 	$admin_th_row = $admin_td_row = $admin_actions_block = '';
 	$colspanPreAdmin = 1;
-	$colspan = 3;
+	$colspan = 4;
 
 	switch ($type) {
 		case 'new':
@@ -189,7 +173,7 @@ function files_get($type, $page, $link_base) {
 
 		case 'popular':
 		default:
-			$header = '<em>Список</em>&nbsp;популярных файлов';
+			$header = 'Список&nbsp;популярных файлов';
 			$th_downloads = '<th class="download current">Скачан</th>';
 			$td_downloads_class = "current";
 			$order_by = 'downloads';
@@ -200,7 +184,7 @@ function files_get($type, $page, $link_base) {
 
 	if ($admin) {
 		$colspanPreAdmin = 2;
-		$colspan = 2;
+		$colspan = 3;
 		$admin_th_row = '<th class="center"><input type="checkbox" id="allCB"/></th>';
 		$admin_actions_block = '
 			<div class="controlButtonsBlock">
@@ -233,8 +217,7 @@ function files_get($type, $page, $link_base) {
 		<thead>
 		<tr>
 			<th class="noborder" colspan="$colspanPreAdmin"></th>
-			<th class="left noborder">$admin_actions_block</th>
-			<th class="right noborder" id="pageLinks" colspan="$colspan">$back_page $page $next_page</th>
+			<th class="left noborder" colspan="$colspan">$admin_actions_block $page_links</th>
 		</tr>
 		<tr>
 			$admin_th_row
@@ -301,8 +284,7 @@ ZZZ;
 		<tfoot>
 		<tr>
 			<td class="noborder" colspan="$colspanPreAdmin"></td>
-			<td class="left noborder"></td>
-			<td class="right noborder" id="pageLinks" colspan="$colspan">$back_page $page $next_page</td>
+			<th class="left noborder" colspan="$colspan">$page_links</th>
 		</tr>
 		</tfoot>
 		</table>

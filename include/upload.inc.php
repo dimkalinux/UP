@@ -245,6 +245,12 @@ class Upload {
 	public static function getThumbsFilename($item_id) {
 		return sha1($item_id).'.jpg';
 	}
+
+	public function move_file_to_storage($filepath, $uploadfile) {
+		if (!link($filepath, $uploadfile)) {
+			throw new Exception(UPLOAD_ERROR_SAVE);
+		}
+	}
 }
 
 ?>

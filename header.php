@@ -15,7 +15,7 @@ $loginForm = <<<FMB
 <div id="fancyLogin">
 	<div id="fancyLoginForm">
 		<div id="fancyLoginFormHeader">Вход на&nbsp;сайт</div>
-		<form method="POST" action="$login_form_action" name="fancyLogin" accept-charset="utf-8">
+		<form method="post" action="$login_form_action" name="fancyLogin" accept-charset="utf-8">
 			<input type="hidden" name="form_sent" value="1"/>
 			<input type="hidden" name="csrf_token" value="$csrf"/>
 			<div class="formRow">
@@ -39,7 +39,7 @@ $loginForm = <<<FMB
 FMB;
 
 
-$logDiv = 'Привет, Гость!&nbsp;&nbsp;Можно <span class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</span> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
+$logDiv = 'Привет, Гость!&nbsp;&nbsp;Можно <div class="relative"><a href="'.$base_url.'login/" title="Войти в систему" id="mainMenuLogin" class="mainMenuLogin">войти</a>'.$loginForm.'</div> или <a href="'.$base_url.'register/" title="Зарегистрироваться на сервисе, бесплатно.">зарегистрироваться</a>';
 $user_login = '';
 
 if (defined('USE_OPENID') && USE_OPENID === TRUE) {
@@ -76,7 +76,7 @@ FMB;
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}about/">О&nbsp;проекте</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow" />
+			<img src="$menuArrow" width="18" height="15" class="arrow" alt=""/>
 		</span>
  		<div class="sub_menu">
 	        <a href="{$base_url}rules/">История</a>
@@ -100,7 +100,7 @@ FMB;
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}files/new/">Список файлов</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow" />
+			<img src="$menuArrow" width="18" height="15" class="arrow" alt=""/>
 		</span>
  		<div class="sub_menu">
 	       	<a href="{$base_url}files/new/">Cвежие</a>
@@ -122,7 +122,7 @@ FMB;
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}top/">Топ файлов</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow" />
+			<img src="$menuArrow" width="18" height="15" class="arrow" alt=""/>
 		</span>
  		<div class="sub_menu">
 			<a href="{$base_url}top/video/">Видео</a>
@@ -139,7 +139,7 @@ FMB;
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}explore/">Сервисы</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow" />
+			<img src="$menuArrow" width="18" height="15" class="arrow" alt=""/>
 		</span>
  		<div class="sub_menu">
 			<a href="http://forum.lluga.net/">Форум</a>
@@ -159,7 +159,7 @@ FMB;
 	<li>
 		<span class="head_menu">
 			<a href="{$base_url}admin/">Управление</a>
-			<img src="$menuArrow" width="18" height="15" class="arrow"/>
+			<img src="$menuArrow" width="18" height="15" class="arrow" alt=""/>
 		</span>
  		<div class="sub_menu">
 			<a href="{$base_url}admin/adult/">+16</a>

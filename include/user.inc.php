@@ -69,7 +69,9 @@ class User {
 	}
 
 	public static function getUserFiles($user_id, $exceptID=FALSE) {
-		global $base_url;
+		global $base_url, $user;
+
+		$imOwner = (bool) ($user['id'] === $user_id);
 
 		$out = '';
 		if (!$user_id) {
@@ -80,17 +82,55 @@ class User {
 			$db = new DB;
 			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 ORDER BY id DESC LIMIT 5000", $user_id);
 		} catch (Exception $e) {
-			error($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+
+		if ($imOwner === TRUE) {
+			$schemaOut = '
+				<table class="t1" id="top_files_table">
+				<thead>
+				<tr>
+					<th colspan="2" class="noborder"></th>
+					<th class="noborder">
+						<div class="controlButtonsBlock">
+							<button type="button" class="btn" disabled="disabled" onmousedown="UP.userFiles.deleteItem();"><span><span>удалить</span></span></button>
+						</div>
+					</th>
+				</tr>
+				<th colspan="2" class="noborder"></th>
+				<tr>
+					<th class="center checkbox"><input type="checkbox" id="allCB"/></th>
+					<th class="size">Размер</th>
+					<th class="name">Имя файла</th>
+					<th class="download">Скачан</th>
+					<th class="time">Срок</th>
+				</tr>
+				</thead>
+				<tbody>%s</tbody>
+				</table>';
+		} else {
+			$schemaOut = '
+				<table class="t1" id="top_files_table">
+				<thead>
+				<tr>
+					<th class="size">Размер</th>
+					<th class="name">Имя файла</th>
+					<th class="download">Скачан</th>
+					<th class="time">Срок</th>
+				</tr>
+				</thead>
+				<tbody>%s</tbody>
+				</table>';
 		}
 
 		if ($datas) {
 			foreach ($datas as $item) {
-				$item_id = intval($item['id']);
-				$filename = get_cool_and_short_filename ($item['filename'], 45);
-				$filesize_text = format_filesize ($item['size']);
+				$item_id = intval($item['id'], 10);
+				$filename = get_cool_and_short_filename($item['filename'], 45);
+				$filesize_text = format_filesize($item['size']);
 				$downloaded = $item['downloads'];
 				$item_pass = $item['delete_num'];
-				$wakkamakka = get_time_of_die ($item['size'], $item['downloads'], $item['NDI'], (bool)$item['spam']);
+				$wakkamakka = get_time_of_die($item['size'], $item['downloads'], $item['NDI'], (bool)$item['spam']);
 				if ($wakkamakka < 1) {
 					$wakkamakka_text = '0';
 				} else {
@@ -102,12 +142,20 @@ class User {
 					$passwordLabel = '<span class="passwordLabel" title="Файл защищён паролем">&beta;</span>';
 				}
 
+				if ($imOwner === TRUE) {
+					$itemURL = "{$base_url}{$item_id}/{$item_pass}/";
+					$checkBoxRow = '<td class="center"><input type="checkbox" value="1" id="item_cb_'.$item_id.'"/></td>';
+				} else {
+					$itemURL = "{$base_url}{$item_id}/";
+					$checkBoxRow = '';
+				}
+
 
 				$out .= <<<FMB
 					<tr id="row_item_{$item_id}" class="row_item">
-						<td class="center"><input type="checkbox" value="1" id="item_cb_{$item_id}"/></td>
+						$checkBoxRow
 						<td class="size">$filesize_text</td>
-						<td class="name">{$passwordLabel}<a rel="nofollow" href="{$base_url}{$item_id}/{$item_pass}/">$filename</a></td>
+						<td class="name">{$passwordLabel}<a rel="nofollow" href="$itemURL">$filename</a></td>
 						<td class="download">$downloaded</td>
 						<td class="time">$wakkamakka_text</td>
 					</tr>
@@ -115,7 +163,7 @@ FMB;
 				}
 		}
 
-		return $out;
+		return sprintf($schemaOut, $out);
 	}
 
 
@@ -264,6 +312,21 @@ FMB;
 			$row = $db->getRow("SELECT email FROM users WHERE id=? LIMIT 1", $uid);
 			if ($row) {
 				return $row['email'];
+			}
+
+			return '';
+		} catch(Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+	}
+
+	public static function getUserUsername($uid) {
+		try {
+			$db = new DB;
+
+			$row = $db->getRow("SELECT username FROM users WHERE id=? LIMIT 1", $uid);
+			if ($row) {
+				return $row['username'];
 			}
 
 			return '';

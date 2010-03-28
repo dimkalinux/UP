@@ -63,6 +63,17 @@ define('CSS_BASE_URL', 'http://up.lluga.net/');
 define('JS_BASE_URL', 'http://up.lluga.net/');
 define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
 
+define('UPLOAD_NO_ERROR', 0);
+define('UPLOAD_ERROR_FOUND_VIRUS', 1);
+define('UPLOAD_ERROR_SAVE', 2);
+define('UPLOAD_ERROR_MAX_SIZE', 3);
+define('UPLOAD_ERROR_SERVER_FAIL', 4);
+define('UPLOAD_ERROR_FLOOD', 5);
+define('UPLOAD_ERROR_NO_FILE', 6);
+define('UPLOAD_ERROR_STORAGE', 7);
+define('UPLOAD_ERROR_EMPTY_FILE', 8);
+
+define('UPLOAD_FILE_RIGHTS', 0444);
 
 
 $base_url = 'http://up.lluga.net/';

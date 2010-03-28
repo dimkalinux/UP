@@ -17,7 +17,7 @@ if (!defined('UP')) {
 			<li><a href="http://twitter.com/up_ua" title="Твиттер проекта">@up_ua</a></li>
 		</ul>
 		<div class="clear separator"></div>
-		<p>©&nbsp;<? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="http://iteam.net.ua/">iTeam</a>.</p>
+		<p>©&nbsp;<? date_default_timezone_set ("Europe/Zaporozhye"); echo (date ("Y")); ?> <a href="http://iteam.net.ua/">iTeam</a></p>
 	</div>
 	<div id="footerBottom">&nbsp;</div>
 	<script src="<?php echo JS_BASE_URL; ?>js/up.js" type="text/javascript"></script>

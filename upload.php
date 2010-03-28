@@ -9,15 +9,7 @@ require UP_ROOT.'include/PasswordHash.php';
 require UP_ROOT.'include/upload.inc.php';
 require UP_ROOT.'include/comments.inc.php';
 
-define('UPLOAD_NO_ERROR', 0);
-define('UPLOAD_ERROR_FOUND_VIRUS', 1);
-define('UPLOAD_ERROR_SAVE', 2);
-define('UPLOAD_ERROR_MAX_SIZE', 3);
-define('UPLOAD_ERROR_SERVER_FAIL', 4);
-define('UPLOAD_ERROR_FLOOD', 5);
-define('UPLOAD_ERROR_NO_FILE', 6);
-define('UPLOAD_ERROR_STORAGE', 7);
-define('UPLOAD_ERROR_EMPTY_FILE', 8);
+
 
 // DEFAULT ERROR
 $error = UPLOAD_NO_ERROR;
@@ -116,14 +108,11 @@ try {
 		$up_file_mime = $Upload->createMIME(get_file_ext($file['file_name']));
 	}
 
-	// rename file (move) USE LINK
-	if (!link($filepath, $uploadfile)) {
-		$add_error_message = "filepath: '$filepath' uploadfile: '$uploadfile'";
-		throw new Exception(UPLOAD_ERROR_SAVE);
-	} else {
-		safeUnlink($file['file_path']);
-	}
+	// MOVE file TO storage
+	$Upload->move_file_to_storage($filepath, $uploadfile);
 
+	// SET rights
+	chmod($uploadfile, UPLOAD_FILE_RIGHTS);
 
 	$db = new DB;
 	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', ?, '0', '', '', '', ?, ?, ?, ?)",
