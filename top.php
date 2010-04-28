@@ -58,7 +58,7 @@ function top_get($type, $link_base) {
 	switch ($type) {
 		case 'mp3':
 			$header = 'ТОП MP3';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.mp3$'
@@ -67,7 +67,7 @@ function top_get($type, $link_base) {
 
 		case 'video':
 			$header = 'ТОП Видео';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
@@ -76,7 +76,7 @@ function top_get($type, $link_base) {
 
 		case 'archive':
 			$header = 'ТОП Архивы';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
@@ -85,7 +85,7 @@ function top_get($type, $link_base) {
 
 		case 'image':
 			$header = 'ТОП Образы';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
@@ -94,7 +94,7 @@ function top_get($type, $link_base) {
 
 		case 'photo':
 			$header = 'ТОП Картинки';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
@@ -103,7 +103,7 @@ function top_get($type, $link_base) {
 
 		default:
 			$header = 'ТОП 100 за неделю';
-			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,uploaded_date,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
+			$query = "SELECT item_id AS id,COUNT(*) AS dc,filename,size,downloads,hot_downloads,UNIX_TIMESTAMP(uploaded_date) AS UT,last_downloaded_date FROM downloads LEFT JOIN up on up.id=downloads.item_id
 						WHERE (date > NOW() - INTERVAL 1 WEEK)
 						AND spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						GROUP by item_id ORDER BY dc DESC LIMIT 100";
@@ -128,7 +128,7 @@ function top_get($type, $link_base) {
 
 
 	try {
-		$db = new DB();
+		$db = DB::singleton();
 		$datas = $db->getData($query);
 	} catch (Exception $e) {
 		error($e->getMessage());
@@ -167,7 +167,7 @@ ZZZ;
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$hotDownloads = intval($rec['hot_downloads'], 10);
-			$file_date = prettyDate($rec['uploaded_date']);
+			$file_date = prettyDate($rec['UT']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
 
 

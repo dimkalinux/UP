@@ -57,7 +57,7 @@ class User {
 		$dbExpire = 'NOW() + INTERVAL 14 DAY';
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
        		$db->query("DELETE FROM session WHERE sid=? AND uid=?", $sid, $uid);
 		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?, ?, ?)", $sid, $uid, $ip, $login, $email, $is_admin);
 		} catch(Exception $e) {
@@ -79,7 +79,7 @@ class User {
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 ORDER BY id DESC LIMIT 5000", $user_id);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -169,7 +169,7 @@ FMB;
 
 	public static function updateUploadsCounters($uid, $upload, $uploadSize) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("UPDATE users SET uploads=uploads+?, uploads_size=uploads_size+? WHERE id=?", $upload, $uploadSize, $uid);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -178,7 +178,7 @@ FMB;
 
 	public static function getUsersTable() {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT id,username,uploads,uploads_size FROM users ORDER BY id");
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -248,7 +248,7 @@ FMB;
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// delete all expires from session DB
 			$db->query('DELETE FROM session WHERE expire < NOW()');
@@ -275,7 +275,7 @@ FMB;
 
 	public static function getUsername($uid) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			$row = $db->getRow("SELECT username FROM session WHERE uid=? LIMIT 1", $uid);
 			if ($row) {
@@ -290,7 +290,7 @@ FMB;
 
 	public static function getUserInfo($uid) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			$row = $db->getRow("SELECT username,email,admin FROM session WHERE uid=? LIMIT 1", $uid);
 			if ($row) {
@@ -307,7 +307,7 @@ FMB;
 
 	public static function getUserEmail($uid) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			$row = $db->getRow("SELECT email FROM users WHERE id=? LIMIT 1", $uid);
 			if ($row) {
@@ -322,7 +322,7 @@ FMB;
 
 	public static function getUserUsername($uid) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			$row = $db->getRow("SELECT username FROM users WHERE id=? LIMIT 1", $uid);
 			if ($row) {
@@ -365,7 +365,7 @@ FMB;
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// delete all expires from session DB
 			$db->query('DELETE FROM session WHERE expire < NOW()');

@@ -26,7 +26,7 @@ class Comments {
 
 	public function commentsNum() {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$row = $db->getRow("SELECT COUNT(*) AS N FROM comments WHERE item_id=?", $this->item_id);
 			return intval($row['N'], 10);
 		} catch (Exception $e) {
@@ -50,7 +50,7 @@ class Comments {
 		try {
 			// typografy comments
 			$text = $this->typografyComments($text);
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("INSERT INTO comments VALUES('', ?, ?, NOW(), ?)", $this->item_id, $user['id'], $text);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -64,7 +64,7 @@ class Comments {
 		$out = '';
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT comments.id,user_id,date,message,username,email FROM comments LEFT JOIN users ON user_id=users.id WHERE item_id=? AND comments.id > ? ORDER BY id", $this->item_id, $lastCommentID);
 
 			if ($datas) {
@@ -116,7 +116,7 @@ FMB;
 		$out = '';
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT comments.id,comments.item_id,comments.user_id,date,message,username,email,filename FROM comments LEFT JOIN users ON user_id=users.id LEFT JOIN up ON item_id=up.id ORDER BY id DESC LIMIT 50");
 
 			if ($datas) {

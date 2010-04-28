@@ -17,7 +17,7 @@ try {
 		throw new Exception("item_id < 1: $uri");
 	}
 
-	$db = new DB;
+	$db = DB::singleton();
 	$row = $db->getRow("SELECT size,adult,hidden FROM up WHERE id=? LIMIT 1", $item_id);
 	$db_size = intval($row['size'], 10);
 	$is_adult = (bool) $row['adult'];

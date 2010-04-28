@@ -10,7 +10,7 @@ class Logger {
 	private $db;
 
 	public function __construct() {
-		$this->db = @new DB;
+		$db = @/**/DB::singleton();
 	}
 
 	public function __destruct() {

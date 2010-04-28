@@ -25,6 +25,7 @@ try {
 
 		foreach ($datas as $rec) {
 			$file = $upload_dir.$rec['sub_location'].'/'.$rec['location'];
+
 			// TRY to REMOVE FILE
 			if (file_exists($file)) {
 				if (!unlink($file)) {
@@ -47,7 +48,7 @@ try {
 		unset($datas);
 	}
 
-	$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE deleted='0'");
+	$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE deleted='0' AND immortal='0'");
 	if ($datas) {
 		array_walk($datas, 'remove_files_callback');
 	}
@@ -61,10 +62,9 @@ $log = new Logger;
 $log->info("Cleaner: from storage: $numDeletedFromStorage, from DB: $numDeletedFromDB");
 
 // LOG NON-CRITICAL ERRORS
-if (($numNotExistsFiles != 0) || ($numNotDeletedFiles)) {
+if (($numNotExistsFiles != 0) || ($numNotDeletedFiles != 0)) {
 	$log->error("Cleaner: not exists: $numNotExistsFiles, not deleted: $numNotDeletedFiles");
 }
-
 
 clear_stat_cache ();
 exit();
@@ -72,6 +72,7 @@ exit();
 
 function remove_files_callback($item, $key) {
 	global $db, $numDeletedFromDB;
+
 	$item_id = intval($item['id'], 10);
 	$size = $item['size'];
 	$ndi = $item['NDI'];

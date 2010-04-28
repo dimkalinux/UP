@@ -6,8 +6,6 @@ if (!defined('UP_ROOT')) {
 
 require UP_ROOT.'functions.inc.php';
 
-
-
 $register_form_action = $base_url.'register/';
 $csrf = generate_form_token($register_form_action);
 $err = 0;
@@ -24,16 +22,13 @@ if (isset($_POST['cancel'])) {
 
 
 if (isset ($_GET['first'])) {
-	require UP_ROOT.'header.php';
-
 	$out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	<h2>Спасибо</h2>
 	<p>Вы зарегистрированны.</p>
 ZZZ;
-	echo($out);
-	require UP_ROOT.'footer.php';
-	exit();
+
+	printPage($out);
 }
 
 
@@ -89,7 +84,7 @@ if (isset($_POST['form_sent'])) {
 		// part 2
 		// check if login already exists
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$result = $db->numRows('SELECT id FROM users WHERE username=? LIMIT 1', $username);
 			if ($result !== 0) {
 				$err = 1;
@@ -98,7 +93,6 @@ if (isset($_POST['form_sent'])) {
 				break;
 			}
 
-			include UP_ROOT.'include/PasswordHash.php';
 			$t_hasher = new PasswordHash(8, FALSE);
 			$cryptPassword = $t_hasher->HashPassword($password);
 
@@ -175,15 +169,12 @@ ZZZ;
 
 
 
-require UP_ROOT.'header.php';
 $out = <<<ZZZ
 	<div id="status"><span type="$statusType">$errMsg</span></div>
 	<h2>Регистрация</h2>
 	<p class="pageDescription">Эти данные мы разместим на всех сайтах знакомств и продадим спамерам.</p>
 	$regForm
 ZZZ;
-echo $out;
-
 
 $onDOMReady = <<<ZZZ
 	var form = $("form[name='register']");
@@ -262,5 +253,6 @@ $onDOMReady = <<<ZZZ
 	$(form).find("[required][value='']:first").focus();
 ZZZ;
 
-require UP_ROOT.'footer.php';
+printPage($out);
+
 ?>

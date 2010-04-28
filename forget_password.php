@@ -22,16 +22,13 @@ if (isset($_POST['cancel'])) {
 
 
 if (isset ($_GET['first'])) {
-	require UP_ROOT.'header.php';
-
 	$out = <<<ZZZ
 	<div id="status">&nbsp;</div>
 	<h2>Поздравляем</h2>
 	<p>Мы выслали новый пароль на ваш электронный адрес.</p>
 ZZZ;
-	echo($out);
-	require UP_ROOT.'footer.php';
-	exit();
+
+	printPage($out);
 }
 
 
@@ -73,7 +70,7 @@ if (isset($_POST['form_sent'])) {
 
 		// part 2
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$row = $db->getRow('SELECT password FROM users WHERE id=? LIMIT 1', $user['id']);
 
 			$t_hasher = new PasswordHash(8, FALSE);
@@ -146,8 +143,6 @@ FMB;
 	</form>
 ZZZ;
 }
-require UP_ROOT.'header.php';
-echo($out);
 
 $onDOMReady = <<<ZZZ
 	var form = $("form[name='forget_password']");
@@ -228,6 +223,6 @@ $onDOMReady = <<<ZZZ
 	form.find("[required][value='']:first").focus();
 ZZZ;
 
+printPage($out);
 
-require UP_ROOT.'footer.php';
 ?>

@@ -9,10 +9,6 @@ if (!defined('UP_ROOT')) {
 	define('UP_ROOT', '../');
 }
 
-if (DEBUG === true) {
-	require_once UP_ROOT.'include/formaldehyde.inc.php';
-}
-
 class AJAX {
 
 	public function getComments() {

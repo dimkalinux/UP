@@ -15,7 +15,7 @@ UP.admin = function () {
 		var items = [],
 			i = 0;
 
-		$(':checkbox:checked').each(function () {
+		$('input:checkbox:checked').each(function () {
 				if (i >= maxItems) {
 					return false;
 				}
@@ -35,7 +35,7 @@ UP.admin = function () {
 		var items = [],
 			i = 0;
 
-		$([':checkbox[value=', type, ']'].join(''))
+		$(['input:checkbox[value=', type, ']'].join(''))
 			.each(function () {
 				if (i >= maxItems) {
 					return false;
@@ -54,7 +54,7 @@ UP.admin = function () {
 
 
 	function showNumCheckedCB() {
-		return $(":checkbox:checked[value='1']:visible").size();
+		return $("input:checkbox:checked[value='1']:visible").size();
 	}
 
 
@@ -107,7 +107,7 @@ UP.admin = function () {
 
 	function onComplete(timerLabel) {
 		$('#wrap').stopTime(timerLabel);
-		$(':checkbox').removeAttr('disabled');
+		$('input:checkbox').removeAttr('disabled');
 		$('#allCB').removeAttr('checked');
 	}
 
@@ -148,7 +148,7 @@ UP.admin = function () {
 				data: 	{ t_action: actions, t_ids: items },
 				dataType: 'json',
 				beforeSend: function () {
-					$(':checkbox, :button').attr('disabled', 'disabled'); // disable all input
+					$('input:checkbox, :button').attr('disabled', 'disabled'); // disable all input
 				},
 				complete: function () {
 					onComplete('deleteTimer');

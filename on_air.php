@@ -19,7 +19,7 @@ require UP_ROOT.'header.php';
 <?
 $addScript[] = 'jquery.sha1.js';
 $onDOMReady = <<<ZZZ
-		$('#wrap').everyTime(7000, '123', UP.utils.getPE);
+		$('#wrap').everyTime(7000, 'updateOnAir', UP.utils.getPE);
 ZZZ;
 
 require UP_ROOT.'footer.php';

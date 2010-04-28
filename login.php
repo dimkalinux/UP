@@ -56,7 +56,7 @@ if (isset($_POST['form_sent'])) {
 
 		// part 2
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$row = $db->getRow('SELECT id,password,email,admin FROM users WHERE username=? LIMIT 1', $form_username);
 			if (!$row) {
 				$err = 1;
@@ -129,8 +129,6 @@ $out = <<<ZZZ
 		</div>
 	</form>
 ZZZ;
-require UP_ROOT.'header.php';
-echo($out);
 
 $onDOMReady = <<<ZZZ
 	var form = $("form[name='login']");
@@ -212,5 +210,5 @@ $onDOMReady = <<<ZZZ
 ZZZ;
 
 
-require UP_ROOT.'footer.php';
+printPage($out);
 ?>

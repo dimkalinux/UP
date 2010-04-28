@@ -24,7 +24,7 @@ function export_new_files($num) {
 	$blocks = null;
 	$cache = new Cache;
 	if (!$blocks = $cache->get('api_new')) {
-		$db = new DB;
+		$db = DB::singleton();
 		$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' ORDER BY uploaded_date DESC LIMIT $num");
 		if ($datas) {
 			$blocks = <<<ZZZ
@@ -45,9 +45,9 @@ ZZZ;
 ZZZ;
 		}
 
-	$cache->set($blocks, 'api_new', 0);
-
+		$cache->set($blocks, 'api_new', 120);
 	}
+
 	return $blocks;
 }
 

@@ -27,7 +27,7 @@ if ($Upload->is_upload_flood()) {
 require UP_ROOT.'header.php';
 
 $geo = get_geo(get_client_ip());
-if ($geo != 'world_'):
+if ($geo != 'world'):
 ?>
 			<div id="status">&nbsp;</div>
 			<h2>Загрузите файл</h2>

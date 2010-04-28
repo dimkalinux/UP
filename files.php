@@ -76,7 +76,7 @@ function files_get($type, $page, $link_base) {
 	$items_per_page = 100;
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$res = $db->getRow("SELECT COUNT(*) as num FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0'");
 	} catch (Exception $e) {
 		error($e->getMessage());
@@ -125,7 +125,7 @@ function files_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.mp3$'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
@@ -135,7 +135,7 @@ function files_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.avi$|.mpg$|.mp4$|.mpeg$'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
@@ -145,7 +145,7 @@ function files_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.rar$|.zip$|.gz$|.bz2$|.7z$|.arj$|.ace$'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
@@ -155,7 +155,7 @@ function files_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.iso$|.nrg$|.mdf$|.mds$'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
@@ -165,7 +165,7 @@ function files_get($type, $page, $link_base) {
 			$th_name = '<th class="name current">Имя файла</th>';
 			$td_name_class = "current";
 			$order_by = 'uploaded_date';
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						AND filename REGEXP BINARY '.jpeg$|.jpg$|.png$|.gif$|.tiff$|.psd$|.bmp$'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 			break;
@@ -199,7 +199,7 @@ function files_get($type, $page, $link_base) {
 
 	try {
 		if (!isset($query)) {
-			$query = "SELECT * FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
+			$query = "SELECT *,UNIX_TIMESTAMP(uploaded_date) AS UT FROM up WHERE spam='0' AND deleted='0' AND hidden='0' AND adult='0'
 						ORDER BY $order_by DESC LIMIT $start_from,$items_per_page";
 		}
 
@@ -217,7 +217,7 @@ function files_get($type, $page, $link_base) {
 		<thead>
 		<tr>
 			<th class="noborder" colspan="$colspanPreAdmin"></th>
-			<th class="left noborder" colspan="$colspan">$admin_actions_block $page_links</th>
+			<th class="left noborder" colspan="$colspan">$admin_actions_block</th>
 		</tr>
 		<tr>
 			$admin_th_row
@@ -240,7 +240,7 @@ ZZZ;
 			$filesize = format_filesize($rec['size']);
 			$downloaded = $rec['downloads'];
 			$hotDownloads = intval($rec['hot_downloads'], 10);
-			$file_date = prettyDate($rec['uploaded_date']);
+			$file_date = prettyDate($rec['UT']);
 			$file_last_downloaded_date = $rec['last_downloaded_date'];
 			$spam = $rec['spam'];
 

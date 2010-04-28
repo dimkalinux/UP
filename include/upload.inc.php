@@ -112,7 +112,7 @@ class Upload {
 
 	public static function getFilenameForFUSE($filename, $user_id) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT filename_fuse FROM up WHERE user_id=? AND deleted=0 LIMIT 1000", $user_id);
 		} catch (Exception $e) {
 			error($e->getMessage());
@@ -172,7 +172,7 @@ class Upload {
 
 	public static function updateUploadsCounters($uid, $upload, $uploadSize) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("UPDATE users SET uploads=uploads+?, uploads_size=uploads_size+? WHERE id=?", $upload, $uploadSize, $uid);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());

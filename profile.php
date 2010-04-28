@@ -56,7 +56,7 @@ if (isset($_POST['form_sent'])) {
 
 		// part 2
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$row = $db->getRow('SELECT id,password FROM users WHERE username=? LIMIT 1', $form_username);
 			if (!$row) {
 				$err = 1;
@@ -70,7 +70,6 @@ if (isset($_POST['form_sent'])) {
 			$user_password_hash = $row['password'];
 
 			// check password
-			require UP_ROOT.'include/PasswordHash.php';
 			$t_hasher = new PasswordHash(8, FALSE);
 			if (!$t_hasher->CheckPassword($form_password, $user_password_hash)) {
 				$err = 1;
@@ -111,10 +110,7 @@ $out = <<<ZZZ
 	</ul>
 	</form>
 ZZZ;
-require UP_ROOT.'header.php';
-echo($out);
 
+printPage($out);
 
-
-require UP_ROOT.'footer.php';
 ?>

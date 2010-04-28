@@ -18,7 +18,7 @@ class User {
 		$dbExpire = ($savePass) ? "NOW() + INTERVAL 14 DAY" : "NOW() + INTERVAL 2 HOUR";
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
        		$db->query("DELETE FROM session WHERE sid=? AND uid=?", $sid, $uid);
 		   	$db->query("INSERT INTO session VALUES(?, ?, INET_ATON(?), $dbExpire, ?)", $sid, $uid, $ip, $login);
 		} catch(Exception $e) {
@@ -31,7 +31,7 @@ class User {
 
 	public function updateUploadsCounters($uid, $upload, $uploadSize) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("UPDATE users SET uploads=uploads+?, uploads_size=uploads_size+? WHERE id=?", $upload, $uploadSize, $uid);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -65,7 +65,7 @@ class User {
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// delete all expires from session DB
 			$db->query('DELETE FROM session WHERE expire < NOW()');
@@ -92,7 +92,7 @@ class User {
 
 	public function getUsername($uid) {
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			$row = $db->getRow("SELECT username FROM session WHERE uid=? LIMIT 1", $uid);
 			if ($row) {
@@ -132,7 +132,7 @@ class User {
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// delete all expires from session DB
 			$db->query('DELETE FROM session WHERE expire < NOW()');

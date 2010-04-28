@@ -41,12 +41,18 @@ if (DEBUG === TRUE) {
 }
 
 // load all libs
-require_once UP_ROOT.'include/db.inc.php';
-require_once UP_ROOT.'include/logger.inc.php';
+
+// LOAD UTF-8 FUNCTIONS
+require UP_ROOT.'include/utf8/utf8.php';
+require UP_ROOT.'include/utf8/ucwords.php';
+require UP_ROOT.'include/utf8/trim.php';
+require UP_ROOT.'include/db.inc.php';
+require UP_ROOT.'include/logger.inc.php';
+require UP_ROOT.'include/PasswordHash.php';
 if (function_exists('memcache_pconnect')) {
-	require_once UP_ROOT.'include/cache_empty.inc.php';
+	require_once UP_ROOT.'include/cache.inc.php';
 } else {
-	require_once UP_ROOT.'include/cache_empty.inc.php';
+	die('');
 }
 require_once UP_ROOT.'include/storage.inc.php';
 require_once UP_ROOT.'include/gravatar.inc.php';
@@ -453,13 +459,13 @@ function is_adult($filename, $filesize=0) {
 }
 
 
-function prettyDate($mysqlDate) {
+function prettyDate($timestamp) {
 	date_default_timezone_set("Europe/Zaporozhye");
 	setlocale(LC_TIME, 'ru_RU', 'ru_RU.utf8', 'ru');
 
-	$diff = date_format(date_create('now'), 'U') - date_format(date_create($mysqlDate), 'U');
+	$diff = time() - $timestamp;
     $dayDiff = floor($diff / 86400);
-    $defaultDateFormat = date_format(date_create($mysqlDate), 'M j');
+    $defaultDateFormat = date('M j', $timestamp);
 
  	if(is_nan($dayDiff) || $dayDiff < 0) {
     	return '';
@@ -485,7 +491,7 @@ function makeSearch($req, $fooltext=FALSE) {
 	$regexp = (bool) preg_match('/\*|\?/u', $req);
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 
 		if ($fooltext === TRUE) {
 			$datas = $db->getData("SELECT * FROM up WHERE
@@ -603,7 +609,7 @@ function get_pe() {
 	$out = '';
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$datas = $db->getData("SELECT dnow.id, up.filename, n, type FROM dnow
 				LEFT JOIN up
 				ON dnow.id = up.id
@@ -645,7 +651,7 @@ function get_similar_count($req, $id) {
 	}
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$row = $db->getRow("SELECT COUNT(*) AS n FROM up WHERE
 				id!=?
 			AND deleted='0'

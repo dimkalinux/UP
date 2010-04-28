@@ -27,10 +27,10 @@ if (!$rss_out = $cache->get('rss_lenta')) {
 FMB;
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' ORDER BY id DESC LIMIT $rss_num");
 	} catch (Exception $e) {
-			error($e->getMessage());
+		error($e->getMessage());
 	}
 
 	if ($datas) {

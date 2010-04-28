@@ -29,7 +29,7 @@ if (!$rss_out = $cache->get('RSS_FEEDBACK'))
 	<lastBuildDate>$rss_date</lastBuildDate>
 EOD;
 
-	$db = new DB;
+	$db = DB::singleton();
 	$datas = $db->getData("SELECT * FROM feedback ORDER BY id DESC LIMIT $rss_num");
 
 	if ($datas) {
@@ -71,8 +71,7 @@ EOD;
 	$cache->set($rss_out, 'RSS_FEEDBACK', 600);
 }
 
-echo $rss_out;
-exit();
+exit($rss_out);
 
 function clear_for_rss($str) {
 	$str =  strip_tags ($str, "<br>");

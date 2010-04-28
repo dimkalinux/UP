@@ -24,7 +24,7 @@ do {
 
 	// build info
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		if ($magic !== null) {
 			$row = $db->getRow("SELECT up.*, username, DATEDIFF(NOW(), GREATEST(up.last_downloaded_date,up.uploaded_date)) as NDI FROM up LEFT JOIN users ON up.user_id=users.id WHERE up.id=? AND up.delete_num=? LIMIT 1", $item_id, $magic);
 		} else {
@@ -257,6 +257,9 @@ FMB;
 		}
 	}
 
+	// ABUSE BLOCK
+	$abuse_block = '<tr><td class="ab">abuse</td><td class="bb"><a href="'.$base_url.'abuse/'.$item_id.'/" title="Пожаловаться на плохой файл">пожаловаться</a></td></tr>';
+
 
 	// NEW MAGIC LINKS SYSTEM
 	$cache = new Cache;
@@ -278,9 +281,12 @@ FMB;
 	}
 
 	// PASSWORD LABEL
-	$passwordLabelOpacity = ($is_password) ? "1.0" : "0.0";
-	$passwordLabel = '<span class="passwordLabel" style="opacity: '.$passwordLabelOpacity.';" title="Файл защищён паролем" id="passwordLabel">&beta;</span>';
+	$passwordLabelShow = ($is_password) ? "inline" : "none";
+	$passwordLabel = '<span class="passwordLabel" rel="item_label" style="display: '.$passwordLabelShow.';" title="Файл защищён паролем" id="passwordLabel">&beta;</span>';
 
+	// PASSWORD LABEL
+	$passwordLabelShow = (intval($row['immortal'], 10) === 1) ? "inline" : "none";
+	$immortalLabel = '<span class="immortalLabel" rel="item_label" style="display: '.$passwordLabelShow.';" title="Вечный файл" id="immortalLabel">&infin;</span>';
 
 	// CREATE DOWNLOAD LINK
 	$dlink_raw = "{$base_url}download/{$item_id}/{$dlmValue}/";
@@ -406,10 +412,11 @@ FMB;
 	$out = <<<FMB
 	<div id="status">&nbsp;</div>
 	$im_owner_block
-	<h2>{$passwordLabel}<span id="item_info_filename" title="$fullFilename">$filename</span></h2>
+	<h2><span id="item_info_filename" title="$fullFilename">$filename</span></h2>
 	<table class="asDiv">
 	<tr><td>
 		<table class="t1" id="file_info_table">
+			<tr id="item_labels"><td class="ab">метки</td><td class="bb">{$immortalLabel}{$passwordLabel}</td></tr>
 			<tr><td class="ab">размер</td><td class="bb">$filesize_text</td></tr>
 			<tr><td class="ab">скачан</td><td class="bb">$downloaded_text</td></tr>
 			<tr><td class="ab">срок хранения</td><td class="bb">$wakkamakka_text</td></tr>
@@ -422,6 +429,7 @@ FMB;
 			<form method="$form_method" action="$dlink_raw" autocomplete="off">
 			$pass_input
 			$owner_block
+			$abuse_block
 			<tr><td class="ab"></td><td class="bb"><div id="download_link">$dlink</div></td></tr>
 			</form>
 			<tr>
@@ -585,7 +593,6 @@ FMB;
 
 if ($error === 0) {
 	printPage($out);
-	exit();
 } else {
 	show_error_message("Ссылка не&nbsp;верна или устарела.");
 }

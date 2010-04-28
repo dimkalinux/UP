@@ -64,7 +64,7 @@ class Storage {
 			$st_hash = serialize($storage['hash']);
 
 			try {
-				$db = new DB;
+				$db = DB::singleton();
 				$db->query("INSERT INTO storage VALUES('', ?, ?, ?, ?, ?, ?, ?)", $st_upload_url, $st_device, $st_mount_point, $st_name, $st_prio, $st_disabled, $st_hash);
 			} catch (Exception $e) {
 				error($e->getMessage());

@@ -1,16 +1,16 @@
 <?php
 
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 
-define('MYSQL_ADDRESS', '127.0.0.1');
-define('MYSQL_LOGIN', 'root');
-define('MYSQL_PASSWORD', '');
-define('MYSQL_DB', 'up');
-define('MYSQL_CHARSET', 'utf8');
+define('MYSQL_ADDRESS', '194.146.132.67');
+define('MYSQL_LOGIN', 'up2user');
+define('MYSQL_PASSWORD', 'uCanStealThisPasswordIDontCare');
+define('MYSQL_DB', 'up2');
+//define('MYSQL_CHARSET', 'latin1');
 
 // memcache
-define('MEMCACHE_HOST', '194.146.132.66');
+define('MEMCACHE_HOST', '194.146.132.67');
 define('MEMCACHE_PORT', '11211');
 define('MEMCACHE_PERSISTENT_CONNECT', TRUE);
 
@@ -59,9 +59,9 @@ define('ACTION_COMMENTS_DEL', 101);
 
 
 // BASE URL aka CDN
-define('CSS_BASE_URL', 'http://up.lluga.net/');
-define('JS_BASE_URL', 'http://up.lluga.net/');
-define('JS_BASE_URL_1', 'http://up.iteam.net.ua/');
+define('CSS_BASE_URL', 'http://up2.lluga.net/');
+define('JS_BASE_URL', 'http://up2.lluga.net/');
+define('JS_BASE_URL_1', 'http://up2.lluga.net/');
 
 define('UPLOAD_NO_ERROR', 0);
 define('UPLOAD_ERROR_FOUND_VIRUS', 1);
@@ -76,7 +76,7 @@ define('UPLOAD_ERROR_EMPTY_FILE', 8);
 define('UPLOAD_FILE_RIGHTS', 0444);
 
 
-$base_url = 'http://up.lluga.net/';
+$base_url = 'http://up2.lluga.net/';
 
 // LOGIN METHOD
 define('USE_OPENID', FALSE);
@@ -111,13 +111,13 @@ $ftpGIDBase = 5000;
 
 // PATH SECTION
 $upload_dir = '/var/upload/';
-$server_root = '/home/opt/lampp/htdocs/';
+$server_root = '/var/www/up2/';
 $thumbs_dir = $server_root.'thumbs/';
 $feedback_upload_dir = $upload_dir.'/up_feedback_files/';
 
 
 // EMAIL
-$feedback_email = 'dark@iteam.net.ua';
+$feedback_email = 'webmaster@iteam.lg.ua';
 
 
 // CACHE TIMEOUTS
@@ -189,65 +189,57 @@ $checker_check_thumbs = FALSE;
 
 // STORAGE SECTION
 $storage_1 = array(
-	'upload_url' => '/upload14',
-	'name' => 'upload14',
-	'device' => '/dev/sdb1',
-	'mount_point' => '/var/upload/14',
+	'upload_url' => '/upload_1',
+	'name' => 'upload_1',
+	'device' => '/dev/sdc1',
+	'mount_point' => '/var/upload/1',
 	'prio' => 5,
 	'disabled' => 0,
-	'hash' => array('14')
-);
-
-$storage_5 = array(
-	'upload_url' => '/upload15',
-	'name' => 'upload15',
-	'device' => '/dev/sda1',
-	'mount_point' => '/var/upload/15',
-	'prio' => 3,
-	'disabled' => 0,
-	'hash' => array('15')
+	'hash' => array('1')
 );
 
 $storage_2 = array(
-	'upload_url' => '/upload17',
-	'name' => 'upload17',
-	'device' => '/dev/sdf1',
-	'mount_point' => '/var/upload/17',
-	'prio' => 3,
+	'upload_url' => '/upload_2',
+	'name' => 'upload_2',
+	'device' => '/dev/sdd1',
+	'mount_point' => '/var/upload/2',
+	'prio' => 5,
 	'disabled' => 0,
-	'hash' => array('17')
+	'hash' => array('2')
 );
 
 $storage_3 = array(
-	'upload_url' => '/upload18',
-	'name' => 'upload18',
-	'device' => '/dev/sdc1',
-	'mount_point' => '/var/upload/18',
+	'upload_url' => '/upload_3',
+	'name' => 'upload_3',
+	'device' => '/dev/sda1',
+	'mount_point' => '/var/upload/3',
+	'prio' => 5,
 	'disabled' => 0,
-	'prio' => 0,
-	'hash' => array('18')
+	'hash' => array('3')
 );
+
 
 $storage_4 = array(
-	'upload_url' => '/upload19',
-	'name' => 'upload19',
-	'device' => '/dev/sdg1',
-	'mount_point' => '/var/upload/19',
-	'prio' => 3,
+	'upload_url' => '/upload_4',
+	'name' => 'upload_4',
+	'device' => '/dev/sdb1',
+	'mount_point' => '/var/upload/4',
+	'prio' => 5,
 	'disabled' => 0,
-	'hash' => array('19')
+	'hash' => array('4')
 );
 
 
-$storage_6 = array(
-	'upload_url' => '/upload16',
-	'name' => 'upload16',
-	'device' => '/dev/sdd1',
-	'mount_point' => '/var/upload/16',
-	'prio' => 3,
+$storage_5 = array(
+	'upload_url' => '/upload_5',
+	'name' => 'upload_5',
+	'device' => '/dev/sdf1',
+	'mount_point' => '/var/upload/5',
+	'prio' => 5,
 	'disabled' => 0,
-	'hash' => array('16')
+	'hash' => array('5')
 );
+
 
 
 define('UP', 1);

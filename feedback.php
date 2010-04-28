@@ -5,19 +5,17 @@ if (!defined('UP_ROOT')) {
 }
 require UP_ROOT.'functions.inc.php';
 
-
+//
 if (isset ($_GET['thanks'])) {
-	require UP_ROOT.'header.php';
-
-	$out = <<<ZZZ
+	$out = <<<FMB
 	<div id="status">&nbsp;</div>
 	<h2>Спасибо</h2>
 	<p>Ваше сообщение отправлено администратору сервиса.</p>
-ZZZ;
-	echo($out);
-	require UP_ROOT.'footer.php';
-	exit();
+FMB;
+
+	printPage($out);
 }
+
 
 $user_email = '';
 if (!$user['is_guest']) {
@@ -28,27 +26,26 @@ $form_action_feedback = $base_url.'feedback/';
 $csrf = generate_form_token($form_action_feedback);
 $form = <<<ZZZ
 	<form method="post" action="$form_action_feedback" name="feedback" enctype="multipart/form-data" accept-charset="utf-8">
-		<input type="hidden" name="form_sent" value="1" />
-		<input type="hidden" name="csrf_token" value="$csrf" />
-	<div class="formRow">
-		<label for="feedbackText">Сообщение</label>
-		<textarea name="feedbackText" rows="10" minLength="1" maxLength="2048" required="1" tabindex="1"></textarea>
-	</div>
-	<div class="formRow">
-		<label for="feedbackUserEmail">Ваш&nbsp;e-mail, на&nbsp;который будет выслан ответ</label>
-		<input type="text" name="feedbackUserEmail" maxLength="80" tabindex="2" value="$user_email"/>
-		<div class="inputHelp">не&nbsp;обязательно</div>
-	</div>
-	<div class="formRow">
-		<label for="feedbackUserFile">Можно добавить файл, например скриншот</label>
-		<input type="hidden" name="MAX_FILE_SIZE" value="5242880"/>
-		<input type="file" name="feedbackUserFile" tabindex="3"/>
-		<div class="inputHelp">объём файла не&nbsp;должен превышать 5&nbsp;МБ.</div>
-	</div>
-	<div class="formRow buttons">
-		<input type="submit" name="do" value="Отправить" class="default" tabindex="4"/>
-		<input type="reset" name="reset" value="Очистить" tabindex="5"/>
-	</div>
+		<input type="hidden" name="form_sent" value="1"/>
+		<input type="hidden" name="csrf_token" value="$csrf"/>
+		<div class="formRow">
+			<label for="feedbackText">Сообщение</label>
+			<textarea name="feedbackText" rows="10" minLength="1" maxLength="2048" required="1" tabindex="1"></textarea>
+		</div>
+		<div class="formRow">
+			<label for="feedbackUserEmail">Ваш&nbsp;e-mail, на&nbsp;который будет выслан ответ</label>
+			<input type="text" name="feedbackUserEmail" maxLength="80" tabindex="2" value="$user_email"/>
+			<div class="inputHelp">не&nbsp;обязательно</div>
+		</div>
+		<div class="formRow">
+			<label for="feedbackUserFile">Можно добавить файл, например скриншот</label>
+			<input type="hidden" name="MAX_FILE_SIZE" value="5242880"/>
+			<input type="file" name="feedbackUserFile" tabindex="3"/>
+			<div class="inputHelp">объём файла не&nbsp;должен превышать 5&nbsp;МБ.</div>
+		</div>
+		<div class="formRow buttons">
+			<input type="submit" name="do" value="Отправить" tabindex="4"/>
+		</div>
 	</form>
 ZZZ;
 
@@ -99,7 +96,7 @@ if (isset ($_POST['form_sent']) || isset($_POST['json'])) {
 
 		// add to database
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("INSERT INTO feedback VALUES('', ?, NOW(), ?, ?, ?, '0')", $ip, $message, $email, $uploadfilename);
 		} catch (Exception $e) {
 			$errMsg = 'Ошибка на сервере. Попробуйте позже';
@@ -131,10 +128,14 @@ if (isset($_POST['json'])) {
 	exit(json_encode(array('error'=> $wasError, 'message' => $errMsg)));
 }
 
+$errMsgType = 'none';
+if ($wasError == 1) {
+	$errMsgType = 'error';
+}
 
 
 $out = <<<FMB
-	<div id="status">$errMsg</div>
+	<div id="status"><span type="$errMsgType">$errMsg</span></div>
 	<h2>Обратная связь</h2>
 	<p class="pageDescription">Перед вами специальная штука.<br />
 С&nbsp;её помощью можно задать вопрос администраторам, высказать свои мысли и&nbsp;предложения, выругаться матом или попросить денег в&nbsp;долг.
@@ -208,7 +209,6 @@ $onDOMReady = <<<ZZZ
 	$(form).find("[required='1'][value='']:first").focus();
 ZZZ;
 
-require UP_ROOT.'header.php';
-echo $out;
-require UP_ROOT.'footer.php';
+printPage($out);
+
 ?>

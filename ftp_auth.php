@@ -27,7 +27,7 @@ do {
 	}
 
 	try {
-		$db = new DB;
+		$db = DB::singleton;
 		$row = $db->getRow('SELECT id,password,username FROM users WHERE username=? LIMIT 1', $login);
 		if (!$row) {
 			break;
@@ -37,7 +37,6 @@ do {
 		$user_password_hash = $row['password'];
 
 		// check password
-		require_once UP_ROOT.'include/PasswordHash.php';
 		$t_hasher = new PasswordHash(8, FALSE);
 		if (!$t_hasher->CheckPassword($pass, $user_password_hash)) {
 			break;

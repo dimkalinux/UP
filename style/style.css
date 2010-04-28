@@ -211,6 +211,7 @@ tr.canceled td, tr.selected td { background: #F4F8FF !important; border-bottom: 
 #status span[type=info] { background: #75A900; }
 #status span[type=error] { background: #cc0000; }
 #status span[type=warning] { background: #E44329; }
+#status span[type=none] { background: #fff; }
 #status > span[type=info], #status > span[type=error], #status > span[type=warning], #status > span[type=waiting]  { -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
 
 #commentStatus { text-align: left;  font: .95em/1 Verdana, Tahoma, Arial, sans-serif; margin: .5em 0; }
@@ -239,7 +240,7 @@ tr#header-name td { padding-bottom: .8em !important; font-family: Verdana, Tahom
 /*a.page_links, a.page_links:visited { color: #0055cc !important; }*/
 
 
-.formRow { padding-bottom: .6em; }
+.formRow { padding-bottom: 1em; }
 .inputHelp { font-size: .88em; padding: .2em 0; color: #444; }
 label { color: #000; font-weight: normal; display: block; MozUserSelect: none; }
 
@@ -290,7 +291,13 @@ input[type='checkbox'] { margin: 0;}
 
 form[name=feedback] input[type=text],
 form[name=feedback] textarea,
+form[name=abuse] input[type=text],
+form[name=abuse] textarea,
 form[name=comments] textarea { width: 33em; }
+
+form[name=abuse] textarea:focus,
+form[name=comments] textarea:focus { -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); }
+
 
 
 #footer { clear: both; color: #474747; }
@@ -700,6 +707,7 @@ a.oneLineLink { margin-top: .6em; display: block; }
 
 .popularLabel { font-weight: bold; color: #fff; background: #1086A4; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
 .passwordLabel { font-weight: bold; color: #fff; background: #EF6430; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
+.immortalLabel { font-weight: bold; color: #fff; background: #EF6430; padding: .1em .3em; margin-right: .5em; font-size: .9em; -webkit-border-radius: 3px; -moz-border-radius: 3px; cursor: default; }
 
 .feedbackList, .commentList { list-style-type: none !important; max-width: 65em !important; padding-left: 1em; }
 .feedbackList + li, .commentList + li { color: #333; padding: .8em 1em 1em 1em; margin-bottom: 1.5em; font-size: .95em; }

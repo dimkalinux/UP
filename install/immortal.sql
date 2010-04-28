@@ -1,0 +1,1 @@
+ALTER TABLE up ADD COLUMN immortal BOOL DEFAULT 0 AFTER user_id;

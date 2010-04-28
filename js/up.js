@@ -1799,17 +1799,32 @@ UP.owner = function () {
 				},
 				success: function(data) {
 					if (parseInt(data.result, 10) === 1) {
+
+					    function hideShowItemsLables() {
+						if ($('span[rel="item_label"]:visible').size() > 0) {
+						    $('#item_labels').show(250);
+						} else {
+						    $('#item_labels').hide(250);
+						}
+					    }
 						if (parseInt(data.message, 10) === 0) {
 							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль отключен' : 'Пароль не установлен';
-							$('#passwordLabel').fadeTo(350, 0.0);
-							$("#owner_password_link").attr("rel", 0);
-							$("#owner_password_link").html("установить&nbsp;пароль").attr("title", 'Установить пароль на файл');
+							$('#passwordLabel').hide(350, function () {
+							    $("#owner_password_link").attr("rel", 0);
+							    $("#owner_password_link").html("установить&nbsp;пароль").attr("title", 'Установить пароль на файл');
+							    hideShowItemsLables();
+							});
 						} else {
 							var okMsg = (parseInt(isChangeCurrent, 10) === 1) ? 'Пароль изменён' : 'Пароль установлен';
-							$('#passwordLabel').fadeTo(350, 1.0);
-							$("#owner_password_link").attr("rel", 1);
-							$("#owner_password_link").html("изменить&nbsp;пароль").attr("title", 'Сменить пароль на файл');
+							$('#passwordLabel').show(350, function () {
+							    $("#owner_password_link").attr("rel", 1);
+							    $("#owner_password_link").html("изменить&nbsp;пароль").attr("title", 'Сменить пароль на файл');
+							    hideShowItemsLables();
+							});
 						}
+
+
+
 						UP.statusMsg.show(okMsg, UP.env.msgInfo, true);
 					} else {
 						onError(data.message);

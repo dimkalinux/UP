@@ -4,7 +4,7 @@ if (!defined('UP_ROOT')) {
 	define('UP_ROOT', './');
 }
 require UP_ROOT.'functions.inc.php';
-require 'include/PasswordHash.php';
+
 
 // item
 if (!isset ($_GET['item']) || !isset ($_GET['magic'])) {
@@ -16,7 +16,7 @@ $geo = get_geo();
 $magic = $_GET['magic'];
 
 try {
-	$db = new DB;
+	$db = DB::singleton();
 	$row = $db->getRow("SELECT * FROM up WHERE id=? LIMIT 1", $item_id);
 } catch (Exception $e) {
 	httpError404();

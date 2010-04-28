@@ -19,7 +19,7 @@ if ($user['is_admin']) {
 
 
 try {
-	$db = new DB;
+	$db = DB::singleton();
 	$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND hidden='0' AND spam='1' ORDER BY id DESC");
 } catch(Exception $e) {
 	error($e->getMessage());

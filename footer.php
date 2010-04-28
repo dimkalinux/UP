@@ -9,6 +9,7 @@ if (!defined('UP')) {
 
 	<div id="footer">
 		<ul class="sitenav">
+			<li><a href="http://portal.iteam.net.ua/">Портал</a></li>
 			<li><a href="<?php echo $base_url; ?>map/">Карта сайта</a></li>
 			<li><a href="<?php echo $base_url; ?>agreement/">Пользовательское соглашение</a></li>
 			<li><a href="<?php echo $base_url; ?>feedback/" title="Форма для&nbsp;связи с&nbsp;администрацией сервиса">Обратная связь</a></li>

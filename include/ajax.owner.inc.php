@@ -32,7 +32,7 @@ class AJAX_OWNER extends AJAX {
 		}
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$datas = $db->getData("SELECT *, DATEDIFF(NOW(), GREATEST(last_downloaded_date,uploaded_date)) as NDI FROM up WHERE user_id=? AND deleted=0 LIMIT 5000", $user['id']);
 		} catch (Exception $e) {
 			parent::exitWithError('Невозможно получить список файлов: '.$e->getMessage());
@@ -100,7 +100,7 @@ FMB;
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -142,7 +142,7 @@ FMB;
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -178,7 +178,7 @@ FMB;
 		$reason = 'удалён владельцем файла';
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// check for magic
 			if ($owner_key === 0) {
@@ -222,7 +222,7 @@ ZZZ;
 		$owner_key = intval(get_post('t_magic'), 10);
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// check for magic
 			if ($owner_key === 0) {
@@ -268,7 +268,7 @@ ZZZ;
 
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// make me owner
 			$db->query("UPDATE up SET user_id=? WHERE id=? AND delete_num=? AND user_id=0", $user['id'], $item_id, $owner_key);
@@ -302,7 +302,7 @@ ZZZ;
 
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 
 			// check for magic
 			if ($owner_key === 0) {
@@ -350,7 +350,7 @@ ZZZ;
 				$cryptPassword = $t_hasher->HashPassword($_POST['t_password']);
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			// check for magic
 			if ($owner_key === 0) {
