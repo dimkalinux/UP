@@ -42,27 +42,26 @@ if (isset ($_POST['form_sent']) || isset($_POST['json'])) {
 		$item_id = isset($_POST['item_id']) ? intval($_POST['item_id'], 10) : 0;
 		$abuseType = isset($_POST['abuseType']) ? intval($_POST['abuseType'], 10) : 0;
 		$abuseMessage = isset($_POST['abuseMessage']) ? mb_substr($_POST['abuseMessage'], 0, 2048) : '';
-		$abuseWeight = 1;
+		$abuseWeight = User::get_abuse_weight($user);
 
 		// add to database
 		try {
 			$db = DB::singleton();
 
-			// CHECK LAST ABUSE FROM THIS ip
-			$row = $db->getRow("SELECT COUNT(*) AS n FROM abuse WHERE item_id=? AND ip=? AND DATE_SUB(CURDATE(),INTERVAL 3 DAY) <= date", $item_id, $ip);
-			if (intval($row['n'], 10) > 0) {
+			// CHECK LAST ABUSE
+			if (!User::can_abuse_this_file($item_id, $user)) {
 				$wasError = 1;
 				$errMsg = 'С вашего IP-адреса уже была жалоба на этот файл';
 				break;
 			}
 
-			$db->query("INSERT INTO abuse (item_id,ip,date,abuse_type,message,weight) VALUES(?, ?, NOW(), ?, ?, ?)", $item_id, $ip, $abuseType, $abuseMessage, $abuseWeight);
+			$db->query("INSERT INTO abuse (item_id,user_id,ip,date,abuse_type,message,weight) VALUES(?, ?, ?, NOW(), ?, ?, ?)", $item_id, $user['id'], $ip, $abuseType, $abuseMessage, $abuseWeight);
 
 			$row = $db->getRow('SELECT COALESCE(SUM(weight), 0) AS sw FROM abuse WHERE item_id=?', $item_id);
 			$spamWeight = intval($row['sw'], 10);
 
 			// HIDE ABUSED file
-			if ($spamWeight > 3) {
+			if ($spamWeight > 9) {
 				$db->query("UPDATE up SET hidden=1 WHERE id=? LIMIT 1", $item_id);
 			}
 		} catch (Exception $e) {
@@ -209,7 +208,9 @@ $onDOMReady = <<<ZZZ
 	$(form).find("[required='1'][value='']:first").focus();
 ZZZ;
 
-require UP_ROOT.'header.php';
-echo $out;
-require UP_ROOT.'footer.php';
+printPage($out);
+exit();
+
+
+
 ?>

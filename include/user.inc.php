@@ -335,6 +335,44 @@ FMB;
 		}
 	}
 
+	public static function can_abuse_this_file($item_id, $user) {
+		$db = DB::singleton();
+
+		// 1. CHECK from USER if not GUEST
+		if (!$user['is_guest']) {
+			$row = $db->getRow("SELECT COUNT(*) AS n FROM abuse WHERE item_id=? AND user_id=?", $item_id, $user['id']);
+			if (intval($row['n'], 10) > 0) {
+				return FALSE;
+			}
+		}
+
+		// 2. CHECK BY IP
+		$row = $db->getRow("SELECT COUNT(*) AS n FROM abuse WHERE item_id=? AND ip=? AND DATE_SUB(CURDATE(),INTERVAL 3 DAY) <= date", $item_id, $user['ip']);
+		if (intval($row['n'], 10) > 0) {
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	public static function get_abuse_weight($user) {
+		if ($user['is_admin']) {
+			return 10;
+		}
+
+		if ($user['geo'] == 'office') {
+			return 10;
+		}
+
+		if (!$user['is_guest'] && ($user['geo'] != 'world')) {
+			return 3;
+		}
+
+		// DEFAULT
+		return 1;
+	}
+
+
 
 	public static function logged($ip=false) {
 		global $cookie_name, $cookieSalt;

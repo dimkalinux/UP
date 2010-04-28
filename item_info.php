@@ -258,7 +258,15 @@ FMB;
 	}
 
 	// ABUSE BLOCK
-	$abuse_block = '<tr><td class="ab">abuse</td><td class="bb"><a href="'.$base_url.'abuse/'.$item_id.'/" title="Пожаловаться на плохой файл">пожаловаться</a></td></tr>';
+	try {
+		$abuse_block = '';
+		if (User::can_abuse_this_file($item_id, $user)) {
+			$abuse_block = '<tr><td class="ab">abuse</td><td class="bb"><a href="'.$base_url.'abuse/'.$item_id.'/" title="Пожаловаться на плохой файл">пожаловаться</a></td></tr>';
+		}
+	} catch (Exception $e) {
+		error($e->getMessage());
+	}
+
 
 
 	// NEW MAGIC LINKS SYSTEM

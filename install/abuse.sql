@@ -3,6 +3,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `abuse` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `user_id` int(10) unsigned NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   `ip` varchar(15) default NULL,
   `date` datetime NOT NULL,
