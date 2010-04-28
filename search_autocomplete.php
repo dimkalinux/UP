@@ -15,7 +15,7 @@ try {
 	$cacheKey = sha1('sa_'.mb_substr($_GET['q'], 0, 90));
 
 	if (!$out = $cache->get($cacheKey)) {
-		$sug =  urldecode($_GET['q']);
+		$sug = urldecode($_GET['q']);
 
 		$regexp = (bool) preg_match('/\*|\?/u', $sug);
 		if (!$regexp) {
@@ -25,7 +25,7 @@ try {
 			$sug = strtr($sug, $trans);
 		}
 
-		$db = new DB;
+		$db = DB::singleton();
 		$datas = $db->getData("SELECT DISTINCT filename FROM up WHERE deleted='0' AND hidden='0' AND spam='0' AND adult='0' AND filename LIKE ? ORDER BY filename LIMIT $searchCompleteMaxResults", "%{$sug}%");
 
 		$out = '';

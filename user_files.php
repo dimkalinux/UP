@@ -32,4 +32,6 @@ FMB;
 $myFiles = User::getUserFiles($user_id);
 
 printPage($out.$myFiles);
+exit();
+
 ?>

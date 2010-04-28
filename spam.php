@@ -56,9 +56,7 @@ FMB;
 	$out = '<div id="status">&nbsp;</div><h2>Спам</h2><p>Отсутствует.</p>';
 }
 
-require UP_ROOT.'header.php';
-echo($out);
-require UP_ROOT.'footer.php';
+printPage($out);
 exit();
 
 

@@ -10,7 +10,7 @@ $out = null;
 $cache = new Cache;
 if (!$out = $cache->get('up_stats')) {
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$row = $db->getRow("SELECT COUNT(*) AS num_files, SUM(size) AS sum_sizes FROM up");
 		$num_files = $row['num_files'];
 		$sum_file_size = format_filesize($row['sum_sizes']);

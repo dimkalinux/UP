@@ -114,7 +114,7 @@ try {
 	// SET rights
 	chmod($uploadfile, UPLOAD_FILE_RIGHTS);
 
-	$db = new DB;
+	$db = DB::singleton();
 	$db->query("INSERT INTO up VALUES('', ?, ?, NOW(), '', ?, ?, ?, ?, ?, ?, ?, '0', '0', ?, '0', '', '', '', ?, ?, ?, ?)",
 		$password, $owner_key, $up_file_ip, $uploadfilename, $subfolder, $up_file_name, $up_file_name_fuse, $up_file_mime, $up_file_size, ANTIVIR_NOT_CHECKED, $is_spam, $is_adult, $hidden, $user['id']);
 

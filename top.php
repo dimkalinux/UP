@@ -36,15 +36,12 @@ switch ($type) {
 		break;
 }
 
-require UP_ROOT.'header.php';
-echo $blocks;
 $addScript = $onDOMReady = '';
 if ($user['is_admin']) {
-		$addScript[] = 'up.admin.js';
-		$onDOMReady = 'UP.admin.cbStuffStart();';
+	$addScript[] = 'up.admin.js';
+	$onDOMReady = 'UP.admin.cbStuffStart();';
 }
-require UP_ROOT.'footer.php';
-exit();
+printPage($blocks);
 
 
 function top_get($type, $link_base) {

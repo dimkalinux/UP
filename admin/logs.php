@@ -8,7 +8,7 @@ if (!defined('UP_ROOT')) {
 require UP_ROOT.'functions.inc.php';
 
 try {
-	$db = new DB;
+	$db = DB::singleton();
 	$datas = $db->getData("SELECT * FROM logs WHERE (date > (NOW()-INTERVAL 1 WEEK)) ORDER BY date DESC");
 } catch (Exception $e) {
 	error($e->getMessage());

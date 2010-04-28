@@ -17,6 +17,7 @@ if (isset ($_GET['thanks'])) {
 FMB;
 	// PRINT PAGE and EXIT
 	printPage($out);
+	exit();
 }
 
 

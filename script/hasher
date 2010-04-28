@@ -1,0 +1,7 @@
+#!/bin/sh
+
+while [ '0' == '0' ]
+do
+    cd /var/www/html/script/ && nice -n 19 /usr/bin/php ./hasher.php >> /var/log/up.hasher.log
+    sleep 300
+done

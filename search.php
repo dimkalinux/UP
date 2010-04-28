@@ -138,8 +138,7 @@ $onDOMReady = <<<ZZZ
 	}
 ZZZ;
 
-require UP_ROOT.'header.php';
-echo $out;
 $addScript[] = 'jquery.autocomplete.js';
-require UP_ROOT.'footer.php';
+printPage($out);
+
 ?>

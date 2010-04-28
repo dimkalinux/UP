@@ -52,13 +52,9 @@ $onDOMReady = <<<FMB
 	});
 FMB;
 
-
-require UP_ROOT.'header.php';
-echo $out;
 $addScript[] = 'up.admin.js';
-require UP_ROOT.'footer.php';
+printPage($out);
 exit();
-
 
 
 function getFeedbackList() {
@@ -66,7 +62,7 @@ function getFeedbackList() {
 	$out = '';
 
 	try {
-		$db = new DB;
+		$db = DB::singleton();
 		$datas = $db->getData("SELECT * FROM feedback WHERE (date > (NOW()-INTERVAL 2 WEEK)) ORDER BY id DESC");
 
 		if ($datas) {

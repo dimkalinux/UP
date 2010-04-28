@@ -9,7 +9,7 @@ require UP_ROOT.'functions.inc.php';
 $addScript[] = 'up.admin.js';
 
 try {
-	$db = new DB;
+	$db = DB::singleton();
 	$datas = $db->getData("SELECT * FROM up WHERE deleted='0' AND adult='1' ORDER BY id DESC");
 } catch(Exception $e) {
 	error($e->getMessage());
@@ -46,9 +46,7 @@ FMB;
 	$out = '<div id="status">&nbsp;</div><h2>+16</h2><p>Отсутствует.</p>';
 }
 
-require UP_ROOT.'header.php';
-echo($out);
-require UP_ROOT.'footer.php';
+printPage($out);
 exit();
 
 

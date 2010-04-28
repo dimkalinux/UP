@@ -23,7 +23,7 @@ class AJAX_ADMIN extends AJAX {
 		$item_id = intval(get_get('t_id'), 10);
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("DELETE FROM comments WHERE id=? LIMIT 1", $item_id);
 
 			if ($db->affected() == 1) {
@@ -44,7 +44,7 @@ class AJAX_ADMIN extends AJAX {
 		$item_id = intval(get_get('t_id'), 10);
 
 		try {
-			$db = new DB;
+			$db = DB::singleton();
 			$db->query("DELETE FROM feedback WHERE id=? LIMIT 1", $item_id);
 
 			if ($db->affected() == 1) {
@@ -75,7 +75,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -119,7 +119,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -163,7 +163,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -207,7 +207,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -251,7 +251,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -295,7 +295,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -339,7 +339,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 
@@ -383,7 +383,7 @@ class AJAX_ADMIN extends AJAX {
 				throw new Exception('Empty items');
 			}
 
-			$db = new DB;
+			$db = DB::singleton();
 
 			$superItems = array_chunk(array_filter($items, "onlyDigit"), 10, FALSE);
 

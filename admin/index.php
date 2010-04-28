@@ -29,6 +29,7 @@ FMB;
 
 
 printPage($out);
+exit();
 
 ?>
 
