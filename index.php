@@ -26,8 +26,7 @@ if ($Upload->is_upload_flood()) {
 
 require UP_ROOT.'header.php';
 
-$geo = get_geo(get_client_ip());
-if ($geo != 'world'):
+if ($user['geo'] != 'world'):
 ?>
 			<div id="status">&nbsp;</div>
 			<h2>Загрузите файл</h2>
@@ -184,7 +183,7 @@ else:
 ?>
 	<div id="status">&nbsp;</div>
 	<h2>Привет</h2>
-	<p>Для гостей из «мира» загрузка файлов отключена.<br/>
+	<p>Загрузка файлов разрешена только пользователям <a href="http://iteam.net.ua/">сети «iTeam»</a><br/>
 	Но вы можете скачивать <a href="<?php echo $base_url; ?>files/">файлы</a> без каких-либо ограничений.</p>
 <?php
 endif;

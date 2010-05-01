@@ -9,7 +9,7 @@ if (!defined('UP')) {
 class User {
 
 	public static function getCurrentUser() {
-		$user = array("email" => '', "ip" => '', "id" => 0, "login" => '', "is_admin" => false, "is_guest" => true, "gravatar" => '');
+		$user = array("email" => '', "ip" => '', "id" => 0, "login" => '', "is_admin" => false, "is_guest" => true, "gravatar" => '', "geo" => 'world');
 
 		$user['ip'] = get_client_ip();
 
@@ -41,6 +41,9 @@ class User {
         	$gravatar->rating = "G";
 			$user['gravatar'] = $gravatar->toHTML();
 		}
+
+		// SET GEO
+		$user['geo'] = get_geo();
 
 		return $user;
 	}
@@ -366,6 +369,10 @@ FMB;
 
 		if (!$user['is_guest'] && ($user['geo'] != 'world')) {
 			return 3;
+		}
+
+		if ($user['geo'] != 'world') {
+			return 2;
 		}
 
 		// DEFAULT
